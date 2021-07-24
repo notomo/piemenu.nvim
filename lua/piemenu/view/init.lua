@@ -1,4 +1,6 @@
+local Menus = require("piemenu.core.menu").Menus
 local Background = require("piemenu.view.background").Background
+local Tiles = require("piemenu.view.tile").Tiles
 local repository = require("piemenu.lib.repository").Repository.new("view")
 
 local M = {}
@@ -10,9 +12,16 @@ M.View = View
 function View.open(name, position)
   vim.validate({name = {name, "string"}, position = {position, "table", true}})
 
+  local menus, err = Menus.new(name)
+  if err then
+    return err
+  end
+  position = position or vim.api.nvim_win_get_cursor(0)
+
   local background = Background.open()
-  -- TODO: open pie menu
-  local tbl = {name = name, _position = position, _background = background}
+  local tiles = Tiles.open(menus, position)
+
+  local tbl = {name = name, _position = position, _background = background, _tiles = tiles}
   local self = setmetatable(tbl, View)
 
   repository:set(background.window_id, self)
@@ -30,6 +39,7 @@ end
 
 function View.close(self)
   self._background:close()
+  self._tiles:close()
   repository:delete(self._background.window_id)
 end
 
@@ -54,6 +64,7 @@ function View.find(name)
       return view
     end
   end
+  return nil
 end
 
 local mouse = vim.api.nvim_eval("\"\\<LeftMouse>\"")

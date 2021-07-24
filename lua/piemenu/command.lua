@@ -28,10 +28,10 @@ function Command.start(name, opts)
 
   local already = View.find(name)
   if already then
-    return
+    return nil
   end
 
-  View.open(name, opts.position)
+  return View.open(name, opts.position)
 end
 
 function Command.hover()
