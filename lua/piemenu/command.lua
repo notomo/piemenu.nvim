@@ -58,6 +58,14 @@ function Command.cancel()
   view:close()
 end
 
+function Command.close(name)
+  local view = View.find(name)
+  if not view then
+    return
+  end
+  view:close()
+end
+
 function Command.register(info)
   require("piemenu.core.setting").register(info)
 end

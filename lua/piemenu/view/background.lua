@@ -6,7 +6,7 @@ local Background = {}
 Background.__index = Background
 M.Background = Background
 
-function Background.open()
+function Background.open(name)
   local width = vim.o.columns
   local height = vim.o.lines - vim.o.cmdheight
 
@@ -33,6 +33,8 @@ function Background.open()
 
   -- NOTE: show and move cursor to the window by <LeftDrag>
   vim.cmd("redraw")
+
+  vim.cmd(([[autocmd WinLeave,TabLeave,BufLeave <buffer=%s> ++once lua require('piemenu.command').Command.new("close", "%s")]]):format(bufnr, name))
 
   local tbl = {window_id = window_id}
   return setmetatable(tbl, Background)

@@ -18,7 +18,7 @@ function View.open(name, position)
   end
   position = position or vim.api.nvim_win_get_cursor(0)
 
-  local background = Background.open()
+  local background = Background.open(name)
   local tiles = Tiles.open(menus, position)
 
   local tbl = {name = name, _position = position, _background = background, _tiles = tiles}
