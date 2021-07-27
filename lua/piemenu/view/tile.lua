@@ -24,8 +24,8 @@ function Tiles.open(menus, position)
   local max_row = vim.o.lines
   for angle = 0, 359, 45 do
     local rad = math.rad(angle)
-    local row = radius * math.sin(rad) + origin_row - half_width
-    local col = radius * math.cos(rad) * 2 + origin_col - half_height -- *2 for row height and col width ratio
+    local row = radius * math.sin(rad) + origin_row - half_height
+    local col = radius * math.cos(rad) * 2 + origin_col - half_width -- *2 for row height and col width ratio
     if row <= 0 or col <= 0 or max_row <= row + height or max_col <= col + width then
       goto continue
     end
