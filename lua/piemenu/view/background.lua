@@ -44,4 +44,8 @@ function Background.close(self)
   windowlib.close(self.window_id)
 end
 
+function Background.cursor(self)
+  return vim.api.nvim_win_get_cursor(self.window_id)
+end
+
 return M

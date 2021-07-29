@@ -29,12 +29,20 @@ end
 
 function View.hover(self)
   self:_click()
-  -- TODO
+
+  local position = self._background:cursor()
+  self._tiles:activate(position)
 end
 
 function View.select(self)
-  print("select TODO")
+  local position = self._background:cursor()
+  local tile = self._tiles:find(position)
+
   self:close()
+
+  if tile then
+    tile:execute_action()
+  end
 end
 
 function View.close(self)
