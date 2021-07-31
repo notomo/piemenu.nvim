@@ -28,14 +28,12 @@ function View.open(name, position)
 end
 
 function View.hover(self)
-  self:_click()
-
-  local position = self._background:cursor()
+  local position = self._background:click()
   self._tiles:activate(position)
 end
 
 function View.select(self)
-  local position = self._background:cursor()
+  local position = self._background:click()
   local tile = self._tiles:find(position)
 
   self:close()
@@ -73,12 +71,6 @@ function View.find(name)
     end
   end
   return nil
-end
-
-local mouse = vim.api.nvim_eval("\"\\<LeftMouse>\"")
--- replace on testing
-function View._click()
-  vim.cmd("normal! " .. mouse)
 end
 
 return M

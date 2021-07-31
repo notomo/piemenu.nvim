@@ -44,8 +44,15 @@ function Background.close(self)
   windowlib.close(self.window_id)
 end
 
-function Background.cursor(self)
+function Background.click(self)
+  self:_click()
   return vim.api.nvim_win_get_cursor(self.window_id)
+end
+
+local mouse = vim.api.nvim_eval("\"\\<LeftMouse>\"")
+-- replace on testing
+function Background._click()
+  vim.cmd("normal! " .. mouse)
 end
 
 return M
