@@ -113,7 +113,7 @@ function Tile.include(self, position)
   local x = position[1] - self._origin_pos[1]
   local y = position[2] - self._origin_pos[2]
   local rad = math.atan(y / x)
-  return self._start_rad <= rad <= self._end_rad
+  return self._start_rad <= rad and rad <= self._end_rad
 end
 
 function Tile.close(self)

@@ -9,6 +9,8 @@ function M.register(info)
 end
 
 function M.find_menus(name)
+  -- TODO
+  return {{}, {}, {}, {}, {}, {}, {}, {}}
 end
 
 return M
