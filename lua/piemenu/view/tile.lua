@@ -1,3 +1,4 @@
+local CircleRange = require("piemenu.core.circle_range").CircleRange
 local windowlib = require("piemenu.lib.window")
 
 local M = {}
@@ -96,12 +97,11 @@ function Tile.open(angle, origin_pos, menu)
   })
   vim.wo[window_id].winblend = 0
 
-  local around_angle = 10
+  local around_angle = 20
   local tbl = {
     _window_id = window_id,
     _menu = menu,
-    _start_rad = math.rad(angle - around_angle),
-    _end_rad = math.rad(angle + around_angle),
+    _range = CircleRange.new(angle - around_angle, angle + around_angle),
     _origin_pos = origin_pos,
   }
   local self = setmetatable(tbl, Tile)
@@ -110,10 +110,7 @@ function Tile.open(angle, origin_pos, menu)
 end
 
 function Tile.include(self, position)
-  local x = position[1] - self._origin_pos[1]
-  local y = position[2] - self._origin_pos[2]
-  local rad = math.atan(y / x)
-  return self._start_rad <= rad and rad <= self._end_rad
+  return self._range:include(self._origin_pos, position)
 end
 
 function Tile.close(self)
