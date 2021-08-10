@@ -11,13 +11,6 @@ function CircleRange.new(start_angle, end_angle)
   return setmetatable(tbl, CircleRange)
 end
 
-function CircleRange._include(self, angle)
-  if self._e < self._s then
-    return (0 <= angle and angle <= self._e) or (self._s <= angle and angle <= 360)
-  end
-  return self._s <= angle and angle <= self._e
-end
-
 function CircleRange.include(self, p1, p2)
   local x = p2[2] - p1[2]
   local y = p2[1] - p1[1]
@@ -27,7 +20,11 @@ function CircleRange.include(self, p1, p2)
     angle = angle + 180
   end
   angle = (angle + 360) % 360
-  return self:_include(angle)
+
+  if self._e < self._s then
+    return (0 <= angle and angle <= self._e) or (self._s <= angle and angle <= 360)
+  end
+  return self._s <= angle and angle <= self._e
 end
 
 return M
