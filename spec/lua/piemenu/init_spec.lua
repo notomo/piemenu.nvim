@@ -51,7 +51,22 @@ describe("piemenu.register()", function()
   after_each(helper.after_each)
 
   it("TODO", function()
-    piemenu.register({})
+    piemenu.register("default", {
+      menus = {
+        {
+          icon = "A",
+          description = "description: A",
+          action = function()
+          end,
+        },
+        {
+          icon = "B",
+          description = "description: B",
+          action = function()
+          end,
+        },
+      },
+    })
   end)
 
 end)
@@ -62,7 +77,18 @@ describe("piemenu.clear()", function()
   after_each(helper.after_each)
 
   it("TODO", function()
-    piemenu.clear()
+    piemenu.clear("default")
+  end)
+
+end)
+
+describe("piemenu.clear_all()", function()
+
+  before_each(helper.before_each)
+  after_each(helper.after_each)
+
+  it("TODO", function()
+    piemenu.clear_all()
   end)
 
 end)

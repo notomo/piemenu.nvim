@@ -12,7 +12,7 @@ M.View = View
 function View.open(name, position)
   vim.validate({name = {name, "string"}, position = {position, "table", true}})
 
-  local menus, err = Menus.new(name)
+  local menus, err = Menus.find(name)
   if err then
     return err
   end

@@ -66,12 +66,16 @@ function Command.close(name)
   view:close()
 end
 
-function Command.register(info)
-  require("piemenu.core.setting").register(info)
+function Command.register(name, info)
+  require("piemenu.core.menu").Menus.register(name, info)
 end
 
-function Command.clear()
-  require("piemenu.core.setting").clear()
+function Command.clear(name)
+  require("piemenu.core.menu").Menus.clear(name)
+end
+
+function Command.clear_all()
+  require("piemenu.core.menu").Menus.clear_all()
 end
 
 return M

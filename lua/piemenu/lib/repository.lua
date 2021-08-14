@@ -28,6 +28,12 @@ function Repository.delete(self, key)
   self:set(key, nil)
 end
 
+function Repository.delete_all(self)
+  for key in self:all() do
+    self:delete(key)
+  end
+end
+
 function Repository.all(self)
   return pairs(self._data)
 end

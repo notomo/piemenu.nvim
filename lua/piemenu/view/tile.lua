@@ -80,6 +80,7 @@ function Tile.open(angle, origin_pos, menu)
   end
 
   local bufnr = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, {menu:to_string()})
   vim.bo[bufnr].bufhidden = "wipe"
   vim.bo[bufnr].modifiable = false
 
@@ -126,7 +127,7 @@ function Tile.deactivate(self)
 end
 
 function Tile.execute_action(self)
-  print("TODO", vim.inspect(self._window_id))
+  self._menu:execute_action()
 end
 
 vim.cmd("highlight default link PimenuCurrent Todo")

@@ -18,12 +18,16 @@ function M.cancel()
   Command.new("cancel")
 end
 
-function M.register(info)
-  Command.new("register", info)
+function M.register(name, info)
+  Command.new("register", name, info)
 end
 
-function M.clear()
-  Command.new("clear")
+function M.clear(name)
+  Command.new("clear", name)
+end
+
+function M.clear_all()
+  Command.new("clear_all")
 end
 
 return M
