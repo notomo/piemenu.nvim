@@ -64,7 +64,7 @@ function Tile.open(angle, origin_pos, menu)
   })
 
   local radius = 12.0
-  local width = 10
+  local width = 15
   local half_width = width / 2
   local height = 3
   local half_height = height / 2
@@ -85,8 +85,8 @@ function Tile.open(angle, origin_pos, menu)
   vim.bo[bufnr].modifiable = false
 
   local window_id = vim.api.nvim_open_win(bufnr, false, {
-    width = width,
-    height = height,
+    width = width - 2, -- for border
+    height = height - 2, -- for border
     anchor = "NW",
     relative = "editor",
     row = row,
@@ -95,6 +95,7 @@ function Tile.open(angle, origin_pos, menu)
     focusable = false,
     style = "minimal",
     zindex = 51,
+    border = {{" ", "PimenuNonCurrent"}},
   })
   vim.wo[window_id].winblend = 0
 
@@ -120,10 +121,12 @@ end
 
 function Tile.activate(self)
   vim.wo[self._window_id].winhighlight = "Normal:PimenuCurrent"
+  vim.api.nvim_win_set_config(self._window_id, {border = {{" ", "PimenuCurrent"}}})
 end
 
 function Tile.deactivate(self)
   vim.wo[self._window_id].winhighlight = "Normal:PimenuNonCurrent"
+  vim.api.nvim_win_set_config(self._window_id, {border = {{" ", "PimenuNonCurrent"}}})
 end
 
 function Tile.execute_action(self)
