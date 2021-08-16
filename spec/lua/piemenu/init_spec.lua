@@ -54,14 +54,12 @@ describe("piemenu.register()", function()
     piemenu.register("default", {
       menus = {
         {
-          icon = "A",
-          description = "description: A",
+          text = "text A",
           action = function()
           end,
         },
         {
-          icon = "B",
-          description = "description: B",
+          text = "text B",
           action = function()
           end,
         },

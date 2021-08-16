@@ -6,13 +6,9 @@ local Menu = {}
 Menu.__index = Menu
 M.Menu = Menu
 
-function Menu.new(action, icon, description)
-  vim.validate({
-    action = {action, "function"},
-    icon = {icon, "string", true},
-    description = {description, "string", true},
-  })
-  local tbl = {_action = action, _icon = icon or "", _description = description or ""}
+function Menu.new(action, text)
+  vim.validate({action = {action, "function"}, text = {text, "string"}})
+  local tbl = {_action = action, _text = vim.split(text, "\n", true)[1]}
   return setmetatable(tbl, Menu)
 end
 
@@ -25,7 +21,7 @@ function Menu.execute_action(self)
 end
 
 function Menu.to_string(self)
-  return ("%s %s"):format(self._icon, self._description)
+  return self._text
 end
 
 local Menus = {}
@@ -36,7 +32,7 @@ function Menus.new(name, info)
 
   local menus = {}
   for _, menu in ipairs(info.menus or {}) do
-    table.insert(menus, Menu.new(menu.action, menu.icon, menu.description))
+    table.insert(menus, Menu.new(menu.action, menu.text))
   end
 
   local tbl = {name = name, _menus = menus, start_angle = info.start_angle or 0}
