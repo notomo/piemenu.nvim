@@ -17,7 +17,11 @@ function Menu.new(action, icon, description)
 end
 
 function Menu.execute_action(self)
-  return self._action()
+  local ok, err = pcall(self._action)
+  if not ok then
+    return err
+  end
+  return nil
 end
 
 function Menu.to_string(self)

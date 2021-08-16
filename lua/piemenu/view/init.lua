@@ -43,7 +43,7 @@ function View.select(self)
   self:close()
 
   if tile then
-    tile:execute_action()
+    return tile:execute_action()
   end
 end
 

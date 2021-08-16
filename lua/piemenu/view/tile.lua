@@ -135,7 +135,7 @@ function Tile.deactivate(self)
 end
 
 function Tile.execute_action(self)
-  self._menu:execute_action()
+  return self._menu:execute_action()
 end
 
 vim.cmd("highlight default link PimenuCurrent Todo")

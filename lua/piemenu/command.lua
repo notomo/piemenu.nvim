@@ -47,7 +47,7 @@ function Command.select()
   if err then
     return err
   end
-  view:select()
+  return view:select()
 end
 
 function Command.cancel()
