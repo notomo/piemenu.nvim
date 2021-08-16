@@ -9,8 +9,12 @@ local View = {}
 View.__index = View
 M.View = View
 
-function View.open(name, position)
-  vim.validate({name = {name, "string"}, position = {position, "table", true}})
+function View.open(name, position, start_angle)
+  vim.validate({
+    name = {name, "string"},
+    position = {position, "table", true},
+    start_angle = {start_angle, "number", true},
+  })
 
   local menus, err = Menus.find(name)
   if err then
@@ -19,7 +23,7 @@ function View.open(name, position)
   position = position or vim.api.nvim_win_get_cursor(0)
 
   local background = Background.open(name)
-  local tiles = Tiles.open(menus, position)
+  local tiles = Tiles.open(menus, position, start_angle)
 
   local tbl = {name = name, _position = position, _background = background, _tiles = tiles}
   local self = setmetatable(tbl, View)

@@ -35,7 +35,7 @@ function Menus.new(name, info)
     table.insert(menus, Menu.new(menu.action, menu.icon, menu.description))
   end
 
-  local tbl = {name = name, _menus = menus}
+  local tbl = {name = name, _menus = menus, start_angle = info.start_angle or 0}
   return setmetatable(tbl, Menus)
 end
 

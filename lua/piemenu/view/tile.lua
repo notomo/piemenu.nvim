@@ -11,11 +11,16 @@ local Tile = {}
 Tile.__index = Tile
 M.Tile = Tile
 
-function Tiles.open(menus, position)
-  vim.validate({menus = {menus, "table"}, position = {position, "table"}})
+function Tiles.open(menus, position, start_angle)
+  vim.validate({
+    menus = {menus, "table"},
+    position = {position, "table"},
+    start_angle = {start_angle, "number", true},
+  })
+  start_angle = start_angle or menus.start_angle
 
   local tiles = {}
-  for angle = 0, 359, 45 do
+  for angle = start_angle, start_angle + 359, 45 do
     local menu = menus[#tiles + 1]
     if not menu then
       break
