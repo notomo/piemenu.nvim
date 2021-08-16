@@ -20,8 +20,9 @@ function Tiles.open(menus, position, start_angle)
   start_angle = start_angle or menus.start_angle
 
   local tiles = {}
+  local i = 1
   for angle = start_angle, start_angle + 359, 45 do
-    local menu = menus[#tiles + 1]
+    local menu = menus[i]
     if not menu then
       break
     end
@@ -30,6 +31,7 @@ function Tiles.open(menus, position, start_angle)
     if tile then
       table.insert(tiles, tile)
     end
+    i = i + 1
   end
 
   local tbl = {_tiles = tiles}
@@ -67,6 +69,9 @@ function Tile.open(angle, origin_pos, menu)
     origin_pos = {origin_pos, "table"},
     menu = {menu, "table"},
   })
+  if menu:is_empty() then
+    return nil
+  end
 
   local radius = 12.0
   local width = 15

@@ -24,6 +24,23 @@ function Menu.to_string(self)
   return self._text
 end
 
+function Menu.is_empty(_)
+  return false
+end
+
+local EmptyMenu = {}
+EmptyMenu.__index = EmptyMenu
+M.EmptyMenu = EmptyMenu
+
+function EmptyMenu.new()
+  local tbl = {}
+  return setmetatable(tbl, EmptyMenu)
+end
+
+function EmptyMenu.is_empty(_)
+  return true
+end
+
 local Menus = {}
 M.Menus = Menus
 
@@ -32,7 +49,11 @@ function Menus.new(name, info)
 
   local menus = {}
   for _, menu in ipairs(info.menus or {}) do
-    table.insert(menus, Menu.new(menu.action, menu.text))
+    if vim.tbl_isempty(menu) then
+      table.insert(menus, EmptyMenu.new())
+    else
+      table.insert(menus, Menu.new(menu.action, menu.text))
+    end
   end
 
   local tbl = {name = name, _menus = menus, start_angle = info.start_angle or 0}

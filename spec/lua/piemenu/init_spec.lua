@@ -58,6 +58,7 @@ describe("piemenu.register()", function()
           action = function()
           end,
         },
+        {},
         {
           text = "text B",
           action = function()
