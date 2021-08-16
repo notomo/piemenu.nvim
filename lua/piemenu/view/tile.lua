@@ -1,5 +1,6 @@
 local CircleRange = require("piemenu.core.circle_range").CircleRange
 local windowlib = require("piemenu.lib.window")
+local stringlib = require("piemenu.lib.string")
 
 local M = {}
 
@@ -90,7 +91,7 @@ function Tile.open(angle, origin_pos, menu)
   end
 
   local bufnr = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, {menu:to_string()})
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, {stringlib.ellipsis(menu:to_string(), width - 2)})
   vim.bo[bufnr].bufhidden = "wipe"
   vim.bo[bufnr].modifiable = false
 
