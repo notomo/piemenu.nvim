@@ -12,17 +12,29 @@ local Tile = {}
 Tile.__index = Tile
 M.Tile = Tile
 
-function Tiles.open(menus, position, start_angle)
+function Tiles.open(menus, position, start_angle, increment_angle)
   vim.validate({
     menus = {menus, "table"},
     position = {position, "table"},
     start_angle = {start_angle, "number", true},
+    increment_angle = {increment_angle, "number", true},
   })
-  start_angle = start_angle or menus.start_angle
+  start_angle = start_angle or menus.start_angle or 0
+  increment_angle = increment_angle or menus.increment_angle or 45
+
+  vim.validate({
+    increment_angle = {
+      increment_angle,
+      function(x)
+        return x >= 45
+      end,
+      "larger than 45",
+    },
+  })
 
   local tiles = {}
   local i = 1
-  for angle = start_angle, start_angle + 359, 45 do
+  for angle = start_angle, start_angle + 359, increment_angle do
     local menu = menus[i]
     if not menu then
       break

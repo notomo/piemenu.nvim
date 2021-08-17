@@ -31,7 +31,7 @@ function Command.start(name, opts)
     return nil
   end
 
-  return View.open(name, opts.position, opts.start_angle)
+  return View.open(name, opts.position, opts.start_angle, opts.increment_angle)
 end
 
 function Command.hover()
