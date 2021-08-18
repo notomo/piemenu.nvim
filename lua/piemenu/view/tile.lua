@@ -40,7 +40,8 @@ function Tiles.open(menus, position, start_angle, increment_angle)
       break
     end
 
-    local tile = Tile.open(angle, position, menu)
+    local around_angle = increment_angle * 0.5
+    local tile = Tile.open(angle, position, menu, around_angle)
     if tile then
       table.insert(tiles, tile)
     end
@@ -76,7 +77,7 @@ function Tiles.close(self)
   end
 end
 
-function Tile.open(angle, origin_pos, menu)
+function Tile.open(angle, origin_pos, menu, around_angle)
   vim.validate({
     angle = {angle, "number"},
     origin_pos = {origin_pos, "table"},
@@ -122,7 +123,6 @@ function Tile.open(angle, origin_pos, menu)
   })
   vim.wo[window_id].winblend = 0
 
-  local around_angle = 20
   local tbl = {
     _window_id = window_id,
     _menu = menu,

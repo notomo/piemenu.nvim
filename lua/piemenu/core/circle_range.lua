@@ -17,7 +17,7 @@ end
 function CircleRange.include(self, p1, p2)
   local x = p2[2] - p1[2]
   local y = p2[1] - p1[1]
-  local rad = math.atan(y / x)
+  local rad = math.atan(y / x * 2) -- *2 for row height and col width ratio
   local raw_angle = rad * 180 / math.pi
   if x < 0 then
     raw_angle = raw_angle + 180
