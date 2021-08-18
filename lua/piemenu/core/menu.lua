@@ -69,7 +69,7 @@ function Menus.find(name)
   vim.validate({name = {name, "string"}})
   local menus = repository:get(name)
   if not menus then
-    return nil, "no menus for " .. name
+    return nil, ("no menus for `%s`"):format(name)
   end
   return menus, nil
 end
