@@ -28,6 +28,14 @@ describe("piemenu.start()", function()
     assert.window_count(4)
   end)
 
+  it("raises error if menus is empty", function()
+    piemenu.register("default", {menus = {{}, {}}})
+
+    piemenu.start("default")
+
+    assert.exists_message("no menus for `default`")
+  end)
+
 end)
 
 describe("piemenu.hover()", function()
@@ -61,8 +69,25 @@ describe("piemenu.select()", function()
   before_each(helper.before_each)
   after_each(helper.after_each)
 
-  it("TODO", function()
+  it("executes selected menu's action", function()
+    local called = false
+    piemenu.register("default", {
+      menus = {
+        {
+          text = "text A",
+          action = function()
+            called = true
+          end,
+        },
+      },
+    })
+
+    piemenu.start("default", {position = {vim.o.lines / 2, vim.o.columns / 2}})
+
+    vim.api.nvim_win_set_cursor(0, {math.floor(vim.o.lines / 2), vim.o.columns})
     piemenu.select()
+
+    assert.is_true(called)
   end)
 
 end)
@@ -107,7 +132,39 @@ describe("piemenu.register()", function()
   before_each(helper.before_each)
   after_each(helper.after_each)
 
-  it("TODO", function()
+  it("registers menus", function()
+    piemenu.register("default", {
+      menus = {
+        {
+          text = "text A",
+          action = function()
+          end,
+        },
+        {
+          text = "text B",
+          action = function()
+          end,
+        },
+      },
+    })
+    piemenu.start("default")
+  end)
+
+  it("can overwrite setting", function()
+    piemenu.register("default", {menus = {}})
+    piemenu.register("default", {
+      menus = {
+        {
+          text = "text A",
+          action = function()
+          end,
+        },
+      },
+    })
+    piemenu.start("default")
+  end)
+
+  it("can register empty menus", function()
     piemenu.register("default", {
       menus = {
         {
@@ -116,6 +173,7 @@ describe("piemenu.register()", function()
           end,
         },
         {},
+        {},
         {
           text = "text B",
           action = function()
@@ -123,6 +181,7 @@ describe("piemenu.register()", function()
         },
       },
     })
+    piemenu.start("default")
   end)
 
 end)

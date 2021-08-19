@@ -65,10 +65,19 @@ function Menus.new(name, info)
   return setmetatable(tbl, Menus)
 end
 
+function Menus.is_empty(self)
+  for _, m in ipairs(self._menus) do
+    if not m:is_empty() then
+      return false
+    end
+  end
+  return true
+end
+
 function Menus.find(name)
   vim.validate({name = {name, "string"}})
   local menus = repository:get(name)
-  if not menus then
+  if not menus or menus:is_empty() then
     return nil, ("no menus for `%s`"):format(name)
   end
   return menus, nil

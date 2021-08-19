@@ -59,7 +59,7 @@ asserts.create("exists_highlighted_window"):register(function(self)
         return vim.startswith(hl, "Normal:")
       end, vim.split(vim.wo[window_id].winhighlight, ",", true))
       for _, hl in ipairs(hls) do
-        local k, v = unpack(vim.split(hl, ":", true))
+        local _, v = unpack(vim.split(hl, ":", true))
         if v == expected then
           return true
         end
