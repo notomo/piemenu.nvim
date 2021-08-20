@@ -36,12 +36,23 @@ function Background.open(name)
 
   vim.cmd(([[autocmd WinLeave,TabLeave,BufLeave <buffer=%s> ++once lua require('piemenu.command').Command.new("close", "%s")]]):format(bufnr, name))
 
-  local tbl = {window_id = window_id}
+  local ns = vim.api.nvim_create_namespace("piemenu")
+  vim.api.nvim_set_decoration_provider(ns, {
+    on_win = function(_, _, buf, topline)
+      if topline == 0 or buf ~= bufnr or not vim.api.nvim_win_is_valid(window_id) then
+        return false
+      end
+      vim.fn.winrestview({topline = 0, leftcol = 0})
+    end,
+  })
+
+  local tbl = {window_id = window_id, _ns = ns}
   return setmetatable(tbl, Background)
 end
 
 function Background.close(self)
   windowlib.close(self.window_id)
+  vim.api.nvim_set_decoration_provider(self._ns, {})
 end
 
 function Background.click(self)
