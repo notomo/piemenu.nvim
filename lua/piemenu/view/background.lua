@@ -6,7 +6,7 @@ local Background = {}
 Background.__index = Background
 M.Background = Background
 
-function Background.open(name)
+function Background.open(name, position)
   local width = vim.o.columns
   local height = vim.o.lines - vim.o.cmdheight
 
@@ -30,6 +30,7 @@ function Background.open(name)
   vim.wo[window_id].winblend = 100
   vim.wo[window_id].scrolloff = 0
   vim.wo[window_id].sidescrolloff = 0
+  vim.api.nvim_win_set_cursor(window_id, {position[1] + 1, position[2] - 1})
 
   -- NOTE: show and move cursor to the window by <LeftDrag>
   vim.cmd("redraw")

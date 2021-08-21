@@ -21,9 +21,9 @@ function View.open(name, position, start_angle, increment_angle)
   if err then
     return err
   end
-  position = position or vim.api.nvim_win_get_cursor(0)
+  position = position or {vim.fn.winline(), vim.fn.wincol()}
 
-  local background = Background.open(name)
+  local background = Background.open(name, position)
   local tiles = Tiles.open(menus, position, start_angle, increment_angle)
 
   local tbl = {name = name, _position = position, _background = background, _tiles = tiles}
