@@ -60,6 +60,9 @@ function Menus.new(name, info)
     name = name,
     start_angle = info.start_angle,
     increment_angle = info.increment_angle,
+    radius = info.radius,
+    tile_width = info.tile_width,
+    position_offset = info.position_offset,
     _menus = menus,
   }
   return setmetatable(tbl, Menus)

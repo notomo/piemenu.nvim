@@ -21,19 +21,38 @@ function Tiles.open(menus, position, start_angle, increment_angle)
   })
   start_angle = start_angle or menus.start_angle or 0
   increment_angle = increment_angle or menus.increment_angle or 45
+  local radius = menus.radius or 12.0
+  local width = menus.tile_width or 15
+  local position_offset = menus.position_offset or {0, 0}
 
   vim.validate({
     increment_angle = {
       increment_angle,
       function(x)
-        return x >= 45
+        return x > 0
       end,
-      "larger than 45",
+      "greater than 45",
     },
+    radius = {
+      radius,
+      function(x)
+        return x > 0
+      end,
+      "greater than 0",
+    },
+    tile_width = {
+      width,
+      function(x)
+        return x > 0
+      end,
+      "greater than 0",
+    },
+    position_offset = {position_offset, "table"},
   })
 
   local tiles = {}
   local i = 1
+  local new_position = {position[1] + position_offset[1], position[2] + position_offset[2]}
   for angle = start_angle, start_angle + 359, increment_angle do
     local menu = menus[i]
     if not menu then
@@ -41,7 +60,7 @@ function Tiles.open(menus, position, start_angle, increment_angle)
     end
 
     local around_angle = increment_angle * 0.5
-    local tile = Tile.open(angle, position, menu, around_angle)
+    local tile = Tile.open(angle, radius, width, new_position, menu, around_angle)
     if tile then
       table.insert(tiles, tile)
     end
@@ -77,9 +96,11 @@ function Tiles.close(self)
   end
 end
 
-function Tile.open(angle, origin_pos, menu, around_angle)
+function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
   vim.validate({
     angle = {angle, "number"},
+    radius = {radius, "number"},
+    width = {width, "number"},
     origin_pos = {origin_pos, "table"},
     menu = {menu, "table"},
   })
@@ -87,8 +108,6 @@ function Tile.open(angle, origin_pos, menu, around_angle)
     return nil
   end
 
-  local radius = 12.0
-  local width = 15
   local half_width = width / 2
   local height = 3
   local half_height = height / 2
