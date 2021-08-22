@@ -11,6 +11,7 @@ function Background.open(name, position)
   local height = vim.o.lines - vim.o.cmdheight
 
   local bufnr = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_name(bufnr, ("piemenu://%s"):format(name))
   local lines = vim.fn["repeat"]({(" "):rep(width)}, height)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
   vim.bo[bufnr].filetype = "piemenu"
