@@ -2,6 +2,7 @@ local Menus = require("piemenu.core.menu").Menus
 local Background = require("piemenu.view.background").Background
 local Tiles = require("piemenu.view.tile").Tiles
 local repository = require("piemenu.lib.repository").Repository.new("view")
+local cursorlib = require("piemenu.lib.cursor")
 
 local M = {}
 
@@ -21,7 +22,7 @@ function View.open(name, position, start_angle, increment_angle)
   if err then
     return err
   end
-  position = position or {vim.fn.winline(), vim.fn.wincol()}
+  position = position or cursorlib.global_position()
 
   local background = Background.open(name, position)
   local tiles = Tiles.open(menus, position, start_angle, increment_angle)

@@ -51,20 +51,18 @@ function Tiles.open(menus, position, start_angle, increment_angle)
   })
 
   local tiles = {}
-  local i = 1
-  local new_position = {position[1] + position_offset[1], position[2] + position_offset[2]}
+  local origin_pos = {position[1] + position_offset[1], position[2] + position_offset[2]}
   for angle = start_angle, start_angle + 359, increment_angle do
-    local menu = menus[i]
+    local menu = menus[#tiles + 1]
     if not menu then
       break
     end
 
     local around_angle = increment_angle * 0.5
-    local tile = Tile.open(angle, radius, width, new_position, menu, around_angle)
+    local tile = Tile.open(angle, radius, width, origin_pos, menu, around_angle)
     if tile then
       table.insert(tiles, tile)
     end
-    i = i + 1
   end
 
   local tbl = {_tiles = tiles}
@@ -132,7 +130,7 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
     height = height - 2, -- for border
     anchor = "NW",
     relative = "editor",
-    row = row,
+    row = row + 1,
     col = col,
     external = false,
     focusable = false,
