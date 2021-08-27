@@ -162,12 +162,12 @@ end
 
 function Tile.activate(self)
   vim.wo[self._window_id].winhighlight = "Normal:PimenuCurrent"
-  vim.api.nvim_win_set_config(self._window_id, {border = {{" ", "PimenuCurrent"}}})
+  vim.api.nvim_win_set_config(self._window_id, {border = {{" ", "PimenuCurrentBorder"}}})
 end
 
 function Tile.deactivate(self)
   vim.wo[self._window_id].winhighlight = "Normal:PimenuNonCurrent"
-  vim.api.nvim_win_set_config(self._window_id, {border = {{" ", "PimenuNonCurrent"}}})
+  vim.api.nvim_win_set_config(self._window_id, {border = {{" ", "PimenuNonCurrentBorder"}}})
 end
 
 function Tile.execute_action(self)
@@ -176,12 +176,14 @@ end
 
 local force = false
 highlightlib.link("PimenuNonCurrent", force, "NormalFloat")
+highlightlib.link("PimenuNonCurrentBorder", force, "NormalFloat")
 highlightlib.define("PimenuCurrent", force, {
-  ctermfg = "NormalFloat",
-  guifg = "NormalFloat",
-  ctermbg = "NormalFloat",
-  guibg = {"NormalFloat", 0x303030},
-  gui = "bold",
+  ctermfg = "Normal",
+  guifg = "Normal",
+  ctermbg = "Normal",
+  guibg = "Normal",
+  gui = "bold,undercurl",
 })
+highlightlib.link("PimenuCurrentBorder", force, "NormalFloat")
 
 return M

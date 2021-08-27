@@ -19,7 +19,7 @@ local ATTRIBUTES = {
 }
 function M.define(name, force, attributes)
   local parts = {}
-  attributes["blend"] = attributes["blend"] or 0
+  attributes["gui"] = attributes["gui"] or "NONE"
   for attr_name, v in pairs(attributes) do
     local value = v
     if type(v) == "table" then
