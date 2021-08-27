@@ -1,6 +1,7 @@
 local CircleRange = require("piemenu.core.circle_range").CircleRange
 local windowlib = require("piemenu.lib.window")
 local stringlib = require("piemenu.lib.string")
+local highlightlib = require("piemenu.lib.highlight")
 
 local M = {}
 
@@ -173,7 +174,14 @@ function Tile.execute_action(self)
   return self._menu:execute_action()
 end
 
-vim.cmd("highlight default link PimenuCurrent Todo")
-vim.cmd("highlight default link PimenuNonCurrent NormalFloat")
+local force = false
+highlightlib.link("PimenuNonCurrent", force, "NormalFloat")
+highlightlib.define("PimenuCurrent", force, {
+  ctermfg = "NormalFloat",
+  guifg = "NormalFloat",
+  ctermbg = "NormalFloat",
+  guibg = {"NormalFloat", 0x303030},
+  gui = "bold",
+})
 
 return M
