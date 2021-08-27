@@ -1,4 +1,5 @@
 local windowlib = require("piemenu.lib.window")
+local bufferlib = require("piemenu.lib.buffer")
 
 local M = {}
 
@@ -11,7 +12,9 @@ function Background.open(name, position)
   local height = vim.o.lines - vim.o.cmdheight
 
   local bufnr = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_name(bufnr, ("piemenu://%s"):format(name))
+  local buffer_name = ("piemenu://%s"):format(name)
+  bufferlib.delete_by_name(buffer_name)
+  vim.api.nvim_buf_set_name(bufnr, buffer_name)
   local lines = vim.fn["repeat"]({(" "):rep(width)}, height)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
   vim.bo[bufnr].filetype = "piemenu"
