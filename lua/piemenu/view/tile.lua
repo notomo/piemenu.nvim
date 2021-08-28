@@ -26,6 +26,7 @@ function Tiles.open(menus, position, start_angle, increment_angle)
   local radius = menus.radius or 12.0
   local width = menus.tile_width or 15
   local position_offset = menus.position_offset or {0, 0}
+  local animation = menus.animation or {duration = 100}
 
   vim.validate({
     increment_angle = {
@@ -62,7 +63,7 @@ function Tiles.open(menus, position, start_angle, increment_angle)
     end
 
     local around_angle = increment_angle * 0.5
-    local tile, increment = Tile.open(angle, radius, width, origin_pos, menu, around_angle)
+    local tile, increment = Tile.open(angle, radius, width, origin_pos, menu, around_angle, animation)
     if tile then
       table.insert(tiles, tile)
     end
@@ -100,13 +101,14 @@ function Tiles.close(self)
   end
 end
 
-function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
+function Tile.open(angle, radius, width, origin_pos, menu, around_angle, animation)
   vim.validate({
     angle = {angle, "number"},
     radius = {radius, "number"},
     width = {width, "number"},
     origin_pos = {origin_pos, "table"},
     menu = {menu, "table"},
+    animation = {animation, "table"},
   })
   if menu:is_empty() then
     return nil, true
@@ -148,7 +150,7 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
   })
   vim.wo[window_id].winblend = 0
 
-  Move.start({y, x}, {row + 1, col}, 100, function(dx, dy)
+  Move.start({y, x}, {row + 1, col}, animation.duration, function(dx, dy)
     if not vim.api.nvim_win_is_valid(window_id) then
       return
     end

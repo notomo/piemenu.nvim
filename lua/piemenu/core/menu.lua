@@ -63,6 +63,7 @@ function Menus.new(name, info)
     radius = info.radius,
     tile_width = info.tile_width,
     position_offset = info.position_offset,
+    animation = info.animation,
     _menus = menus,
   }
   return setmetatable(tbl, Menus)

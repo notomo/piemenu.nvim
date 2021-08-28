@@ -39,6 +39,7 @@ describe("piemenu.start()", function()
   it("can show space if menu is empty dict", function()
     local called = false
     piemenu.register("default", {
+      animation = {duration = 0},
       menus = {
         {},
         {},
@@ -52,7 +53,6 @@ describe("piemenu.start()", function()
     })
 
     piemenu.start("default", {position = {math.floor(vim.o.lines / 2) - 3, vim.o.columns / 2}})
-    helper.wait()
 
     vim.api.nvim_win_set_cursor(0, {vim.o.lines - 1, math.floor(vim.o.columns / 2)})
     piemenu.select()
@@ -63,6 +63,7 @@ describe("piemenu.start()", function()
   it("fallbacks if menu can't be displayed", function()
     local called = false
     piemenu.register("default", {
+      animation = {duration = 0},
       start_angle = -90,
       menus = {
         {
@@ -75,7 +76,6 @@ describe("piemenu.start()", function()
     })
 
     piemenu.start("default", {position = {5, vim.o.columns / 2}})
-    helper.wait()
 
     vim.api.nvim_win_set_cursor(0, {5, vim.o.columns})
     piemenu.select()
@@ -92,6 +92,7 @@ describe("piemenu.hover()", function()
 
   it("highlights a menu if cursor is in area", function()
     piemenu.register("default", {
+      animation = {duration = 0},
       menus = {
         {
           text = "text A",
@@ -102,7 +103,6 @@ describe("piemenu.hover()", function()
     })
 
     piemenu.start("default", {position = {vim.o.lines / 2, vim.o.columns / 2}})
-    helper.wait()
 
     vim.api.nvim_win_set_cursor(0, {math.floor(vim.o.lines / 2), vim.o.columns})
     piemenu.hover()
@@ -120,6 +120,7 @@ describe("piemenu.select()", function()
   it("executes selected menu's action", function()
     local called = false
     piemenu.register("default", {
+      animation = {duration = 0},
       menus = {
         {
           text = "text A",
@@ -131,7 +132,6 @@ describe("piemenu.select()", function()
     })
 
     piemenu.start("default", {position = {vim.o.lines / 2, vim.o.columns / 2}})
-    helper.wait()
 
     vim.api.nvim_win_set_cursor(0, {math.floor(vim.o.lines / 2), vim.o.columns})
     piemenu.select()
