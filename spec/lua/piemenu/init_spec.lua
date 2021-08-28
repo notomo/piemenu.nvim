@@ -36,6 +36,30 @@ describe("piemenu.start()", function()
     assert.exists_message("no menus for `default`")
   end)
 
+  it("can show space if menu is empty dict", function()
+    local called = false
+    piemenu.register("default", {
+      menus = {
+        {},
+        {},
+        {
+          text = "text A",
+          action = function()
+            called = true
+          end,
+        },
+      },
+    })
+
+    piemenu.start("default", {position = {math.floor(vim.o.lines / 2) - 3, vim.o.columns / 2}})
+    helper.wait()
+
+    vim.api.nvim_win_set_cursor(0, {vim.o.lines - 1, math.floor(vim.o.columns / 2)})
+    piemenu.select()
+
+    assert.is_true(called)
+  end)
+
 end)
 
 describe("piemenu.hover()", function()
