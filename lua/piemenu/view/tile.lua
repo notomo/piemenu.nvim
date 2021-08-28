@@ -130,7 +130,7 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
   vim.bo[bufnr].modifiable = false
 
   local y = origin_pos[1]
-  local x = origin_pos[2]
+  local x = origin_pos[2] - half_width
   local window_id = vim.api.nvim_open_win(bufnr, false, {
     width = width - 2, -- for border
     height = height - 2, -- for border
@@ -146,7 +146,7 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
   })
   vim.wo[window_id].winblend = 0
 
-  Move.start(origin_pos, {row + 1, col}, 100, function(dx, dy)
+  Move.start({y, x}, {row + 1, col}, 100, function(dx, dy)
     if not vim.api.nvim_win_is_valid(window_id) then
       return
     end
