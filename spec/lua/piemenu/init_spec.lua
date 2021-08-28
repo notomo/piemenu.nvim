@@ -55,6 +55,7 @@ describe("piemenu.hover()", function()
     })
 
     piemenu.start("default", {position = {vim.o.lines / 2, vim.o.columns / 2}})
+    helper.wait()
 
     vim.api.nvim_win_set_cursor(0, {math.floor(vim.o.lines / 2), vim.o.columns})
     piemenu.hover()
@@ -83,6 +84,7 @@ describe("piemenu.select()", function()
     })
 
     piemenu.start("default", {position = {vim.o.lines / 2, vim.o.columns / 2}})
+    helper.wait()
 
     vim.api.nvim_win_set_cursor(0, {math.floor(vim.o.lines / 2), vim.o.columns})
     piemenu.select()

@@ -24,6 +24,11 @@ function M.set_lines(lines)
   vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(lines, "\n"))
 end
 
+function M.wait()
+  -- TODO
+  vim.wait(100)
+end
+
 local asserts = require("vusted.assert").asserts
 
 asserts.create("filetype"):register_eq(function()

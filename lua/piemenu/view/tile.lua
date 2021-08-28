@@ -1,4 +1,5 @@
 local CircleRange = require("piemenu.core.circle_range").CircleRange
+local Move = require("piemenu.view.animation").Move
 local windowlib = require("piemenu.lib.window")
 local stringlib = require("piemenu.lib.string")
 local highlightlib = require("piemenu.lib.highlight")
@@ -126,13 +127,15 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
   vim.bo[bufnr].bufhidden = "wipe"
   vim.bo[bufnr].modifiable = false
 
+  local y = origin_pos[1]
+  local x = origin_pos[2]
   local window_id = vim.api.nvim_open_win(bufnr, false, {
     width = width - 2, -- for border
     height = height - 2, -- for border
     anchor = "NW",
     relative = "editor",
-    row = row + 1,
-    col = col,
+    row = y,
+    col = x,
     external = false,
     focusable = false,
     style = "minimal",
@@ -140,6 +143,20 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
     border = {{" ", "PimenuNonCurrent"}},
   })
   vim.wo[window_id].winblend = 0
+
+  Move.start(origin_pos, {row + 1, col}, 100, function(dx, dy)
+    if not vim.api.nvim_win_is_valid(window_id) then
+      return
+    end
+    x = x + dx
+    y = y + dy
+    vim.api.nvim_win_set_config(window_id, {row = y, col = x, relative = "editor"})
+  end, function()
+    if not vim.api.nvim_win_is_valid(window_id) then
+      return
+    end
+    vim.api.nvim_win_set_config(window_id, {row = row + 1, col = col, relative = "editor"})
+  end)
 
   local tbl = {
     _window_id = window_id,
