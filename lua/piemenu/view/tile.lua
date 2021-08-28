@@ -62,11 +62,13 @@ function Tiles.open(menus, position, start_angle, increment_angle)
     end
 
     local around_angle = increment_angle * 0.5
-    local tile = Tile.open(angle, radius, width, origin_pos, menu, around_angle)
+    local tile, increment = Tile.open(angle, radius, width, origin_pos, menu, around_angle)
     if tile then
       table.insert(tiles, tile)
     end
-    i = i + 1
+    if increment then
+      i = i + 1
+    end
   end
 
   local tbl = {_tiles = tiles}
@@ -107,7 +109,7 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
     menu = {menu, "table"},
   })
   if menu:is_empty() then
-    return nil
+    return nil, true
   end
 
   local half_width = width / 2
@@ -121,7 +123,7 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
   local row = radius * math.sin(rad) + origin_row - half_height
   local col = radius * math.cos(rad) * 2 + origin_col - half_width -- *2 for row height and col width ratio
   if row <= 0 or col <= 0 or max_row <= row + height or max_col <= col + width then
-    return nil
+    return nil, false
   end
 
   local bufnr = vim.api.nvim_create_buf(false, true)
@@ -168,7 +170,7 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle)
   }
   local self = setmetatable(tbl, Tile)
   self:deactivate()
-  return self
+  return self, true
 end
 
 function Tile.include(self, position)

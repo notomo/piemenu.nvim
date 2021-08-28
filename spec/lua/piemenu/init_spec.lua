@@ -60,6 +60,29 @@ describe("piemenu.start()", function()
     assert.is_true(called)
   end)
 
+  it("fallbacks if menu can't be displayed", function()
+    local called = false
+    piemenu.register("default", {
+      start_angle = -90,
+      menus = {
+        {
+          text = "text A",
+          action = function()
+            called = true
+          end,
+        },
+      },
+    })
+
+    piemenu.start("default", {position = {5, vim.o.columns / 2}})
+    helper.wait()
+
+    vim.api.nvim_win_set_cursor(0, {5, vim.o.columns})
+    piemenu.select()
+
+    assert.is_true(called)
+  end)
+
 end)
 
 describe("piemenu.hover()", function()
