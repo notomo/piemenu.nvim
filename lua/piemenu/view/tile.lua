@@ -147,18 +147,12 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle, animati
   })
   vim.wo[window_id].winblend = 0
 
-  Move.start({y, x}, {row + 1, col}, animation.duration, function(dx, dy)
+  Move.start({y, x}, {row + 1, col}, animation.duration, function(new_x, new_y)
     if not vim.api.nvim_win_is_valid(window_id) then
-      return
+      return false
     end
-    x = x + dx
-    y = y + dy
-    vim.api.nvim_win_set_config(window_id, {row = y, col = x, relative = "editor"})
-  end, function()
-    if not vim.api.nvim_win_is_valid(window_id) then
-      return
-    end
-    vim.api.nvim_win_set_config(window_id, {row = row + 1, col = col, relative = "editor"})
+    vim.api.nvim_win_set_config(window_id, {row = new_y, col = new_x, relative = "editor"})
+    return true
   end)
 
   local tbl = {

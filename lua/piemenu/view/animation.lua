@@ -30,19 +30,29 @@ function Animation.start(self)
       self._timer:stop()
       return self._on_finish()
     end
-    return self._on_tick()
+    local ok = self._on_tick()
+    if not ok then
+      self._timer:stop()
+    end
   end))
 end
 
 local Move = {}
 M.Move = Move
 
-function Move.start(from, to, timeout_ms, on_tick, on_finish)
+function Move.start(from, to, timeout_ms, on_tick)
   local dx = (to[2] - from[2]) / timeout_ms
   local dy = (to[1] - from[1]) / timeout_ms
+
+  local y = from[1]
+  local x = from[2]
   local animation = Animation.new(timeout_ms, function()
-    on_tick(dx, dy)
-  end, on_finish)
+    x = x + dx
+    y = y + dy
+    return on_tick(x, y)
+  end, function()
+    return on_tick(to[2], to[1])
+  end)
   return animation:start()
 end
 
