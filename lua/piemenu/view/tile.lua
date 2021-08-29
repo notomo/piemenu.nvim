@@ -14,42 +14,15 @@ local Tile = {}
 Tile.__index = Tile
 M.Tile = Tile
 
-function Tiles.open(menus, position, start_angle, increment_angle)
-  vim.validate({
-    menus = {menus, "table"},
-    position = {position, "table"},
-    start_angle = {start_angle, "number", true},
-    increment_angle = {increment_angle, "number", true},
-  })
-  start_angle = start_angle or menus.start_angle or 0
-  increment_angle = increment_angle or menus.increment_angle or 45
-  local radius = menus.radius or 12.0
-  local width = menus.tile_width or 15
-  local animation = menus.animation or {duration = 100}
+function Tiles.open(menus, view_opts)
+  vim.validate({menus = {menus, "table"}, view_opts = {view_opts, "table"}})
 
-  vim.validate({
-    increment_angle = {
-      increment_angle,
-      function(x)
-        return x > 0
-      end,
-      "greater than 45",
-    },
-    radius = {
-      radius,
-      function(x)
-        return x > 0
-      end,
-      "greater than 0",
-    },
-    tile_width = {
-      width,
-      function(x)
-        return x > 0
-      end,
-      "greater than 0",
-    },
-  })
+  local position = view_opts.position
+  local start_angle = view_opts.start_angle
+  local increment_angle = view_opts.increment_angle
+  local radius = view_opts.radius
+  local tile_width = view_opts.tile_width
+  local animation = view_opts.animation
 
   local tiles = {}
   local i = 1
@@ -60,7 +33,7 @@ function Tiles.open(menus, position, start_angle, increment_angle)
     end
 
     local around_angle = increment_angle * 0.5
-    local tile, increment = Tile.open(angle, radius, width, position, menu, around_angle, animation)
+    local tile, increment = Tile.open(angle, radius, tile_width, position, menu, around_angle, animation)
     if tile then
       table.insert(tiles, tile)
     end

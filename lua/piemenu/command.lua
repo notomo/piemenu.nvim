@@ -22,16 +22,16 @@ function Command.new(name, ...)
   return nil
 end
 
-function Command.start(name, opts)
-  vim.validate({name = {name, "string"}, opts = {opts, "table", true}})
-  opts = opts or {}
+function Command.start(name, raw_opts)
+  vim.validate({name = {name, "string"}, opts = {raw_opts, "table", true}})
+  raw_opts = raw_opts or {}
 
   local already = View.find(name)
   if already then
     return nil
   end
 
-  return View.open(name, opts.position, opts.start_angle, opts.increment_angle)
+  return View.open(name, raw_opts)
 end
 
 function Command.hover()

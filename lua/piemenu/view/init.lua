@@ -2,7 +2,6 @@ local Menus = require("piemenu.core.menu").Menus
 local Background = require("piemenu.view.background").Background
 local Tiles = require("piemenu.view.tile").Tiles
 local repository = require("piemenu.lib.repository").Repository.new("view")
-local cursorlib = require("piemenu.lib.cursor")
 
 local M = {}
 
@@ -10,24 +9,24 @@ local View = {}
 View.__index = View
 M.View = View
 
-function View.open(name, position, start_angle, increment_angle)
-  vim.validate({
-    name = {name, "string"},
-    position = {position, "table", true},
-    start_angle = {start_angle, "number", true},
-    increment_angle = {increment_angle, "number", true},
-  })
+function View.open(name, raw_opts)
+  vim.validate({name = {name, "string"}, raw_opts = {raw_opts, "table"}})
 
-  local menus, err = Menus.find(name)
+  local menus, err
+  if not raw_opts.menus then
+    menus, err = Menus.find(name)
+  else
+    menus = Menus.new(name, raw_opts)
+  end
   if err then
     return err
   end
-  position = position or cursorlib.global_position()
 
-  local background = Background.open(name, position)
-  local tiles = Tiles.open(menus, position, start_angle, increment_angle)
+  local view_opts = menus.opts:merge(raw_opts):for_view()
+  local background = Background.open(name, view_opts.position)
+  local tiles = Tiles.open(menus, view_opts)
 
-  local tbl = {name = name, _position = position, _background = background, _tiles = tiles}
+  local tbl = {name = name, _background = background, _tiles = tiles}
   local self = setmetatable(tbl, View)
 
   repository:set(background.window_id, self)

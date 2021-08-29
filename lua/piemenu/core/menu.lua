@@ -1,3 +1,4 @@
+local Option = require("piemenu.core.option").Option
 local repository = require("piemenu.lib.repository").Repository.new("menu")
 
 local M = {}
@@ -56,15 +57,7 @@ function Menus.new(name, info)
     end
   end
 
-  local tbl = {
-    name = name,
-    start_angle = info.start_angle,
-    increment_angle = info.increment_angle,
-    radius = info.radius,
-    tile_width = info.tile_width,
-    animation = info.animation,
-    _menus = menus,
-  }
+  local tbl = {name = name, opts = Option.new(info), _menus = menus}
   return setmetatable(tbl, Menus)
 end
 
