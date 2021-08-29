@@ -1,0 +1,85 @@
+*piemenu.nvim.txt*
+
+==============================================================================
+Lua module: piemenu                                     *piemenu.nvim-piemenu*
+
+start({name}, {opts})                                        *piemenu.start()*
+  Start a piemenu.
+
+  Parameters: ~
+    {name} (string) registered name by |piemenu.register()|
+    {opts} (table) Todo
+
+hover()                                                      *piemenu.hover()*
+  Highlight a current selected menu.
+
+select()                                                    *piemenu.select()*
+  Select a menu and close all.
+
+cancel()                                                    *piemenu.cancel()*
+  Close all displayed menus.
+
+register({name}, {info})                                  *piemenu.register()*
+  Register a piemenu setting.
+
+  Parameters: ~
+    {name} (string) Todo
+    {info} (table) Todo
+
+clear({name})                                                *piemenu.clear()*
+  Clear a registered piemenu setting.
+
+  Parameters: ~
+    {name} (string) registered name by |piemenu.register()|
+
+clear_all()                                              *piemenu.clear_all()*
+  Clear all registered piemenus settings.
+
+==============================================================================
+HIGHLIGHT GROUPS                               *piemenu.nvim-HIGHLIGHT-GROUPS*
+
+PiemenuNonCurrent                                       *hl-PiemenuNonCurrent*
+  used for non selected menu content
+
+PiemenuNonCurrentBorder                           *hl-PiemenuNonCurrentBorder*
+  used for non selected menu border
+
+PiemenuCurrent                                             *hl-PiemenuCurrent*
+  used for current selected menu content
+
+PiemenuCurrentBorder                                 *hl-PiemenuCurrentBorder*
+  used for current selected menu border
+
+==============================================================================
+EXAMPLES                                               *piemenu.nvim-EXAMPLES*
+
+>
+  augroup piemenu_setting
+    autocmd!
+    autocmd FileType piemenu call s:setting()
+  augroup END
+  function! s:setting() abort
+    nnoremap <buffer> <LeftDrag> <Cmd>lua require("piemenu").hover()<CR>
+    nnoremap <buffer> <LeftRelease> <Cmd>lua require("piemenu").select()<CR>
+    nnoremap <buffer> <RightMouse> <Cmd>lua require("piemenu").cancel()<CR>
+  endfunction
+
+  lua << EOF
+  require("piemenu").register("TODO", {
+    -- start_angle = 0,
+    -- increment_angle = 45,
+    -- tile_width = 15,
+    menus = {
+      {
+        text = "open",
+        action = function()
+          -- TODO
+        end,
+      },
+    },
+  })
+  EOF
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help

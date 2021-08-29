@@ -79,4 +79,6 @@ function View.find(name)
   return nil
 end
 
+M.hl_groups = require("piemenu.view.tile").hl_groups
+
 return M

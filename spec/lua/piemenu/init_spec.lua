@@ -107,7 +107,7 @@ describe("piemenu.hover()", function()
     vim.api.nvim_win_set_cursor(0, {math.floor(vim.o.lines / 2), vim.o.columns})
     piemenu.hover()
 
-    assert.exists_highlighted_window("PimenuCurrent")
+    assert.exists_highlighted_window("PiemenuCurrent")
   end)
 
 end)

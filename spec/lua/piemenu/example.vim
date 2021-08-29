@@ -1,10 +1,3 @@
-# piemenu.nvim
-
-piemenu.nvim is a circular menu plugin for Neovim (nightly).
-
-## Example
-
-```vim
 augroup piemenu_setting
   autocmd!
   autocmd FileType piemenu call s:setting()
@@ -30,4 +23,3 @@ require("piemenu").register("TODO", {
   },
 })
 EOF
-```
