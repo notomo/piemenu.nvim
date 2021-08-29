@@ -23,27 +23,49 @@ function Tiles.open(menus, view_setting)
   local radius = view_setting.radius
   local tile_width = view_setting.tile_width
   local animation = view_setting.animation
+  local around_angle = increment_angle * 0.5
+
+  local open = function(angle, menu)
+    return Tile.open(angle, radius, tile_width, position, menu, around_angle, animation)
+  end
 
   local tiles = {}
+  local spacer_angles = {}
   local i = 1
   for angle = start_angle, start_angle + 359, increment_angle do
     local menu = menus[i]
     if not menu then
       break
     end
+    if menu:is_empty() then
+      i = i + 1
+      table.insert(spacer_angles, angle)
+      goto continue
+    end
 
-    local around_angle = increment_angle * 0.5
-    local tile, increment = Tile.open(angle, radius, tile_width, position, menu, around_angle, animation)
+    local tile = open(angle, menu)
+    if not tile then
+      tile = Tiles._fallback_to_spacer(open, menu, spacer_angles)
+    end
     if tile then
       table.insert(tiles, tile)
-    end
-    if increment then
       i = i + 1
     end
+    ::continue::
   end
 
   local tbl = {_tiles = tiles}
   return setmetatable(tbl, Tiles)
+end
+
+function Tiles._fallback_to_spacer(open, menu, angles)
+  for i, angle in ipairs(angles) do
+    local tile = open(angle, menu)
+    if tile then
+      table.remove(angles, i)
+      return tile
+    end
+  end
 end
 
 function Tiles.activate(self, position)
@@ -80,9 +102,6 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle, animati
     menu = {menu, "table"},
     animation = {animation, "table"},
   })
-  if menu:is_empty() then
-    return nil, true
-  end
 
   local half_width = width / 2
   local height = 3
@@ -94,8 +113,8 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle, animati
   local origin_row, origin_col = unpack(origin_pos)
   local row = radius * math.sin(rad) + origin_row - half_height
   local col = radius * math.cos(rad) * 2 + origin_col - half_width -- *2 for row height and col width ratio
-  if row <= 0 or col <= 0 or max_row <= row + height or max_col <= col + width then
-    return nil, false
+  if row <= -1 or col <= -1 or max_row <= row + height or max_col <= col + width then
+    return nil
   end
 
   local bufnr = vim.api.nvim_create_buf(false, true)
@@ -136,7 +155,7 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle, animati
   }
   local self = setmetatable(tbl, Tile)
   self:deactivate()
-  return self, true
+  return self
 end
 
 function Tile.include(self, position)
