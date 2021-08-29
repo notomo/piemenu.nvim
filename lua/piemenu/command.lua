@@ -22,16 +22,16 @@ function Command.new(name, ...)
   return nil
 end
 
-function Command.start(name, raw_opts)
-  vim.validate({name = {name, "string"}, opts = {raw_opts, "table", true}})
-  raw_opts = raw_opts or {}
+function Command.start(name, raw_info)
+  vim.validate({name = {name, "string"}, info = {raw_info, "table", true}})
+  raw_info = raw_info or {}
 
   local already = View.find(name)
   if already then
     return nil
   end
 
-  return View.open(name, raw_opts)
+  return View.open(name, raw_info)
 end
 
 function Command.highlight()

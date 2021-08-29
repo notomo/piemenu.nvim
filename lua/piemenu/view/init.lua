@@ -9,20 +9,20 @@ local View = {}
 View.__index = View
 M.View = View
 
-function View.open(name, raw_opts)
-  vim.validate({name = {name, "string"}, raw_opts = {raw_opts, "table"}})
+function View.open(name, raw_info)
+  vim.validate({name = {name, "string"}, raw_info = {raw_info, "table"}})
 
   local menus, err
-  if not raw_opts.menus then
+  if not raw_info.menus then
     menus, err = Menus.find(name)
   else
-    menus = Menus.new(name, raw_opts)
+    menus = Menus.new(name, raw_info)
   end
   if err then
     return err
   end
 
-  local view_opts = menus.opts:merge(raw_opts):for_view()
+  local view_opts = menus.opts:merge(raw_info):for_view()
   local background = Background.open(name, view_opts.position)
   local tiles = Tiles.open(menus, view_opts)
 

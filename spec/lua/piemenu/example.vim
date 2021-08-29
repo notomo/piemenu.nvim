@@ -3,8 +3,8 @@ augroup piemenu_setting
   autocmd FileType piemenu call s:setting()
 augroup END
 function! s:setting() abort
-  nnoremap <buffer> <LeftDrag> <Cmd>lua require("piemenu").hover()<CR>
-  nnoremap <buffer> <LeftRelease> <Cmd>lua require("piemenu").select()<CR>
+  nnoremap <buffer> <LeftDrag> <Cmd>lua require("piemenu").highlight()<CR>
+  nnoremap <buffer> <LeftRelease> <Cmd>lua require("piemenu").finish()<CR>
   nnoremap <buffer> <RightMouse> <Cmd>lua require("piemenu").cancel()<CR>
 endfunction
 

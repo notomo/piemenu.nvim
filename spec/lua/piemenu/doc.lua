@@ -20,6 +20,48 @@ require("genvdoc").generate("piemenu.nvim", {
       end,
     },
     {
+      name = "PARAMETERS",
+      body = function(ctx)
+        local descriptions = {
+          start_angle = [[
+- {start_angle} (number | nil): angle to open first tile]],
+          increment_angle = [[
+- {increment_angle} (number | nil): angle]],
+          radius = [[
+- {radius} (number | nil): piemenu circle radius]],
+          tile_width = [[
+- {tile_width} (number | nil): menu tile width]],
+          animation = [[
+- {animation} (table | nil): |piemenu.nvim-animation|]],
+          menus = [[
+- {menus} (table | nil): |piemenu.nvim-menus|]],
+          position = [[
+- {position} (table | nil): {row, col}]],
+        }
+        local setting_lines = {}
+        local keys = vim.tbl_keys(require("piemenu.core.option").Option.default)
+        table.sort(keys, function(a, b)
+          return a < b
+        end)
+        for _, key in ipairs(keys) do
+          table.insert(setting_lines, descriptions[key] or "Todo\n")
+        end
+        return util.help_tagged(ctx, "Setting", "piemenu.nvim-setting") .. [[
+
+]] .. vim.trim(table.concat(setting_lines, "\n")) .. [[
+
+
+]] .. util.help_tagged(ctx, "Animation", "piemenu.nvim-animation") .. [[
+
+- {duration} (number | nil): open animation duration
+
+]] .. util.help_tagged(ctx, "Menus", "piemenu.nvim-menus") .. [[
+
+- {text} (string): displayed text in menu tile
+- {action} (function): action triggered by |piemenu.nvim-piemenu.finish()|]]
+      end,
+    },
+    {
       name = "HIGHLIGHT GROUPS",
       body = function(ctx)
         local descriptions = {

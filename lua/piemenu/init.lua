@@ -4,9 +4,9 @@ local M = {}
 
 --- Start a piemenu.
 --- @param name string: registered name by |piemenu.register()|
---- @param opts table: Todo
-function M.start(name, opts)
-  Command.new("start", name, opts)
+--- @param setting table|nil: |piemenu.nvim-setting|
+function M.start(name, setting)
+  Command.new("start", name, setting)
 end
 
 --- Highlight a current hovered menu.
@@ -25,10 +25,10 @@ function M.cancel()
 end
 
 --- Register a piemenu setting.
---- @param name string: Todo
---- @param info table: Todo
-function M.register(name, info)
-  Command.new("register", name, info)
+--- @param name string: key to lookup pimenu setting
+--- @param setting table: |piemenu.nvim-setting|
+function M.register(name, setting)
+  Command.new("register", name, setting)
 end
 
 --- Clear a registered piemenu setting.

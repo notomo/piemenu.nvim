@@ -3,12 +3,12 @@
 ==============================================================================
 Lua module: piemenu                                     *piemenu.nvim-piemenu*
 
-start({name}, {opts})                                        *piemenu.start()*
+start({name}, {setting})                                     *piemenu.start()*
   Start a piemenu.
 
   Parameters: ~
     {name} (string) registered name by |piemenu.register()|
-    {opts} (table) Todo
+    {setting} (table|nil) |piemenu.nvim-setting|
 
 highlight()                                              *piemenu.highlight()*
   Highlight a current hovered menu.
@@ -19,12 +19,12 @@ finish()                                                    *piemenu.finish()*
 cancel()                                                    *piemenu.cancel()*
   Close all displayed menus.
 
-register({name}, {info})                                  *piemenu.register()*
+register({name}, {setting})                               *piemenu.register()*
   Register a piemenu setting.
 
   Parameters: ~
-    {name} (string) Todo
-    {info} (table) Todo
+    {name} (string) key to lookup pimenu setting
+    {setting} (table) |piemenu.nvim-setting|
 
 clear({name})                                                *piemenu.clear()*
   Clear a registered piemenu setting.
@@ -34,6 +34,28 @@ clear({name})                                                *piemenu.clear()*
 
 clear_all()                                              *piemenu.clear_all()*
   Clear all registered piemenus settings.
+
+==============================================================================
+PARAMETERS                                           *piemenu.nvim-PARAMETERS*
+
+Setting                                                 *piemenu.nvim-setting*
+
+- {animation} (table | nil): |piemenu.nvim-animation|
+- {increment_angle} (number | nil): angle
+- {menus} (table | nil): |piemenu.nvim-menus|
+- {position} (table | nil): {row, col}
+- {radius} (number | nil): piemenu circle radius
+- {start_angle} (number | nil): angle to open first tile
+- {tile_width} (number | nil): menu tile width
+
+Animation                                             *piemenu.nvim-animation*
+
+- {duration} (number | nil): open animation duration
+
+Menus                                                     *piemenu.nvim-menus*
+
+- {text} (string): displayed text in menu tile
+- {action} (function): action triggered by |piemenu.nvim-piemenu.finish()|
 
 ==============================================================================
 HIGHLIGHT GROUPS                               *piemenu.nvim-HIGHLIGHT-GROUPS*
@@ -59,8 +81,8 @@ EXAMPLES                                               *piemenu.nvim-EXAMPLES*
     autocmd FileType piemenu call s:setting()
   augroup END
   function! s:setting() abort
-    nnoremap <buffer> <LeftDrag> <Cmd>lua require("piemenu").hover()<CR>
-    nnoremap <buffer> <LeftRelease> <Cmd>lua require("piemenu").select()<CR>
+    nnoremap <buffer> <LeftDrag> <Cmd>lua require("piemenu").highlight()<CR>
+    nnoremap <buffer> <LeftRelease> <Cmd>lua require("piemenu").finish()<CR>
     nnoremap <buffer> <RightMouse> <Cmd>lua require("piemenu").cancel()<CR>
   endfunction
 
