@@ -39,7 +39,7 @@ require("genvdoc").generate("piemenu.nvim", {
 - {position} (table | nil): {row, col}]],
         }
         local setting_lines = {}
-        local keys = vim.tbl_keys(require("piemenu.core.option").Option.default)
+        local keys = vim.tbl_keys(require("piemenu.core.setting").Setting.default)
         table.sort(keys, function(a, b)
           return a < b
         end)

@@ -14,15 +14,15 @@ local Tile = {}
 Tile.__index = Tile
 M.Tile = Tile
 
-function Tiles.open(menus, view_opts)
-  vim.validate({menus = {menus, "table"}, view_opts = {view_opts, "table"}})
+function Tiles.open(menus, view_setting)
+  vim.validate({menus = {menus, "table"}, view_setting = {view_setting, "table"}})
 
-  local position = view_opts.position
-  local start_angle = view_opts.start_angle
-  local increment_angle = view_opts.increment_angle
-  local radius = view_opts.radius
-  local tile_width = view_opts.tile_width
-  local animation = view_opts.animation
+  local position = view_setting.position
+  local start_angle = view_setting.start_angle
+  local increment_angle = view_setting.increment_angle
+  local radius = view_setting.radius
+  local tile_width = view_setting.tile_width
+  local animation = view_setting.animation
 
   local tiles = {}
   local i = 1

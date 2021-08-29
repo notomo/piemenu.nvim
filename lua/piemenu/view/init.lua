@@ -9,22 +9,22 @@ local View = {}
 View.__index = View
 M.View = View
 
-function View.open(name, raw_info)
-  vim.validate({name = {name, "string"}, raw_info = {raw_info, "table"}})
+function View.open(name, raw_setting)
+  vim.validate({name = {name, "string"}, raw_setting = {raw_setting, "table"}})
 
   local menus, err
-  if not raw_info.menus then
+  if not raw_setting.menus then
     menus, err = Menus.find(name)
   else
-    menus = Menus.new(name, raw_info)
+    menus = Menus.new(name, raw_setting)
   end
   if err then
     return err
   end
 
-  local view_opts = menus.opts:merge(raw_info):for_view()
-  local background = Background.open(name, view_opts.position)
-  local tiles = Tiles.open(menus, view_opts)
+  local view_setting = menus.setting:merge(raw_setting):for_view()
+  local background = Background.open(name, view_setting.position)
+  local tiles = Tiles.open(menus, view_setting)
 
   local tbl = {name = name, _background = background, _tiles = tiles}
   local self = setmetatable(tbl, View)

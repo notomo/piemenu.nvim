@@ -22,16 +22,16 @@ function Command.new(name, ...)
   return nil
 end
 
-function Command.start(name, raw_info)
-  vim.validate({name = {name, "string"}, info = {raw_info, "table", true}})
-  raw_info = raw_info or {}
+function Command.start(name, raw_setting)
+  vim.validate({name = {name, "string"}, setting = {raw_setting, "table", true}})
+  raw_setting = raw_setting or {}
 
   local already = View.find(name)
   if already then
     return nil
   end
 
-  return View.open(name, raw_info)
+  return View.open(name, raw_setting)
 end
 
 function Command.highlight()
@@ -66,8 +66,8 @@ function Command.close(name)
   view:close()
 end
 
-function Command.register(name, info)
-  require("piemenu.core.menu").Menus.register(name, info)
+function Command.register(name, setting)
+  require("piemenu.core.menu").Menus.register(name, setting)
 end
 
 function Command.clear(name)

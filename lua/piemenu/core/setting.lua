@@ -3,32 +3,32 @@ local validatelib = require("piemenu.lib.validate")
 
 local M = {}
 
-local Option = {}
-Option.__index = Option
-M.Option = Option
+local Setting = {}
+Setting.__index = Setting
+M.Setting = Setting
 
-Option.nil_value = ""
+Setting.nil_value = ""
 
-Option.default = {
+Setting.default = {
   start_angle = 0,
   increment_angle = 45,
   radius = 12.0,
   tile_width = 15,
   animation = {duration = 100},
-  menus = Option.nil_value,
-  position = Option.nil_value,
+  menus = Setting.nil_value,
+  position = Setting.nil_value,
 }
 
-function Option.new(raw_opts)
-  vim.validate({raw_opts = {raw_opts, "table"}})
-  local default = vim.deepcopy(Option.default)
-  for k, v in pairs(Option.default) do
-    if v == Option.nil_value then
+function Setting.new(raw_setting)
+  vim.validate({raw_setting = {raw_setting, "table"}})
+  local default = vim.deepcopy(Setting.default)
+  for k, v in pairs(Setting.default) do
+    if v == Setting.nil_value then
       default[k] = nil
     end
   end
 
-  local data = vim.tbl_deep_extend("force", default, raw_opts)
+  local data = vim.tbl_deep_extend("force", default, raw_setting)
   validatelib.greater_than_zero({
     increment_angle = data.increment_angle,
     radius = data.radius,
@@ -42,18 +42,18 @@ function Option.new(raw_opts)
   })
 
   local tbl = {_data = data}
-  return setmetatable(tbl, Option)
+  return setmetatable(tbl, Setting)
 end
 
-function Option.all(self)
+function Setting.all(self)
   return vim.deepcopy(self._data)
 end
 
-function Option.merge(self, raw_opts)
-  return Option.new(vim.tbl_deep_extend("force", self:all(), raw_opts))
+function Setting.merge(self, raw_setting)
+  return Setting.new(vim.tbl_deep_extend("force", self:all(), raw_setting))
 end
 
-function Option.for_view(self)
+function Setting.for_view(self)
   return {
     start_angle = self._data.start_angle,
     increment_angle = self._data.increment_angle,

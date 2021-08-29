@@ -1,4 +1,4 @@
-local Option = require("piemenu.core.option").Option
+local Setting = require("piemenu.core.setting").Setting
 local repository = require("piemenu.lib.repository").Repository.new("menu")
 
 local M = {}
@@ -45,11 +45,11 @@ end
 local Menus = {}
 M.Menus = Menus
 
-function Menus.new(name, info)
-  vim.validate({name = {name, "string"}, info = {info, "table"}})
+function Menus.new(name, setting)
+  vim.validate({name = {name, "string"}, setting = {setting, "table"}})
 
   local menus = {}
-  for _, menu in ipairs(info.menus or {}) do
+  for _, menu in ipairs(setting.menus or {}) do
     if vim.tbl_isempty(menu) then
       table.insert(menus, EmptyMenu.new())
     else
@@ -57,7 +57,7 @@ function Menus.new(name, info)
     end
   end
 
-  local tbl = {name = name, opts = Option.new(info), _menus = menus}
+  local tbl = {name = name, setting = Setting.new(setting), _menus = menus}
   return setmetatable(tbl, Menus)
 end
 
@@ -79,8 +79,8 @@ function Menus.find(name)
   return menus, nil
 end
 
-function Menus.register(name, info)
-  local menus = Menus.new(name, info)
+function Menus.register(name, setting)
+  local menus = Menus.new(name, setting)
   repository:set(name, menus)
 end
 
