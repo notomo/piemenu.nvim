@@ -34,12 +34,12 @@ function Command.start(name, raw_opts)
   return View.open(name, raw_opts)
 end
 
-function Command.hover()
+function Command.highlight()
   local view, err = View.current()
   if err then
     return err
   end
-  view:hover()
+  view:highlight()
 end
 
 function Command.finish()

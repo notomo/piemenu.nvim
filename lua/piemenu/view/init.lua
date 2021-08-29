@@ -32,7 +32,7 @@ function View.open(name, raw_opts)
   repository:set(background.window_id, self)
 end
 
-function View.hover(self)
+function View.highlight(self)
   local position = self._background:click()
   self._tiles:activate(position)
 end

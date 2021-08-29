@@ -10,11 +10,11 @@ start({name}, {opts})                                        *piemenu.start()*
     {name} (string) registered name by |piemenu.register()|
     {opts} (table) Todo
 
-hover()                                                      *piemenu.hover()*
-  Highlight a current selected menu.
+highlight()                                              *piemenu.highlight()*
+  Highlight a current hovered menu.
 
 finish()                                                    *piemenu.finish()*
-  Execute current hovered menu's action and close all.
+  Execute a current hovered menu's action and close all.
 
 cancel()                                                    *piemenu.cancel()*
   Close all displayed menus.

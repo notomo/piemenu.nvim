@@ -9,12 +9,12 @@ function M.start(name, opts)
   Command.new("start", name, opts)
 end
 
---- Highlight a current selected menu.
-function M.hover()
-  Command.new("hover")
+--- Highlight a current hovered menu.
+function M.highlight()
+  Command.new("highlight")
 end
 
---- Execute current hovered menu's action and close all.
+--- Execute a current hovered menu's action and close all.
 function M.finish()
   Command.new("finish")
 end

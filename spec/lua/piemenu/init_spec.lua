@@ -85,7 +85,7 @@ describe("piemenu.start()", function()
 
 end)
 
-describe("piemenu.hover()", function()
+describe("piemenu.highlight()", function()
 
   before_each(helper.before_each)
   after_each(helper.after_each)
@@ -105,7 +105,7 @@ describe("piemenu.hover()", function()
     piemenu.start("default", {position = {vim.o.lines / 2, vim.o.columns / 2}})
 
     vim.api.nvim_win_set_cursor(0, {math.floor(vim.o.lines / 2), vim.o.columns})
-    piemenu.hover()
+    piemenu.highlight()
 
     assert.exists_highlighted_window("PiemenuCurrent")
   end)
