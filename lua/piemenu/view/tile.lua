@@ -25,7 +25,6 @@ function Tiles.open(menus, position, start_angle, increment_angle)
   increment_angle = increment_angle or menus.increment_angle or 45
   local radius = menus.radius or 12.0
   local width = menus.tile_width or 15
-  local position_offset = menus.position_offset or {0, 0}
   local animation = menus.animation or {duration = 100}
 
   vim.validate({
@@ -50,11 +49,9 @@ function Tiles.open(menus, position, start_angle, increment_angle)
       end,
       "greater than 0",
     },
-    position_offset = {position_offset, "table"},
   })
 
   local tiles = {}
-  local origin_pos = {position[1] + position_offset[1], position[2] + position_offset[2]}
   local i = 1
   for angle = start_angle, start_angle + 359, increment_angle do
     local menu = menus[i]
@@ -63,7 +60,7 @@ function Tiles.open(menus, position, start_angle, increment_angle)
     end
 
     local around_angle = increment_angle * 0.5
-    local tile, increment = Tile.open(angle, radius, width, origin_pos, menu, around_angle, animation)
+    local tile, increment = Tile.open(angle, radius, width, position, menu, around_angle, animation)
     if tile then
       table.insert(tiles, tile)
     end

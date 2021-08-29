@@ -62,7 +62,6 @@ function Menus.new(name, info)
     increment_angle = info.increment_angle,
     radius = info.radius,
     tile_width = info.tile_width,
-    position_offset = info.position_offset,
     animation = info.animation,
     _menus = menus,
   }
