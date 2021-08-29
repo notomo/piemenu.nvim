@@ -42,12 +42,12 @@ function Command.hover()
   view:hover()
 end
 
-function Command.select()
+function Command.finish()
   local view, err = View.current()
   if err then
     return err
   end
-  return view:select()
+  return view:finish()
 end
 
 function Command.cancel()

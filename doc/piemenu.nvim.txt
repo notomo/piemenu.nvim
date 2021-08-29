@@ -13,8 +13,8 @@ start({name}, {opts})                                        *piemenu.start()*
 hover()                                                      *piemenu.hover()*
   Highlight a current selected menu.
 
-select()                                                    *piemenu.select()*
-  Select a menu and close all.
+finish()                                                    *piemenu.finish()*
+  Execute current hovered menu's action and close all.
 
 cancel()                                                    *piemenu.cancel()*
   Close all displayed menus.

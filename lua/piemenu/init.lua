@@ -14,9 +14,9 @@ function M.hover()
   Command.new("hover")
 end
 
---- Select a menu and close all.
-function M.select()
-  Command.new("select")
+--- Execute current hovered menu's action and close all.
+function M.finish()
+  Command.new("finish")
 end
 
 --- Close all displayed menus.

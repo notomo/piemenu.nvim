@@ -55,7 +55,7 @@ describe("piemenu.start()", function()
     piemenu.start("default", {position = {math.floor(vim.o.lines / 2) - 3, vim.o.columns / 2}})
 
     vim.api.nvim_win_set_cursor(0, {vim.o.lines - 1, math.floor(vim.o.columns / 2)})
-    piemenu.select()
+    piemenu.finish()
 
     assert.is_true(called)
   end)
@@ -78,7 +78,7 @@ describe("piemenu.start()", function()
     piemenu.start("default", {position = {5, vim.o.columns / 2}})
 
     vim.api.nvim_win_set_cursor(0, {5, vim.o.columns})
-    piemenu.select()
+    piemenu.finish()
 
     assert.is_true(called)
   end)
@@ -112,7 +112,7 @@ describe("piemenu.hover()", function()
 
 end)
 
-describe("piemenu.select()", function()
+describe("piemenu.finish()", function()
 
   before_each(helper.before_each)
   after_each(helper.after_each)
@@ -134,7 +134,7 @@ describe("piemenu.select()", function()
     piemenu.start("default", {position = {vim.o.lines / 2, vim.o.columns / 2}})
 
     vim.api.nvim_win_set_cursor(0, {math.floor(vim.o.lines / 2), vim.o.columns})
-    piemenu.select()
+    piemenu.finish()
 
     assert.is_true(called)
   end)

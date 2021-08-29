@@ -37,7 +37,7 @@ function View.hover(self)
   self._tiles:activate(position)
 end
 
-function View.select(self)
+function View.finish(self)
   local position = self._background:click()
   local tile = self._tiles:find(position)
 
