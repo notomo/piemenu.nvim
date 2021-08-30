@@ -25,8 +25,8 @@ require("genvdoc").generate("piemenu.nvim", {
         local descriptions = {
           start_angle = [[
 - {start_angle} (number | nil): angle to open first tile]],
-          increment_angle = [[
-- {increment_angle} (number | nil): angle]],
+          end_angle = [[
+- {end_angle} (number | nil): angle to limit open tile]],
           radius = [[
 - {radius} (number | nil): piemenu circle radius]],
           tile_width = [[

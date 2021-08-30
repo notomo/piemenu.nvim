@@ -11,7 +11,6 @@ endfunction
 lua << EOF
 require("piemenu").register("TODO", {
   -- start_angle = 0,
-  -- increment_angle = 45,
   -- tile_width = 15,
   menus = {
     {

@@ -11,7 +11,7 @@ Setting.nil_value = ""
 
 Setting.default = {
   start_angle = 0,
-  increment_angle = 45,
+  end_angle = 360,
   radius = 12.0,
   tile_width = 15,
   animation = {duration = 100},
@@ -29,13 +29,10 @@ function Setting.new(raw_setting)
   end
 
   local data = vim.tbl_deep_extend("force", default, raw_setting)
-  validatelib.greater_than_zero({
-    increment_angle = data.increment_angle,
-    radius = data.radius,
-    tile_width = data.tile_width,
-  })
+  validatelib.greater_than_zero({radius = data.radius, tile_width = data.tile_width})
   vim.validate({
     start_angle = {data.start_angle, "number"},
+    end_angle = {data.end_angle, "number"},
     animation = {data.animation, "table"},
     menus = {data.menus, "table", true},
     position = {data.position, "table", true},
@@ -56,7 +53,7 @@ end
 function Setting.for_view(self)
   return {
     start_angle = self._data.start_angle,
-    increment_angle = self._data.increment_angle,
+    end_angle = self._data.end_angle,
     radius = self._data.radius,
     tile_width = self._data.tile_width,
     animation = self._data.animation,

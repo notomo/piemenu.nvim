@@ -1,3 +1,4 @@
+local EmptyMenu = require("piemenu.core.menu").EmptyMenu
 local CircleRange = require("piemenu.core.circle_range").CircleRange
 local Move = require("piemenu.view.animation").Move
 local windowlib = require("piemenu.lib.window")
@@ -14,25 +15,43 @@ local Tile = {}
 Tile.__index = Tile
 M.Tile = Tile
 
-function Tiles.open(menus, view_setting)
-  vim.validate({menus = {menus, "table"}, view_setting = {view_setting, "table"}})
+function Tiles.open(defined_menus, view_setting)
+  vim.validate({defined_menus = {defined_menus, "table"}, view_setting = {view_setting, "table"}})
 
   local position = view_setting.position
   local start_angle = view_setting.start_angle
-  local increment_angle = view_setting.increment_angle
+  local end_angle = view_setting.end_angle
   local radius = view_setting.radius
   local tile_width = view_setting.tile_width
   local animation = view_setting.animation
-  local around_angle = increment_angle * 0.5
+
+  local menu_increment_angle = end_angle / defined_menus:count()
+  local space_increment_angle = math.max(menu_increment_angle / 3, 1)
+  local around_angle = space_increment_angle * 0.5
 
   local open = function(angle, menu)
     return Tile.open(angle, radius, tile_width, position, menu, around_angle, animation)
   end
 
+  local menus = {}
+  local index = 0
+  for angle = start_angle, end_angle - 1, space_increment_angle do
+    local next_menu_angle = menu_increment_angle * index
+    if angle < next_menu_angle then
+      table.insert(menus, EmptyMenu.new())
+      goto continue
+    end
+
+    index = index + 1
+    table.insert(menus, defined_menus[index])
+
+    ::continue::
+  end
+
   local tiles = {}
   local spacer_angles = {}
   local i = 1
-  for angle = start_angle, start_angle + 359, increment_angle do
+  for angle = start_angle, end_angle - 1, space_increment_angle do
     local menu = menus[i]
     if not menu then
       break

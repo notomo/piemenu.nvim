@@ -41,7 +41,7 @@ PARAMETERS                                           *piemenu.nvim-PARAMETERS*
 Setting                                                 *piemenu.nvim-setting*
 
 - {animation} (table | nil): |piemenu.nvim-animation|
-- {increment_angle} (number | nil): angle
+- {end_angle} (number | nil): angle to limit open tile
 - {menus} (table | nil): |piemenu.nvim-menus|
 - {position} (table | nil): {row, col}
 - {radius} (number | nil): piemenu circle radius
@@ -89,7 +89,6 @@ EXAMPLES                                               *piemenu.nvim-EXAMPLES*
   lua << EOF
   require("piemenu").register("TODO", {
     -- start_angle = 0,
-    -- increment_angle = 45,
     -- tile_width = 15,
     menus = {
       {

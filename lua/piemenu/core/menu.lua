@@ -70,6 +70,10 @@ function Menus.is_empty(self)
   return true
 end
 
+function Menus.count(self)
+  return #self._menus
+end
+
 function Menus.find(name)
   vim.validate({name = {name, "string"}})
   local menus = repository:get(name)

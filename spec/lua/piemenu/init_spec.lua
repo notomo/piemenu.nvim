@@ -42,13 +42,14 @@ describe("piemenu.start()", function()
       animation = {duration = 0},
       menus = {
         {},
-        {},
         {
           text = "text A",
           action = function()
             called = true
           end,
         },
+        {},
+        {},
       },
     })
 
