@@ -34,11 +34,17 @@ end
 
 function View.highlight(self)
   local position = self._background:click()
+  if not position then
+    return
+  end
   self._tiles:activate(position)
 end
 
 function View.finish(self)
   local position = self._background:click()
+  if not position then
+    return
+  end
   local tile = self._tiles:find(position)
 
   self:close()

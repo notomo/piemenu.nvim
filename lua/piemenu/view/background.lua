@@ -62,6 +62,9 @@ end
 
 function Background.click(self)
   self:_click()
+  if not vim.api.nvim_win_is_valid(self.window_id) then
+    return nil
+  end
   return vim.api.nvim_win_get_cursor(self.window_id)
 end
 
