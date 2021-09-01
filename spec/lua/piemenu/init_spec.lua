@@ -76,9 +76,9 @@ describe("piemenu.start()", function()
       },
     })
 
-    piemenu.start("default", {position = {5, vim.o.columns / 2}})
+    piemenu.start("default", {position = {1, vim.o.columns / 2}})
 
-    vim.api.nvim_win_set_cursor(0, {5, vim.o.columns})
+    vim.api.nvim_win_set_cursor(0, {1, vim.o.columns})
     piemenu.finish()
 
     assert.is_true(called)

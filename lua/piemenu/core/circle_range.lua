@@ -4,6 +4,7 @@ local angle_0_to_360 = function(raw_angle)
   vim.validate({raw_angle = {raw_angle, "number"}})
   return (raw_angle + 360) % 360
 end
+M.angle_0_to_360 = angle_0_to_360
 
 local CircleRange = {}
 CircleRange.__index = CircleRange

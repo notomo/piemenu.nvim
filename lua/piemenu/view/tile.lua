@@ -1,15 +1,31 @@
 local EmptyMenu = require("piemenu.core.menu").EmptyMenu
 local CircleRange = require("piemenu.core.circle_range").CircleRange
+local angle_0_to_360 = require("piemenu.core.circle_range").angle_0_to_360
 local Move = require("piemenu.view.animation").Move
+local TileArea = require("piemenu.view.area").TileArea
 local windowlib = require("piemenu.lib.window")
 local stringlib = require("piemenu.lib.string")
 local highlightlib = require("piemenu.lib.highlight")
 
 local M = {}
 
+local diff_angle = function(angle, angle_next)
+  angle = angle_0_to_360(angle)
+  angle_next = angle_0_to_360(angle_next)
+  local d = angle_next - angle
+  if d <= 0 then
+    return d + 360
+  end
+  return d
+end
+
 local Tiles = {}
 Tiles.__index = Tiles
 M.Tiles = Tiles
+
+local TileSpace = {}
+TileSpace.__index = TileSpace
+M.TileSpace = TileSpace
 
 local Tile = {}
 Tile.__index = Tile
@@ -23,14 +39,15 @@ function Tiles.open(defined_menus, view_setting)
   local end_angle = view_setting.end_angle
   local radius = view_setting.radius
   local tile_width = view_setting.tile_width
+  local tile_height = 3
   local animation = view_setting.animation
 
   local menu_increment_angle = end_angle / defined_menus:count()
   local space_increment_angle = math.max(menu_increment_angle / 3, 1)
-  local around_angle = space_increment_angle * 0.5
 
-  local open = function(angle, menu)
-    return Tile.open(angle, radius, tile_width, position, menu, around_angle, animation)
+  local area = TileArea.new()
+  local create_space = function(angle, menu)
+    return TileSpace.new(area, angle, radius, tile_width, tile_height, position, menu)
   end
 
   local menus = {}
@@ -48,7 +65,7 @@ function Tiles.open(defined_menus, view_setting)
     ::continue::
   end
 
-  local tiles = {}
+  local spaces = {}
   local spacer_angles = {}
   local i = 1
   for angle = start_angle, end_angle - 1, space_increment_angle do
@@ -62,27 +79,53 @@ function Tiles.open(defined_menus, view_setting)
       goto continue
     end
 
-    local tile = open(angle, menu)
-    if not tile then
-      tile = Tiles._fallback_to_spacer(open, menu, spacer_angles)
+    local space = create_space(angle, menu)
+    if not space then
+      space = Tiles._fallback_to_spacer(create_space, menu, spacer_angles)
     end
-    if tile then
-      table.insert(tiles, tile)
+    if space then
       i = i + 1
+      table.insert(spaces, space)
     end
     ::continue::
+  end
+
+  table.sort(spaces, function(a, b)
+    return a.angle < b.angle
+  end)
+
+  local tiles = {}
+  for k, space in ipairs(spaces) do
+    local prev_space = spaces[k - 1]
+    if not prev_space then
+      prev_space = spaces[#spaces]
+    end
+
+    local next_space = spaces[k + 1]
+    if not next_space then
+      next_space = spaces[1]
+    end
+
+    local prev_angle = diff_angle(prev_space.angle, space.angle) / 2
+    local next_angle = diff_angle(space.angle, next_space.angle) / 2
+    if prev_angle + next_angle > 180 then
+      prev_angle = math.min(90, prev_angle)
+      next_angle = math.min(90, next_angle)
+    end
+    local tile = space:open(animation, prev_angle, next_angle)
+    table.insert(tiles, tile)
   end
 
   local tbl = {_tiles = tiles}
   return setmetatable(tbl, Tiles)
 end
 
-function Tiles._fallback_to_spacer(open, menu, angles)
+function Tiles._fallback_to_spacer(create_space, menu, angles)
   for i, angle in ipairs(angles) do
-    local tile = open(angle, menu)
-    if tile then
+    local space = create_space(angle, menu)
+    if space then
       table.remove(angles, i)
-      return tile
+      return space
     end
   end
 end
@@ -112,40 +155,44 @@ function Tiles.close(self)
   end
 end
 
-function Tile.open(angle, radius, width, origin_pos, menu, around_angle, animation)
-  vim.validate({
-    angle = {angle, "number"},
-    radius = {radius, "number"},
-    width = {width, "number"},
-    origin_pos = {origin_pos, "table"},
-    menu = {menu, "table"},
-    animation = {animation, "table"},
-  })
-
+function TileSpace.new(area, angle, radius, width, height, origin_pos, menu)
   local half_width = width / 2
-  local height = 3
   local half_height = height / 2
-  local max_col = vim.o.columns
-  local max_row = vim.o.lines
-
   local rad = math.rad(angle)
   local origin_row, origin_col = unpack(origin_pos)
   local row = radius * math.sin(rad) + origin_row - half_height
   local col = radius * math.cos(rad) * 2 + origin_col - half_width -- *2 for row height and col width ratio
-  if row <= -1 or col <= -1 or max_row <= row + height or max_col <= col + width then
+
+  if not area:include(row, col, width, height) then
     return nil
   end
 
+  local tbl = {
+    angle = angle,
+    _row = row,
+    _col = col,
+    _width = width,
+    _half_width = half_width,
+    _height = height,
+    _origin_pos = origin_pos,
+    _menu = menu,
+  }
+  return setmetatable(tbl, TileSpace)
+end
+
+function TileSpace.open(self, animation, prev_angle, next_angle)
   local bufnr = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, {stringlib.ellipsis(menu:to_string(), width - 2)})
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, {
+    stringlib.ellipsis(self._menu:to_string(), self._width - 2),
+  })
   vim.bo[bufnr].bufhidden = "wipe"
   vim.bo[bufnr].modifiable = false
 
-  local y = origin_pos[1]
-  local x = origin_pos[2] - half_width
+  local y = self._origin_pos[1]
+  local x = self._origin_pos[2] - self._half_width
   local window_id = vim.api.nvim_open_win(bufnr, false, {
-    width = width - 2, -- for border
-    height = height - 2, -- for border
+    width = self._width - 2, -- for border
+    height = self._height - 2, -- for border
     anchor = "NW",
     relative = "editor",
     row = y,
@@ -158,7 +205,7 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle, animati
   })
   vim.wo[window_id].winblend = 0
 
-  Move.start({y, x}, {row + 1, col}, animation.duration, function(new_x, new_y)
+  Move.start({y, x}, {self._row + 1, self._col}, animation.duration, function(new_x, new_y)
     if not vim.api.nvim_win_is_valid(window_id) then
       return false
     end
@@ -168,13 +215,13 @@ function Tile.open(angle, radius, width, origin_pos, menu, around_angle, animati
 
   local tbl = {
     _window_id = window_id,
-    _menu = menu,
-    _range = CircleRange.new(angle - around_angle, angle + around_angle),
-    _origin_pos = origin_pos,
+    _menu = self._menu,
+    _range = CircleRange.new(self.angle - prev_angle, self.angle + next_angle),
+    _origin_pos = self._origin_pos,
   }
-  local self = setmetatable(tbl, Tile)
-  self:deactivate()
-  return self
+  local tile = setmetatable(tbl, Tile)
+  tile:deactivate()
+  return tile
 end
 
 function Tile.include(self, position)
