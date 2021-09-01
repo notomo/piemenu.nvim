@@ -74,6 +74,10 @@ function Menus.count(self)
   return #self._menus
 end
 
+function Menus.iter(self)
+  return ipairs(self._menus)
+end
+
 function Menus.find(name)
   vim.validate({name = {name, "string"}})
   local menus = repository:get(name)

@@ -3,6 +3,7 @@ local CircleRange = require("piemenu.core.circle_range").CircleRange
 local angle_0_to_360 = require("piemenu.core.circle_range").angle_0_to_360
 local Move = require("piemenu.view.animation").Move
 local TileArea = require("piemenu.view.area").TileArea
+local CircleSplitter = require("piemenu.view.circle_splitter").CircleSplitter
 local windowlib = require("piemenu.lib.window")
 local stringlib = require("piemenu.lib.string")
 local highlightlib = require("piemenu.lib.highlight")
@@ -42,59 +43,13 @@ function Tiles.open(defined_menus, view_setting)
   local tile_height = 3
   local animation = view_setting.animation
 
-  local menu_increment_angle = end_angle / defined_menus:count()
-  local space_increment_angle = math.max(menu_increment_angle / 3, 1)
-
   local area = TileArea.new()
-  local create_space = function(angle, menu)
+  local splitter = CircleSplitter.new(start_angle, end_angle, function(angle, menu)
     return TileSpace.new(area, angle, radius, tile_width, tile_height, position, menu)
-  end
-
-  local menus = {}
-  local index = 0
-  for angle = start_angle, end_angle - 1, space_increment_angle do
-    local next_menu_angle = menu_increment_angle * index
-    if angle < next_menu_angle then
-      table.insert(menus, EmptyMenu.new())
-      goto continue
-    end
-
-    index = index + 1
-    table.insert(menus, defined_menus[index])
-
-    ::continue::
-  end
-
-  local spaces = {}
-  local spacer_angles = {}
-  local i = 1
-  for angle = start_angle, end_angle - 1, space_increment_angle do
-    local menu = menus[i]
-    if not menu then
-      break
-    end
-    if menu:is_empty() then
-      i = i + 1
-      table.insert(spacer_angles, angle)
-      goto continue
-    end
-
-    local space = create_space(angle, menu)
-    if not space then
-      space = Tiles._fallback_to_spacer(create_space, menu, spacer_angles)
-    end
-    if space then
-      i = i + 1
-      table.insert(spaces, space)
-    end
-    ::continue::
-  end
-
-  table.sort(spaces, function(a, b)
-    return a.angle < b.angle
   end)
 
   local tiles = {}
+  local spaces = splitter:split(defined_menus)
   for k, space in ipairs(spaces) do
     local prev_space = spaces[k - 1]
     if not prev_space then
@@ -118,16 +73,6 @@ function Tiles.open(defined_menus, view_setting)
 
   local tbl = {_tiles = tiles}
   return setmetatable(tbl, Tiles)
-end
-
-function Tiles._fallback_to_spacer(create_space, menu, angles)
-  for i, angle in ipairs(angles) do
-    local space = create_space(angle, menu)
-    if space then
-      table.remove(angles, i)
-      return space
-    end
-  end
 end
 
 function Tiles.activate(self, position)
