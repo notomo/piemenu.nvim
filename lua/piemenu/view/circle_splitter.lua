@@ -26,7 +26,7 @@ function CircleSplitter.split(self, items)
   local retry_items = {}
   local item_increment_angle = self._end_angle / #items
   for i, item in ipairs(items) do
-    local angle = self._start_angle + (i - 1) * item_increment_angle
+    local angle = self._start_angle + item_increment_angle * (i - 1)
     local allocated = self._allocate(angle, item)
     if allocated then
       angle_holders = angle_holders:add(angle, allocated)

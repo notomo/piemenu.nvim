@@ -66,8 +66,7 @@ function Tiles.open(defined_menus, view_setting)
 
     local space = current_holder.inner
     if not space:is_empty() then
-      local tile = current_holder.inner:open(animation, prev_angle, next_angle)
-      table.insert(tiles, tile)
+      table.insert(tiles, space:open_tile(animation, prev_angle, next_angle))
     end
   end
 
@@ -133,7 +132,7 @@ function TileSpace.is_empty(self)
   return self._angle == nil
 end
 
-function TileSpace.open(self, animation, prev_angle, next_angle)
+function TileSpace.open_tile(self, animation, prev_angle, next_angle)
   local bufnr = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, {
     stringlib.ellipsis(self._menu:to_string(), self._width - 2),
