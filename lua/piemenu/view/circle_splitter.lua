@@ -16,6 +16,8 @@ function CircleSplitter.new(start_angle, end_angle, allocate)
   return setmetatable(tbl, CircleSplitter)
 end
 
+CircleSplitter._retry_max_count = 5
+
 function CircleSplitter.split(self, items)
   vim.validate({items = {items, "table"}})
 
@@ -33,8 +35,22 @@ function CircleSplitter.split(self, items)
     end
   end
 
-  local increment_angle = math.max(item_increment_angle / 3, 1)
-  for _, item in ipairs(retry_items) do
+  for i = 1, self._retry_max_count do
+    if #retry_items == 0 then
+      break
+    end
+    local increment_angle = math.max(item_increment_angle / math.pow(2, i), 1)
+    retry_items = self:_retry(retry_items, angle_holders, increment_angle)
+  end
+
+  return angle_holders:sorted()
+end
+
+function CircleSplitter._retry(self, items, angle_holders, increment_angle)
+  local retry_items = {}
+
+  for _, item in ipairs(items) do
+    local ok = false
     for angle = self._start_angle, self._end_angle - 1, increment_angle do
       if angle_holders:exists(angle) then
         goto continue
@@ -43,14 +59,18 @@ function CircleSplitter.split(self, items)
       local allocated = self._allocate(angle, item)
       if allocated then
         angle_holders = angle_holders:add(angle, allocated)
+        ok = true
         break
       end
 
       ::continue::
     end
+    if not ok then
+      table.insert(retry_items, item)
+    end
   end
 
-  return angle_holders:sorted()
+  return retry_items
 end
 
 return M
