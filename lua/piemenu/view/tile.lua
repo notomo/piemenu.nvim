@@ -48,7 +48,7 @@ function Tiles.open(defined_menus, view_setting)
     if menu:is_empty() then
       return TileSpace.empty()
     end
-    return TileSpace.new(area, angle, radius, tile_width, tile_height, position, menu)
+    return TileSpace.allocate(area, angle, radius, tile_width, tile_height, position, menu)
   end)
 
   local tiles = {}
@@ -104,7 +104,7 @@ function TileSpace.empty()
   return setmetatable({}, TileSpace)
 end
 
-function TileSpace.new(area, angle, radius, width, height, origin_pos, menu)
+function TileSpace.allocate(area, angle, radius, width, height, origin_pos, menu)
   local half_width = width / 2
   local half_height = height / 2
   local rad = math.rad(angle)
