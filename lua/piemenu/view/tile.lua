@@ -1,9 +1,9 @@
-local EmptyMenu = require("piemenu.core.menu").EmptyMenu
 local CircleRange = require("piemenu.core.circle_range").CircleRange
 local angle_0_to_360 = require("piemenu.core.circle_range").angle_0_to_360
 local Move = require("piemenu.view.animation").Move
 local TileArea = require("piemenu.view.area").TileArea
 local CircleSplitter = require("piemenu.view.circle_splitter").CircleSplitter
+local CircleTriList = require("piemenu.view.circle_tri_list").CircleTriList
 local windowlib = require("piemenu.lib.window")
 local stringlib = require("piemenu.lib.string")
 local highlightlib = require("piemenu.lib.highlight")
@@ -45,30 +45,30 @@ function Tiles.open(defined_menus, view_setting)
 
   local area = TileArea.new()
   local splitter = CircleSplitter.new(start_angle, end_angle, function(angle, menu)
+    if menu:is_empty() then
+      return TileSpace.empty()
+    end
     return TileSpace.new(area, angle, radius, tile_width, tile_height, position, menu)
   end)
 
   local tiles = {}
-  local spaces = splitter:split(defined_menus)
-  for k, space in ipairs(spaces) do
-    local prev_space = spaces[k - 1]
-    if not prev_space then
-      prev_space = spaces[#spaces]
-    end
+  local spaces = splitter:split(defined_menus:all())
+  local tri_list = CircleTriList.new(spaces)
+  for _, tri in ipairs(tri_list) do
+    local prev_holder, current_holder, next_holder = unpack(tri)
 
-    local next_space = spaces[k + 1]
-    if not next_space then
-      next_space = spaces[1]
-    end
-
-    local prev_angle = diff_angle(prev_space.angle, space.angle) / 2
-    local next_angle = diff_angle(space.angle, next_space.angle) / 2
+    local prev_angle = diff_angle(prev_holder.angle, current_holder.angle) / 2
+    local next_angle = diff_angle(current_holder.angle, next_holder.angle) / 2
     if prev_angle + next_angle > 180 then
       prev_angle = math.min(90, prev_angle)
       next_angle = math.min(90, next_angle)
     end
-    local tile = space:open(animation, prev_angle, next_angle)
-    table.insert(tiles, tile)
+
+    local space = current_holder.inner
+    if not space:is_empty() then
+      local tile = current_holder.inner:open(animation, prev_angle, next_angle)
+      table.insert(tiles, tile)
+    end
   end
 
   local tbl = {_tiles = tiles}
@@ -100,6 +100,10 @@ function Tiles.close(self)
   end
 end
 
+function TileSpace.empty()
+  return setmetatable({}, TileSpace)
+end
+
 function TileSpace.new(area, angle, radius, width, height, origin_pos, menu)
   local half_width = width / 2
   local half_height = height / 2
@@ -113,7 +117,7 @@ function TileSpace.new(area, angle, radius, width, height, origin_pos, menu)
   end
 
   local tbl = {
-    angle = angle,
+    _angle = angle,
     _row = row,
     _col = col,
     _width = width,
@@ -123,6 +127,10 @@ function TileSpace.new(area, angle, radius, width, height, origin_pos, menu)
     _menu = menu,
   }
   return setmetatable(tbl, TileSpace)
+end
+
+function TileSpace.is_empty(self)
+  return self._angle == nil
 end
 
 function TileSpace.open(self, animation, prev_angle, next_angle)
@@ -161,7 +169,7 @@ function TileSpace.open(self, animation, prev_angle, next_angle)
   local tbl = {
     _window_id = window_id,
     _menu = self._menu,
-    _range = CircleRange.new(self.angle - prev_angle, self.angle + next_angle),
+    _range = CircleRange.new(self._angle - prev_angle, self._angle + next_angle),
     _origin_pos = self._origin_pos,
   }
   local tile = setmetatable(tbl, Tile)
