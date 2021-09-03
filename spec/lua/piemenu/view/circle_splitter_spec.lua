@@ -22,6 +22,7 @@ describe("piemenu.view.circle_splitter", function()
       items = {1, 3},
       expected = {{angle = 0, inner = 1}, {angle = 180, inner = 3}},
     },
+    {start_angle = 370, end_angle = 0, items = {1}, expected = {{angle = 370, inner = 1}}},
     {
       start_angle = 0,
       end_angle = 360,
@@ -47,5 +48,25 @@ describe("piemenu.view.circle_splitter", function()
       assert.is_same(c.expected, actual)
     end)
   end
+
+  it("CircleSplitter does not give duplicated angle in retry", function()
+    local splitter = require("piemenu.view.circle_splitter").CircleSplitter.new(30, 90, function(angle, item)
+      if angle == 30 and item ~= 3 then
+        return item
+      end
+    end)
+    local actual = splitter:split({1, 2, 3})
+    assert.is_same({{angle = 30, inner = 1}}, actual)
+  end)
+
+  it("CircleSplitter does not give duplicated angle even if it is over 360", function()
+    local splitter = require("piemenu.view.circle_splitter").CircleSplitter.new(0, 360, function(angle, item)
+      if angle == 0 or angle == 360 then
+        return item
+      end
+    end)
+    local actual = splitter:split({1, 2, 3, 4})
+    assert.is_same({{angle = 0, inner = 1}}, actual)
+  end)
 
 end)

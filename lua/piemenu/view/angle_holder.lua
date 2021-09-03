@@ -1,3 +1,5 @@
+local angle_0_to_360 = require("piemenu.core.circle_range").angle_0_to_360
+
 local M = {}
 
 local AngleHolder = {}
@@ -17,7 +19,7 @@ function AngleHolders.new(raw_holders)
   raw_holders = raw_holders or {}
   local angles = {}
   for _, holder in ipairs(raw_holders) do
-    angles[holder.angle] = true
+    angles[angle_0_to_360(holder.angle)] = true
   end
   local tbl = {_holders = raw_holders, _angles = angles}
   return setmetatable(tbl, AngleHolders)
@@ -29,7 +31,7 @@ function AngleHolders.add(self, angle, inner)
 end
 
 function AngleHolders.exists(self, angle)
-  return self._angles[angle] ~= nil
+  return self._angles[angle_0_to_360(angle)] ~= nil
 end
 
 function AngleHolders.sorted(self, asc)
