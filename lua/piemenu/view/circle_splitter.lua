@@ -23,8 +23,14 @@ function CircleSplitter.split(self, items)
 
   local angle_holders = AngleHolders.new()
 
+  local count = #items
+  local angle_diff = math.min(self._end_angle - self._start_angle, 360)
+  if math.abs(angle_diff) ~= 360 then
+    count = count - 1
+  end
+  local item_increment_angle = angle_diff / count
+
   local retry_items = {}
-  local item_increment_angle = self._end_angle / #items
   for i, item in ipairs(items) do
     local angle = self._start_angle + item_increment_angle * (i - 1)
     local allocated = self._allocate(angle, item)
@@ -39,11 +45,11 @@ function CircleSplitter.split(self, items)
     if #retry_items == 0 then
       break
     end
-    local increment_angle = math.max(item_increment_angle / math.pow(2, i), 1)
+    local increment_angle = item_increment_angle / math.pow(2, i)
     retry_items = self:_retry(retry_items, angle_holders, increment_angle)
   end
 
-  return angle_holders:sorted()
+  return angle_holders:sorted(self._end_angle > self._start_angle)
 end
 
 function CircleSplitter._retry(self, items, angle_holders, increment_angle)
@@ -51,7 +57,7 @@ function CircleSplitter._retry(self, items, angle_holders, increment_angle)
 
   for _, item in ipairs(items) do
     local ok = false
-    for angle = self._start_angle, self._end_angle - 1, increment_angle do
+    for angle = self._start_angle, self._end_angle, increment_angle do
       if angle_holders:exists(angle) then
         goto continue
       end

@@ -35,20 +35,13 @@ M.Tile = Tile
 function Tiles.open(defined_menus, view_setting)
   vim.validate({defined_menus = {defined_menus, "table"}, view_setting = {view_setting, "table"}})
 
-  local position = view_setting.position
-  local start_angle = view_setting.start_angle
-  local end_angle = view_setting.end_angle
-  local radius = view_setting.radius
-  local tile_width = view_setting.tile_width
   local tile_height = 3
-  local animation = view_setting.animation
-
   local area = TileArea.new()
-  local splitter = CircleSplitter.new(start_angle, end_angle, function(angle, menu)
+  local splitter = CircleSplitter.new(view_setting.start_angle, view_setting.end_angle, function(angle, menu)
     if menu:is_empty() then
       return TileSpace.empty()
     end
-    return TileSpace.allocate(area, angle, radius, tile_width, tile_height, position, menu)
+    return TileSpace.allocate(area, angle, view_setting.radius, view_setting.tile_width, tile_height, view_setting.position, menu)
   end)
 
   local tiles = {}
@@ -66,7 +59,7 @@ function Tiles.open(defined_menus, view_setting)
 
     local space = current_holder.inner
     if not space:is_empty() then
-      table.insert(tiles, space:open_tile(animation, prev_angle, next_angle))
+      table.insert(tiles, space:open_tile(view_setting.animation, prev_angle, next_angle))
     end
   end
 

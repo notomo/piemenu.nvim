@@ -32,10 +32,16 @@ function AngleHolders.exists(self, angle)
   return self._angles[angle] ~= nil
 end
 
-function AngleHolders.sorted(self)
-  table.sort(self._holders, function(a, b)
-    return a.angle < b.angle
-  end)
+function AngleHolders.sorted(self, asc)
+  if asc then
+    table.sort(self._holders, function(a, b)
+      return a.angle < b.angle
+    end)
+  else
+    table.sort(self._holders, function(a, b)
+      return a.angle > b.angle
+    end)
+  end
   return self._holders
 end
 
