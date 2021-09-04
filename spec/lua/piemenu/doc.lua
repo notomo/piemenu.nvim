@@ -24,13 +24,13 @@ require("genvdoc").generate("piemenu.nvim", {
       body = function(ctx)
         local descriptions = {
           start_angle = [[
-- {start_angle} (number | nil): angle to open first tile]],
+- {start_angle} (number | nil): angle to open first tile, default: %s]],
           end_angle = [[
-- {end_angle} (number | nil): angle to limit open tile]],
+- {end_angle} (number | nil): angle to limit open tile, default: %s]],
           radius = [[
-- {radius} (number | nil): piemenu circle radius]],
+- {radius} (number | nil): piemenu circle radius, default: %s]],
           tile_width = [[
-- {tile_width} (number | nil): menu tile width]],
+- {tile_width} (number | nil): menu tile width, default: %s]],
           animation = [[
 - {animation} (table | nil): |piemenu.nvim-animation|]],
           menus = [[
@@ -39,13 +39,35 @@ require("genvdoc").generate("piemenu.nvim", {
 - {position} (table | nil): {row, col}]],
         }
         local setting_lines = {}
-        local keys = vim.tbl_keys(require("piemenu.core.setting").Setting.default)
-        table.sort(keys, function(a, b)
-          return a < b
-        end)
-        for _, key in ipairs(keys) do
-          table.insert(setting_lines, descriptions[key] or "Todo\n")
+        do
+          local keys = vim.tbl_keys(require("piemenu.core.setting").Setting.default)
+          local values = require("piemenu.core.setting").Setting.default_values()
+          table.sort(keys, function(a, b)
+            return a < b
+          end)
+          for _, key in ipairs(keys) do
+            local desc = (descriptions[key] or "Todo\n"):format(vim.inspect(values[key]))
+            table.insert(setting_lines, desc)
+          end
         end
+
+        local animation_descriptions = {
+          duration = [[
+- {duration} (number | nil): open animation duration, default: %s]],
+        }
+        local animation_lines = {}
+        do
+          local keys = vim.tbl_keys(require("piemenu.core.setting").AnimationSetting.default)
+          local values = require("piemenu.core.setting").AnimationSetting.default
+          table.sort(keys, function(a, b)
+            return a < b
+          end)
+          for _, key in ipairs(keys) do
+            local desc = (animation_descriptions[key] or "Todo\n"):format(vim.inspect(values[key]))
+            table.insert(animation_lines, desc)
+          end
+        end
+
         return util.help_tagged(ctx, "Setting", "piemenu.nvim-setting") .. [[
 
 ]] .. vim.trim(table.concat(setting_lines, "\n")) .. [[
@@ -53,7 +75,8 @@ require("genvdoc").generate("piemenu.nvim", {
 
 ]] .. util.help_tagged(ctx, "Animation", "piemenu.nvim-animation") .. [[
 
-- {duration} (number | nil): open animation duration
+]] .. vim.trim(table.concat(animation_lines, "\n")) .. [[
+
 
 ]] .. util.help_tagged(ctx, "Menus", "piemenu.nvim-menus") .. [[
 

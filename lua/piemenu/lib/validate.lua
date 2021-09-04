@@ -4,9 +4,19 @@ function M.greater_than_zero(value)
   return {
     value,
     function(x)
-      return x > 0
+      return type(x) == "number" and x > 0
     end,
     "greater than 0",
+  }
+end
+
+function M.not_negative(value)
+  return {
+    value,
+    function(x)
+      return type(x) == "number" and x >= 0
+    end,
+    "not negative number",
   }
 end
 
