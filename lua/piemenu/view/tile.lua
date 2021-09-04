@@ -39,17 +39,14 @@ function Tiles.open(defined_menus, view_setting)
 
   local tile_height = 3
   local area = TileArea.new()
-  local splitter = CircleSplitter.new(view_setting.start_angle, view_setting.end_angle, function(angle, menu)
-    if menu:is_empty() then
-      return TileSpace.empty()
-    end
-    return TileSpace.allocate(area, angle, view_setting.radius, view_setting.tile_width, tile_height, view_setting.position, menu)
+  local splitter = CircleSplitter.new(view_setting.start_angle, view_setting.end_angle, function(angle)
+    return TileSpace.allocate(area, angle, view_setting.radius, view_setting.tile_width, tile_height, view_setting.position)
   end)
 
   local tiles, moves = {}, {}
   local spaces = splitter:split(defined_menus:all())
   local tri_list = CircleTriList.new(spaces)
-  for _, tri in ipairs(tri_list) do
+  for i, tri in ipairs(tri_list) do
     local prev_holder, current_holder, next_holder = unpack(tri)
 
     local prev_angle = diff_angle(prev_holder.angle, current_holder.angle) / 2
@@ -60,8 +57,9 @@ function Tiles.open(defined_menus, view_setting)
     end
 
     local space = current_holder.inner
-    if not space:is_empty() then
-      local tile, move = space:open_tile(prev_angle, next_angle)
+    local menu = defined_menus[i]
+    if not menu:is_empty() then
+      local tile, move = space:open_tile(menu, prev_angle, next_angle)
       table.insert(tiles, tile)
       table.insert(moves, move)
     end
@@ -102,7 +100,7 @@ function TileSpace.empty()
   return setmetatable({}, TileSpace)
 end
 
-function TileSpace.allocate(area, angle, radius, width, height, origin_pos, menu)
+function TileSpace.allocate(area, angle, radius, width, height, origin_pos)
   local half_width = width / 2
   local half_height = height / 2
   local rad = math.rad(angle)
@@ -122,19 +120,14 @@ function TileSpace.allocate(area, angle, radius, width, height, origin_pos, menu
     _half_width = half_width,
     _height = height,
     _origin_pos = origin_pos,
-    _menu = menu,
   }
   return setmetatable(tbl, TileSpace)
 end
 
-function TileSpace.is_empty(self)
-  return self._angle == nil
-end
-
-function TileSpace.open_tile(self, prev_angle, next_angle)
+function TileSpace.open_tile(self, menu, prev_angle, next_angle)
   local bufnr = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, {
-    stringlib.ellipsis(self._menu:to_string(), self._width - 2),
+    stringlib.ellipsis(menu:to_string(), self._width - 2),
   })
   vim.bo[bufnr].bufhidden = "wipe"
   vim.bo[bufnr].modifiable = false
@@ -158,7 +151,7 @@ function TileSpace.open_tile(self, prev_angle, next_angle)
 
   local tbl = {
     _window_id = window_id,
-    _menu = self._menu,
+    _menu = menu,
     _range = CircleRange.new(self._angle - prev_angle, self._angle + next_angle),
     _origin_pos = self._origin_pos,
   }
