@@ -21,8 +21,6 @@ CircleSplitter._retry_max_count = 5
 function CircleSplitter.split(self, items)
   vim.validate({items = {items, "table"}})
 
-  local angle_holders = AngleHolders.new()
-
   local count = #items
   local angle_diff = math.max(-360, math.min(self._end_angle - self._start_angle, 360))
   if math.abs(angle_diff) ~= 360 then
@@ -30,34 +28,30 @@ function CircleSplitter.split(self, items)
   end
   local item_increment_angle = angle_diff / count
 
-  local retires = {}
+  local remains = {}
   for i, item in ipairs(items) do
-    local angle = self._start_angle + item_increment_angle * (i - 1)
-    local allocated = self._allocate(angle, item)
-    if allocated then
-      angle_holders = angle_holders:add(angle, allocated)
-    else
-      table.insert(retires, {item, angle})
-    end
+    local target_angle = self._start_angle + item_increment_angle * (i - 1)
+    table.insert(remains, {item, target_angle})
   end
 
-  for i = 1, self._retry_max_count do
-    if #retires == 0 then
+  local angle_holders = AngleHolders.new()
+  for i = 0, self._retry_max_count do
+    if #remains == 0 then
       break
     end
     local increment_angle = item_increment_angle / math.pow(2, i)
-    retires, angle_holders = self:_retry(retires, angle_holders, increment_angle)
+    remains, angle_holders = self:_retry(remains, angle_holders, increment_angle)
   end
 
   return angle_holders:sorted(self._end_angle > self._start_angle)
 end
 
-function CircleSplitter._retry(self, retries, angle_holders, increment_angle)
+function CircleSplitter._retry(self, remains, angle_holders, increment_angle)
   local next_retries = {}
 
-  for _, retry in ipairs(retries) do
+  for _, remain in ipairs(remains) do
     local ok = false
-    local item, target_angle = unpack(retry)
+    local item, target_angle = unpack(remain)
     for _, angle in ipairs(self:_sorted_angles(target_angle, increment_angle)) do
       if angle_holders:exists(angle) then
         goto continue
