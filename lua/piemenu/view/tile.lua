@@ -1,5 +1,6 @@
 local CircleRange = require("piemenu.core.circle_range").CircleRange
 local angle_0_to_360 = require("piemenu.core.circle_range").angle_0_to_360
+local Animation = require("piemenu.view.animation").Animation
 local Move = require("piemenu.view.animation").Move
 local TileArea = require("piemenu.view.area").TileArea
 local CircleSplitter = require("piemenu.view.circle_splitter").CircleSplitter
@@ -7,6 +8,7 @@ local CircleTriList = require("piemenu.view.circle_tri_list").CircleTriList
 local windowlib = require("piemenu.lib.window")
 local stringlib = require("piemenu.lib.string")
 local highlightlib = require("piemenu.lib.highlight")
+local vim = vim
 
 local M = {}
 
@@ -44,7 +46,7 @@ function Tiles.open(defined_menus, view_setting)
     return TileSpace.allocate(area, angle, view_setting.radius, view_setting.tile_width, tile_height, view_setting.position, menu)
   end)
 
-  local tiles = {}
+  local tiles, moves = {}, {}
   local spaces = splitter:split(defined_menus:all())
   local tri_list = CircleTriList.new(spaces)
   for _, tri in ipairs(tri_list) do
@@ -59,9 +61,13 @@ function Tiles.open(defined_menus, view_setting)
 
     local space = current_holder.inner
     if not space:is_empty() then
-      table.insert(tiles, space:open_tile(view_setting.animation, prev_angle, next_angle))
+      local tile, move = space:open_tile(prev_angle, next_angle)
+      table.insert(tiles, tile)
+      table.insert(moves, move)
     end
   end
+
+  Animation.new(moves, view_setting.animation.duration):start()
 
   local tbl = {_tiles = tiles}
   return setmetatable(tbl, Tiles)
@@ -125,7 +131,7 @@ function TileSpace.is_empty(self)
   return self._angle == nil
 end
 
-function TileSpace.open_tile(self, animation, prev_angle, next_angle)
+function TileSpace.open_tile(self, prev_angle, next_angle)
   local bufnr = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, {
     stringlib.ellipsis(self._menu:to_string(), self._width - 2),
@@ -150,14 +156,6 @@ function TileSpace.open_tile(self, animation, prev_angle, next_angle)
   })
   vim.wo[window_id].winblend = 0
 
-  Move.start({y, x}, {self._row + 1, self._col}, animation.duration, function(new_x, new_y)
-    if not vim.api.nvim_win_is_valid(window_id) then
-      return false
-    end
-    vim.api.nvim_win_set_config(window_id, {row = new_y, col = new_x, relative = "editor"})
-    return true
-  end)
-
   local tbl = {
     _window_id = window_id,
     _menu = self._menu,
@@ -166,7 +164,7 @@ function TileSpace.open_tile(self, animation, prev_angle, next_angle)
   }
   local tile = setmetatable(tbl, Tile)
   tile:deactivate()
-  return tile
+  return tile, Move.new(window_id, {y, x}, {self._row + 1, self._col})
 end
 
 function Tile.include(self, position)

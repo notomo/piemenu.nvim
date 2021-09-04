@@ -1,4 +1,5 @@
 local vim = vim
+local hrtime = vim.loop.hrtime
 
 local M = {}
 
@@ -6,26 +7,43 @@ local Animation = {}
 Animation.__index = Animation
 M.Animation = Animation
 
-function Animation.new(timeout_ms, on_tick, on_finish)
-  vim.validate({
-    timeout_ms = {timeout_ms, "number"},
-    on_tick = {on_tick, "function"},
-    on_finish = {on_finish, "function"},
-  })
+function Animation.new(items, duration)
+  vim.validate({items = {items, "table"}, duration = {duration, "number"}})
+
+  local on_tick = function()
+    local ok = true
+    for _, item in ipairs(items) do
+      ok = item:on_tick() and ok
+    end
+    return ok
+  end
+
+  local on_finish = function()
+    local ok = true
+    for _, item in ipairs(items) do
+      ok = item:on_finish() and ok
+    end
+    return ok
+  end
+
+  for _, item in ipairs(items) do
+    item:set_duration(duration)
+  end
+
   local tbl = {
     _timer = vim.loop.new_timer(),
     _on_tick = on_tick,
-    _timeout_ms = timeout_ms,
     _on_finish = on_finish,
+    _duration = duration,
   }
   return setmetatable(tbl, Animation)
 end
 
 function Animation.start(self)
-  local start_time = vim.loop.hrtime()
-  local end_time = start_time + self._timeout_ms * 1E6
+  local start_time = hrtime()
+  local end_time = start_time + self._duration * 1E6
   self._timer:start(0, 1, vim.schedule_wrap(function()
-    local current = vim.loop.hrtime()
+    local current = hrtime()
     if current > end_time then
       self._timer:stop()
       return self._on_finish()
@@ -38,22 +56,45 @@ function Animation.start(self)
 end
 
 local Move = {}
+Move.__index = Move
 M.Move = Move
 
-function Move.start(from, to, timeout_ms, on_tick)
-  local dx = (to[2] - from[2]) / timeout_ms
-  local dy = (to[1] - from[1]) / timeout_ms
+function Move.new(window_id, from, to)
+  local tbl = {
+    _window_id = window_id,
+    _dx = 0,
+    _dy = 0,
+    _x = from[2],
+    _y = from[1],
+    _first_x = from[2],
+    _first_y = from[1],
+    _last_x = to[2],
+    _last_y = to[1],
+  }
+  return setmetatable(tbl, Move)
+end
 
-  local y = from[1]
-  local x = from[2]
-  local animation = Animation.new(timeout_ms, function()
-    x = x + dx
-    y = y + dy
-    return on_tick(x, y)
-  end, function()
-    return on_tick(to[2], to[1])
-  end)
-  return animation:start()
+function Move.set_duration(self, duration)
+  self._dx = (self._last_x - self._first_x) / duration
+  self._dy = (self._last_y - self._first_y) / duration
+end
+
+function Move.on_tick(self)
+  return self:_move(self._x + self._dx, self._y + self._dy)
+end
+
+function Move.on_finish(self)
+  return self:_move(self._last_x, self._last_y)
+end
+
+function Move._move(self, x, y)
+  if not vim.api.nvim_win_is_valid(self._window_id) then
+    return false
+  end
+  self._x = x
+  self._y = y
+  vim.api.nvim_win_set_config(self._window_id, {row = self._y, col = self._x, relative = "editor"})
+  return true
 end
 
 return M
