@@ -69,4 +69,26 @@ describe("piemenu.view.circle_splitter", function()
     assert.is_same({{angle = 0, inner = 1}}, actual)
   end)
 
+  it("CircleSplitter gives near angle from original angle in retry", function()
+    local retry = false
+    local splitter = require("piemenu.view.circle_splitter").CircleSplitter.new(0, 360, function(angle, item)
+      if not retry and item == 4 then
+        retry = true
+        return nil
+      end
+      if angle == 270 then
+        return nil
+      end
+      return item
+    end)
+
+    local actual = splitter:split({1, 2, 3, 4})
+    assert.is_same({
+      {angle = 0, inner = 1},
+      {angle = 90, inner = 2},
+      {angle = 180, inner = 3},
+      {angle = 225, inner = 4},
+    }, actual)
+  end)
+
 end)

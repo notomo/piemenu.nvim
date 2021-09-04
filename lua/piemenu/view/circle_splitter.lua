@@ -30,34 +30,35 @@ function CircleSplitter.split(self, items)
   end
   local item_increment_angle = angle_diff / count
 
-  local retry_items = {}
+  local retires = {}
   for i, item in ipairs(items) do
     local angle = self._start_angle + item_increment_angle * (i - 1)
     local allocated = self._allocate(angle, item)
     if allocated then
       angle_holders = angle_holders:add(angle, allocated)
     else
-      table.insert(retry_items, item)
+      table.insert(retires, {item, angle})
     end
   end
 
   for i = 1, self._retry_max_count do
-    if #retry_items == 0 then
+    if #retires == 0 then
       break
     end
     local increment_angle = item_increment_angle / math.pow(2, i)
-    retry_items, angle_holders = self:_retry(retry_items, angle_holders, increment_angle)
+    retires, angle_holders = self:_retry(retires, angle_holders, increment_angle)
   end
 
   return angle_holders:sorted(self._end_angle > self._start_angle)
 end
 
-function CircleSplitter._retry(self, items, angle_holders, increment_angle)
-  local retry_items = {}
+function CircleSplitter._retry(self, retries, angle_holders, increment_angle)
+  local next_retries = {}
 
-  for _, item in ipairs(items) do
+  for _, retry in ipairs(retries) do
     local ok = false
-    for angle = self._start_angle, self._end_angle, increment_angle do
+    local item, target_angle = unpack(retry)
+    for _, angle in ipairs(self:_sorted_angles(target_angle, increment_angle)) do
       if angle_holders:exists(angle) then
         goto continue
       end
@@ -72,11 +73,22 @@ function CircleSplitter._retry(self, items, angle_holders, increment_angle)
       ::continue::
     end
     if not ok then
-      table.insert(retry_items, item)
+      table.insert(next_retries, {item, target_angle})
     end
   end
 
-  return retry_items, angle_holders
+  return next_retries, angle_holders
+end
+
+function CircleSplitter._sorted_angles(self, target_angle, increment_angle)
+  local angles = {}
+  for angle = self._start_angle, self._end_angle, increment_angle do
+    table.insert(angles, angle)
+  end
+  table.sort(angles, function(a, b)
+    return math.abs(target_angle - a) < math.abs(target_angle - b)
+  end)
+  return angles
 end
 
 return M
