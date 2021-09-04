@@ -44,7 +44,7 @@ function Tiles.open(defined_menus, view_setting)
   end)
 
   local tiles, moves = {}, {}
-  local spaces = splitter:split(defined_menus:all())
+  local spaces = splitter:split(defined_menus:count())
   local tri_list = CircleTriList.new(spaces)
   for i, tri in ipairs(tri_list) do
     local prev_holder, current_holder, next_holder = unpack(tri)

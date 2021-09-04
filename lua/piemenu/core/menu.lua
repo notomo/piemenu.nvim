@@ -70,12 +70,8 @@ function Menus.is_empty(self)
   return true
 end
 
-function Menus.all(self)
-  local menus = {}
-  for _, menu in ipairs(self._menus) do
-    table.insert(menus, menu)
-  end
-  return menus
+function Menus.count(self)
+  return #self._menus
 end
 
 function Menus.find(name)

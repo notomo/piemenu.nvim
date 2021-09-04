@@ -18,46 +18,42 @@ end
 
 CircleSplitter._retry_max_count = 5
 
-function CircleSplitter.split(self, items)
-  vim.validate({items = {items, "table"}})
+function CircleSplitter.split(self, count)
+  vim.validate({count = {count, "number"}})
 
-  local count = #items
   local angle_diff = math.max(-360, math.min(self._end_angle - self._start_angle, 360))
+  local increment_angle
   if math.abs(angle_diff) ~= 360 then
-    count = count - 1
-  end
-  local item_increment_angle = angle_diff / count
-
-  local remains = {}
-  for i, item in ipairs(items) do
-    local target_angle = self._start_angle + item_increment_angle * (i - 1)
-    table.insert(remains, {item, target_angle})
+    increment_angle = angle_diff / (count - 1)
+  else
+    increment_angle = angle_diff / count
   end
 
   local angle_holders = AngleHolders.new()
+  local angles = vim.tbl_map(function(i)
+    return self._start_angle + increment_angle * i
+  end, vim.fn.range(count))
   for i = 0, self._retry_max_count do
-    if #remains == 0 then
+    if #angles == 0 then
       break
     end
-    local increment_angle = item_increment_angle / math.pow(2, i)
-    remains, angle_holders = self:_retry(remains, angle_holders, increment_angle)
+    angles, angle_holders = self:_try_allocate(angles, angle_holders, increment_angle / math.pow(2, i))
   end
 
   return angle_holders:sorted(self._end_angle > self._start_angle)
 end
 
-function CircleSplitter._retry(self, remains, angle_holders, increment_angle)
-  local next_retries = {}
+function CircleSplitter._try_allocate(self, angles, angle_holders, increment_angle)
+  local next_angles = {}
 
-  for _, remain in ipairs(remains) do
+  for _, target_angle in ipairs(angles) do
     local ok = false
-    local item, target_angle = unpack(remain)
     for _, angle in ipairs(self:_sorted_angles(target_angle, increment_angle)) do
       if angle_holders:exists(angle) then
         goto continue
       end
 
-      local allocated = self._allocate(angle, item)
+      local allocated = self._allocate(angle)
       if allocated then
         angle_holders = angle_holders:add(angle, allocated)
         ok = true
@@ -67,11 +63,11 @@ function CircleSplitter._retry(self, remains, angle_holders, increment_angle)
       ::continue::
     end
     if not ok then
-      table.insert(next_retries, {item, target_angle})
+      table.insert(next_angles, target_angle)
     end
   end
 
-  return next_retries, angle_holders
+  return next_angles, angle_holders
 end
 
 function CircleSplitter._sorted_angles(self, target_angle, increment_angle)
