@@ -86,9 +86,20 @@ function CircleSplitter._sorted_angles(self, target_angle, increment_angle)
     table.insert(angles, angle)
   end
   table.sort(angles, function(a, b)
-    return math.abs(target_angle - a) < math.abs(target_angle - b)
+    return self._distance(target_angle, a) < self._distance(target_angle, b)
   end)
   return angles
+end
+
+function CircleSplitter._distance(angle_a, angle_b)
+  local a_rad = math.rad(angle_a)
+  local a_x = math.cos(a_rad)
+  local a_y = math.sin(a_rad)
+
+  local b_rad = math.rad(angle_b)
+  local b_x = math.cos(b_rad)
+  local b_y = math.sin(b_rad)
+  return math.sqrt(math.pow(a_x - b_x, 2) + math.pow(a_y - b_y, 2))
 end
 
 return M
