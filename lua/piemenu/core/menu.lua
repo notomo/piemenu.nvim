@@ -45,11 +45,11 @@ end
 local Menus = {}
 M.Menus = Menus
 
-function Menus.new(name, setting)
-  vim.validate({name = {name, "string"}, setting = {setting, "table"}})
+function Menus.new(name, raw_setting)
+  vim.validate({name = {name, "string"}, setting = {raw_setting, "table"}})
 
   local menus = {}
-  for _, menu in ipairs(setting.menus or {}) do
+  for _, menu in ipairs(raw_setting.menus or {}) do
     if vim.tbl_isempty(menu) then
       table.insert(menus, EmptyMenu.new())
     else
@@ -57,8 +57,13 @@ function Menus.new(name, setting)
     end
   end
 
-  local tbl = {name = name, setting = Setting.new(setting), _menus = menus}
-  return setmetatable(tbl, Menus)
+  local setting, err = Setting.new(raw_setting)
+  if err then
+    return nil, err
+  end
+
+  local tbl = {name = name, setting = setting, _menus = menus}
+  return setmetatable(tbl, Menus), nil
 end
 
 function Menus.is_empty(self)
@@ -84,7 +89,10 @@ function Menus.find(name)
 end
 
 function Menus.register(name, setting)
-  local menus = Menus.new(name, setting)
+  local menus, err = Menus.new(name, setting)
+  if err then
+    return err
+  end
   repository:set(name, menus)
 end
 

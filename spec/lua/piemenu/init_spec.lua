@@ -234,6 +234,21 @@ describe("piemenu.register()", function()
     piemenu.start("default")
   end)
 
+  it("shows validate error with tile_width", function()
+    piemenu.register("default", {tile_width = -1, menus = {}})
+    assert.exists_message([[tile_width: expected greater than 0, got %-1]])
+  end)
+
+  it("shows validate error with radius", function()
+    piemenu.register("default", {radius = -1, menus = {}})
+    assert.exists_message([[radius: expected greater than 0, got %-1]])
+  end)
+
+  it("shows validate error with position", function()
+    piemenu.register("default", {position = {-1, -1}, menus = {}})
+    assert.exists_message([[position: expected greater than {1, 0}]])
+  end)
+
 end)
 
 describe("piemenu.clear()", function()

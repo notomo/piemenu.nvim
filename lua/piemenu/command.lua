@@ -67,7 +67,7 @@ function Command.close(name)
 end
 
 function Command.register(name, setting)
-  require("piemenu.core.menu").Menus.register(name, setting)
+  return require("piemenu.core.menu").Menus.register(name, setting)
 end
 
 function Command.clear(name)
