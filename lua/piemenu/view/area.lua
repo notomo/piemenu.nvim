@@ -16,4 +16,22 @@ function TileArea.include(self, row, col, width, height)
   return self._min_col <= col and col + width < self._max_col
 end
 
+function TileArea.include_circle(self, radius, origin_pos, width, height)
+  local origin_x = origin_pos[2]
+  local origin_y = origin_pos[1]
+  for _, pos in ipairs({
+    {origin_y, origin_x + radius},
+    {origin_y + radius, origin_x},
+    {origin_y, origin_x - radius},
+    {origin_y - radius, origin_x},
+  }) do
+    local row, col = unpack(pos)
+    local ok = self:include(row, col, width, height)
+    if not ok then
+      return false
+    end
+  end
+  return true
+end
+
 return M

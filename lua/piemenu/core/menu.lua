@@ -45,15 +45,25 @@ end
 local Menus = {}
 M.Menus = Menus
 
-function Menus.new(name, raw_setting)
+function Menus.new(name, raw_menus, setting)
+  vim.validate({
+    name = {name, "string"},
+    raw_menus = {raw_menus, "table"},
+    setting = {setting, "table"},
+  })
+  local tbl = {name = name, setting = setting, _menus = raw_menus}
+  return setmetatable(tbl, Menus)
+end
+
+function Menus.parse(name, raw_setting)
   vim.validate({name = {name, "string"}, setting = {raw_setting, "table"}})
 
-  local menus = {}
+  local raw_menus = {}
   for _, menu in ipairs(raw_setting.menus or {}) do
     if vim.tbl_isempty(menu) then
-      table.insert(menus, EmptyMenu.new())
+      table.insert(raw_menus, EmptyMenu.new())
     else
-      table.insert(menus, Menu.new(menu.action, menu.text))
+      table.insert(raw_menus, Menu.new(menu.action, menu.text))
     end
   end
 
@@ -62,8 +72,7 @@ function Menus.new(name, raw_setting)
     return nil, err
   end
 
-  local tbl = {name = name, setting = setting, _menus = menus}
-  return setmetatable(tbl, Menus), nil
+  return Menus.new(name, raw_menus, setting), nil
 end
 
 function Menus.is_empty(self)
@@ -79,6 +88,13 @@ function Menus.count(self)
   return #self._menus
 end
 
+function Menus.exclude_empty(self)
+  local raw_menus = vim.tbl_filter(function(menu)
+    return not menu:is_empty()
+  end, self._menus)
+  return Menus.new(self.name, raw_menus, self.setting)
+end
+
 function Menus.find(name)
   vim.validate({name = {name, "string"}})
   local menus = repository:get(name)
@@ -89,7 +105,7 @@ function Menus.find(name)
 end
 
 function Menus.register(name, setting)
-  local menus, err = Menus.new(name, setting)
+  local menus, err = Menus.parse(name, setting)
   if err then
     return err
   end

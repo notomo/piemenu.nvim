@@ -16,7 +16,7 @@ function View.open(name, raw_setting)
   if not raw_setting.menus then
     menus, err = Menus.find(name)
   else
-    menus, err = Menus.new(name, raw_setting)
+    menus, err = Menus.parse(name, raw_setting)
   end
   if err then
     return err

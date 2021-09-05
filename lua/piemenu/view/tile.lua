@@ -43,8 +43,16 @@ function Tiles.open(defined_menus, view_setting)
     return TileSpace.allocate(area, angle, view_setting.radius, view_setting.tile_width, tile_height, view_setting.position)
   end)
 
+  local menus
+  local can_display_all = area:include_circle(view_setting.radius, view_setting.position, view_setting.tile_width, tile_height)
+  if not can_display_all then
+    menus = defined_menus:exclude_empty()
+  else
+    menus = defined_menus
+  end
+
   local tiles, moves = {}, {}
-  local spaces = splitter:split(defined_menus:count())
+  local spaces = splitter:split(menus:count())
   local tri_list = CircleTriList.new(spaces)
   for i, tri in ipairs(tri_list) do
     local prev_holder, current_holder, next_holder = unpack(tri)
@@ -57,7 +65,7 @@ function Tiles.open(defined_menus, view_setting)
     end
 
     local space = current_holder.inner
-    local menu = defined_menus[i]
+    local menu = menus[i]
     if not menu:is_empty() then
       local tile, move = space:open_tile(menu, prev_angle, next_angle)
       table.insert(tiles, tile)
