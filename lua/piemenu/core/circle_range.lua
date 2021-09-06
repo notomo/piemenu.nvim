@@ -1,17 +1,13 @@
-local M = {}
+local Angle0To360 = require("piemenu.core.angle_with_offset").Angle0To360
 
-local angle_0_to_360 = function(raw_angle)
-  vim.validate({raw_angle = {raw_angle, "number"}})
-  return (raw_angle + 360) % 360
-end
-M.angle_0_to_360 = angle_0_to_360
+local M = {}
 
 local CircleRange = {}
 CircleRange.__index = CircleRange
 M.CircleRange = CircleRange
 
 function CircleRange.new(start_angle, end_angle)
-  local tbl = {_s = angle_0_to_360(start_angle), _e = angle_0_to_360(end_angle)}
+  local tbl = {_s = Angle0To360.new(start_angle), _e = Angle0To360.new(end_angle)}
   return setmetatable(tbl, CircleRange)
 end
 
@@ -24,7 +20,7 @@ function CircleRange.include(self, p1, p2)
     raw_angle = raw_angle + 180
   end
 
-  local angle = angle_0_to_360(raw_angle)
+  local angle = Angle0To360.new(raw_angle)
   if self._s <= self._e then
     return self._s <= angle and angle <= self._e
   end

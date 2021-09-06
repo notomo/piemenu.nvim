@@ -1,5 +1,5 @@
 local CircleRange = require("piemenu.core.circle_range").CircleRange
-local angle_0_to_360 = require("piemenu.core.circle_range").angle_0_to_360
+local AngleDistance = require("piemenu.core.angle_distance").AngleDistance
 local Animation = require("piemenu.view.animation").Animation
 local Move = require("piemenu.view.animation").Move
 local TileArea = require("piemenu.view.area").TileArea
@@ -11,16 +11,6 @@ local highlightlib = require("piemenu.lib.highlight")
 local vim = vim
 
 local M = {}
-
-local diff_angle = function(angle, angle_next)
-  angle = angle_0_to_360(angle)
-  angle_next = angle_0_to_360(angle_next)
-  local d = angle_next - angle
-  if d <= 0 then
-    return d + 360
-  end
-  return d
-end
 
 local Tiles = {}
 Tiles.__index = Tiles
@@ -57,8 +47,8 @@ function Tiles.open(defined_menus, view_setting)
   for i, tri in ipairs(tri_list) do
     local prev_holder, current_holder, next_holder = unpack(tri)
 
-    local prev_angle = diff_angle(prev_holder.angle, current_holder.angle) / 2
-    local next_angle = diff_angle(current_holder.angle, next_holder.angle) / 2
+    local prev_angle = AngleDistance.new(prev_holder.angle, current_holder.angle) / 2
+    local next_angle = AngleDistance.new(current_holder.angle, next_holder.angle) / 2
     if prev_angle + next_angle > 180 then
       prev_angle = math.min(90, prev_angle)
       next_angle = math.min(90, next_angle)
