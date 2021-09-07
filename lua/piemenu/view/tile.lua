@@ -29,13 +29,13 @@ function Tiles.open(defined_menus, view_setting)
 
   local tile_height = 3
   local area = TileArea.new()
+  local overflow_angle_ranges = area:calc_overflow_angle_ranges(view_setting.radius, view_setting.position, view_setting.tile_width, tile_height)
   local splitter = CircleSplitter.new(view_setting.start_angle, view_setting.end_angle, function(angle)
     return TileSpace.allocate(area, angle, view_setting.radius, view_setting.tile_width, tile_height, view_setting.position)
   end)
 
   local menus
-  local can_display_all = area:include_circle(view_setting.radius, view_setting.position, view_setting.tile_width, tile_height)
-  if not can_display_all then
+  if #overflow_angle_ranges > 0 then
     menus = defined_menus:exclude_empty()
   else
     menus = defined_menus

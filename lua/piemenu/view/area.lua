@@ -16,22 +16,23 @@ function TileArea.include(self, row, col, width, height)
   return self._min_col <= col and col + width < self._max_col
 end
 
-function TileArea.include_circle(self, radius, origin_pos, width, height)
-  local origin_x = origin_pos[2]
-  local origin_y = origin_pos[1]
-  for _, pos in ipairs({
-    {origin_y, origin_x + radius},
-    {origin_y + radius, origin_x},
-    {origin_y, origin_x - radius},
-    {origin_y - radius, origin_x},
-  }) do
-    local row, col = unpack(pos)
-    local ok = self:include(row, col, width, height)
-    if not ok then
-      return false
+function TileArea.calc_overflow_angle_ranges(self, radius, origin_pos, width, height)
+  local angle_ranges = {}
+  local directions = {
+    {0, self._max_col - origin_pos[2], width / 2 + radius}, -- +radius for row height and col width ratio
+    {90, self._max_row - origin_pos[1], height / 2},
+    {180, self._min_col - origin_pos[2], width / 2 + radius},
+    {270, self._min_row - origin_pos[1], height / 2},
+  }
+  for _, dir in ipairs(directions) do
+    local base_angle, distance, extend_radius = unpack(dir)
+    local rad = math.acos(math.abs(distance) / (radius + extend_radius))
+    if rad == rad then -- not nan
+      local angle = rad * 180 / math.pi
+      table.insert(angle_ranges, {base_angle - angle, base_angle + angle})
     end
   end
-  return true
+  return angle_ranges
 end
 
 return M
