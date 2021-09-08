@@ -1,3 +1,5 @@
+local Angle = require("piemenu.core.angle").Angle
+
 local M = {}
 
 local TileArea = {}
@@ -28,7 +30,7 @@ function TileArea.calc_overflow_angle_ranges(self, radius, origin_pos, width, he
     local base_angle, distance, extend_radius = unpack(dir)
     local rad = math.acos(math.abs(distance) / (radius + extend_radius))
     if rad == rad then -- not nan
-      local angle = rad * 180 / math.pi
+      local angle = Angle.from_radian(rad)
       table.insert(angle_ranges, {base_angle - angle, base_angle + angle})
     end
   end

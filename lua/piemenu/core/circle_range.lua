@@ -1,3 +1,4 @@
+local Angle = require("piemenu.core.angle").Angle
 local Angle0To360 = require("piemenu.core.angle_with_offset").Angle0To360
 
 local M = {}
@@ -15,7 +16,7 @@ function CircleRange.include(self, p1, p2)
   local x = p2[2] - p1[2]
   local y = p2[1] - p1[1]
   local rad = math.atan(y / x * 2) -- *2 for row height and col width ratio
-  local raw_angle = rad * 180 / math.pi
+  local raw_angle = Angle.from_radian(rad)
   if x < 0 then
     raw_angle = raw_angle + 180
   end
