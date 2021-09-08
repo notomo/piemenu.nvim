@@ -40,6 +40,7 @@ describe("piemenu.core.angle_range", function()
     {angle_ranges = {}, expected = {}},
     {angle_ranges = {{0, 360}}, expected = {{0, 360}}},
     {angle_ranges = {{0, 45}, {150, 360}}, expected = {{150, 405}}},
+    {angle_ranges = {{360, 150}, {45, 0}}, expected = {{45, -210}}},
   }) do
     it(("AngleRanges.new(%s):join() == %s"):format(vim.inspect(c.angle_ranges), vim.inspect(c.expected)), function()
       local angle_ranges = require("piemenu.core.angle_range").AngleRanges.new(vim.tbl_map(function(raw)

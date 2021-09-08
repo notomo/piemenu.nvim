@@ -34,8 +34,8 @@ function AngleRanges.join(self)
     for _, angle_range in ipairs(self._angle_ranges) do
       local s, e = angle_range:raw()
       table.insert(new_angle_ranges, {
-        AngleWithOffset.new(last_angle, s),
-        AngleWithOffset.new(last_angle, e),
+        AngleWithOffset.shift(last_start_angle - s, s),
+        AngleWithOffset.shift(last_start_angle - e, e),
       })
     end
     table.remove(new_angle_ranges, #new_angle_ranges)

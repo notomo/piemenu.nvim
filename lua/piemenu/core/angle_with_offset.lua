@@ -8,6 +8,16 @@ function AngleWithOffset.new(base_angle, angle)
   return (angle % 360) + offset
 end
 
+function AngleWithOffset.shift(base_angle, angle)
+  local offset
+  if base_angle < 0 then
+    offset = math.floor(base_angle / 360) * 360
+  else
+    offset = math.ceil(base_angle / 360) * 360
+  end
+  return angle + offset
+end
+
 local Angle0To360 = {}
 M.Angle0To360 = Angle0To360
 
