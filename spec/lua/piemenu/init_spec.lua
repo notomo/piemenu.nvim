@@ -40,6 +40,7 @@ describe("piemenu.start()", function()
     local called = false
     piemenu.register("default", {
       animation = {duration = 0},
+      radius = 5.0,
       menus = {
         {},
         {
@@ -62,7 +63,6 @@ describe("piemenu.start()", function()
   end)
 
   it("fallbacks if menu can't be displayed", function()
-    local called = false
     piemenu.register("default", {
       animation = {duration = 0},
       start_angle = -90,
@@ -70,7 +70,6 @@ describe("piemenu.start()", function()
         {
           text = "text A",
           action = function()
-            called = true
           end,
         },
       },
@@ -78,10 +77,7 @@ describe("piemenu.start()", function()
 
     piemenu.start("default", {position = {1, vim.o.columns / 2}})
 
-    vim.api.nvim_win_set_cursor(0, {1, vim.o.columns})
-    piemenu.finish()
-
-    assert.is_true(called)
+    assert.window_count(3)
   end)
 
 end)
@@ -94,6 +90,7 @@ describe("piemenu.highlight()", function()
   it("highlights a menu if cursor is in area", function()
     piemenu.register("default", {
       animation = {duration = 0},
+      radius = 5.0,
       menus = {
         {
           text = "text A",
@@ -122,6 +119,7 @@ describe("piemenu.finish()", function()
     local called = false
     piemenu.register("default", {
       animation = {duration = 0},
+      radius = 5.0,
       menus = {
         {
           text = "text A",

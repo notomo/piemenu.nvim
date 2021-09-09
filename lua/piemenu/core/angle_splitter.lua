@@ -1,0 +1,90 @@
+local listlib = require("piemenu.lib.list")
+local Angle0To360 = require("piemenu.core.angle_with_offset").Angle0To360
+
+local M = {}
+
+local AngleSplitter = {}
+AngleSplitter.__index = AngleSplitter
+M.AngleSplitter = AngleSplitter
+
+function AngleSplitter.new(start_angle, end_angle, angle_ranges, all_count)
+  local tbl = {
+    _start_angle = start_angle,
+    _end_angle = end_angle,
+    _angle_ranges = angle_ranges,
+    _all_count = all_count,
+  }
+  return setmetatable(tbl, AngleSplitter)
+end
+
+function AngleSplitter.split(self)
+  local angles = {}
+  local distances = self._angle_ranges:distances()
+  for i, count in ipairs(self:_counts(distances)) do
+    local start_angle, end_angle = self._angle_ranges[i]:raw()
+    vim.list_extend(angles, self:_split(start_angle, end_angle, count))
+  end
+
+  angles = vim.tbl_map(function(angle)
+    return Angle0To360.new(angle)
+  end, angles)
+
+  if self._start_angle < self._end_angle then
+    table.sort(angles, function(a, b)
+      return a < b
+    end)
+  else
+    table.sort(angles, function(a, b)
+      return a > b
+    end)
+  end
+
+  return angles
+end
+
+function AngleSplitter._split(_, start_angle, end_angle, count)
+  local angle_distance = math.max(-360, math.min(end_angle - start_angle, 360))
+  local increment_angle
+  if math.abs(angle_distance) ~= 360 then
+    increment_angle = angle_distance / (count - 1)
+  else
+    increment_angle = angle_distance / count
+  end
+  return vim.tbl_map(function(i)
+    return start_angle + increment_angle * i
+  end, vim.fn.range(count))
+end
+
+function AngleSplitter._counts(self, angles)
+  local angle_sum = listlib.sum(angles)
+  local count_rates = vim.tbl_map(function(angle)
+    return self._all_count * angle / angle_sum
+  end, angles)
+
+  local counts = vim.tbl_map(function(rate)
+    return math.floor(rate)
+  end, count_rates)
+
+  local remain_count = self._all_count - listlib.sum(counts)
+  if remain_count == 0 then
+    return counts
+  end
+
+  local remains = listlib.enumurate(count_rates, function(i, rate)
+    return {index = i, value = rate - math.floor(rate)}
+  end)
+  table.sort(remains, function(a, b)
+    return a.value > b.value
+  end)
+  for _, remain in ipairs(remains) do
+    counts[remain.index] = counts[remain.index] + 1
+    remain_count = remain_count - 1
+    if remain_count == 0 then
+      break
+    end
+  end
+
+  return counts
+end
+
+return M

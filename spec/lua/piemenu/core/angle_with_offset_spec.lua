@@ -7,7 +7,8 @@ describe("piemenu.core.angle_with_offset", function()
 
   for _, c in ipairs({
     {base_angle = 0, angle = 0, expected = 0},
-    {base_angle = 0, angle = 360, expected = 0},
+    {base_angle = 0, angle = 360, expected = 360},
+    {base_angle = 360, angle = 360, expected = 360},
     {base_angle = 60, angle = 450, expected = 90},
     {base_angle = -90, angle = -90, expected = -90},
     {base_angle = -90, angle = 270, expected = -90},

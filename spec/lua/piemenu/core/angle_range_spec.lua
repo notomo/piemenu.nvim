@@ -27,6 +27,7 @@ describe("piemenu.core.angle_range", function()
     {start_angle = 90, end_angle = 0, exclude_s = 10, exclude_e = 80, expected = {{90, 81}, {9, 0}}},
     {start_angle = 0, end_angle = 90, exclude_s = 91, exclude_e = 100, expected = {{0, 90}}},
     {start_angle = 10, end_angle = 90, exclude_s = 0, exclude_e = 9, expected = {{10, 90}}},
+    {start_angle = 0, end_angle = 360, exclude_s = 330, exclude_e = 360, expected = {{0, 329}}},
   }) do
     it(("AngleRange.new(%s, %s):exclude(%s, %s) == %s"):format(c.start_angle, c.end_angle, c.exclude_s, c.exclude_e, vim.inspect(c.expected)), function()
       local angle_ranges = require("piemenu.core.angle_range").AngleRange.new(c.start_angle, c.end_angle):exclude(c.exclude_s, c.exclude_e)
@@ -41,11 +42,26 @@ describe("piemenu.core.angle_range", function()
     {angle_ranges = {{0, 360}}, expected = {{0, 360}}},
     {angle_ranges = {{0, 45}, {150, 360}}, expected = {{150, 405}}},
     {angle_ranges = {{360, 150}, {45, 0}}, expected = {{45, -210}}},
+    {angle_ranges = {{10, 40}, {50, 360}}, expected = {{10, 40}, {50, 360}}},
   }) do
     it(("AngleRanges.new(%s):join() == %s"):format(vim.inspect(c.angle_ranges), vim.inspect(c.expected)), function()
-      local angle_ranges = require("piemenu.core.angle_range").AngleRanges.new(vim.tbl_map(function(raw)
-        return require("piemenu.core.angle_range").AngleRange.new(unpack(raw))
-      end, c.angle_ranges)):join()
+      local angle_ranges = require("piemenu.core.angle_range").AngleRanges.from_raw(c.angle_ranges):join()
+      local actual = angle_ranges:raw()
+
+      assert.is_same(c.expected, actual)
+    end)
+  end
+
+  for _, c in ipairs({
+    {angle_ranges = {}, exclude = {}, expected = {}},
+    {angle_ranges = {{0, 360}}, exclude = {{0, 10}}, expected = {{11, 360}}},
+    {angle_ranges = {{0, 360}}, exclude = {{0, 10}, {50, 60}}, expected = {{11, 49}, {61, 360}}},
+    {angle_ranges = {{11, 360}}, exclude = {{50, 60}}, expected = {{11, 49}, {61, 360}}},
+    {angle_ranges = {{0, 360}}, exclude = {{330, 360}}, expected = {{0, 329}}},
+  }) do
+    it(("AngleRanges.new(%s):exclude(%s) == %s"):format(vim.inspect(c.angle_ranges), vim.inspect(c.exclude), vim.inspect(c.expected)), function()
+      local exclude = require("piemenu.core.angle_range").AngleRanges.from_raw(c.exclude)
+      local angle_ranges = require("piemenu.core.angle_range").AngleRanges.from_raw(c.angle_ranges):exclude(exclude)
       local actual = angle_ranges:raw()
 
       assert.is_same(c.expected, actual)
