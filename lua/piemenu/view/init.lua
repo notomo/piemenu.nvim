@@ -29,7 +29,10 @@ function View.open(name, raw_setting)
 
   local view_setting = setting:for_view()
   local background = Background.open(name, view_setting.position)
-  local tiles = Tiles.open(menus, view_setting)
+  local tiles, open_err = Tiles.open(menus, view_setting)
+  if open_err then
+    return open_err
+  end
 
   local tbl = {name = name, _background = background, _tiles = tiles}
   local self = setmetatable(tbl, View)

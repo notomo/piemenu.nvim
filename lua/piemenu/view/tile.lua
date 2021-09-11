@@ -44,6 +44,10 @@ function Tiles.open(defined_menus, view_setting)
   local tiles, moves = {}, {}
   local angle_ranges = AngleRanges.new_one(start_angle, end_angle):exclude(overflow_angle_ranges):join()
   local angles = AngleSplitter.new(start_angle, end_angle, angle_ranges, menus:count()):split()
+  if #angles == 0 then
+    return nil, ("could not open: radius=%s"):format(radius)
+  end
+
   for i, e in ipairs(CircleTriList.new(angles)) do
     local prev_angle, current_angle, next_angle = unpack(e)
 
@@ -65,7 +69,7 @@ function Tiles.open(defined_menus, view_setting)
   Animation.new(moves, view_setting.animation.duration):start()
 
   local tbl = {_tiles = tiles}
-  return setmetatable(tbl, Tiles)
+  return setmetatable(tbl, Tiles), nil
 end
 
 function Tiles.activate(self, position)

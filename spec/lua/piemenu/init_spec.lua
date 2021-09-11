@@ -96,6 +96,22 @@ describe("piemenu.start()", function()
     assert.exists_message([[position: expected greater than {1, 1}]])
   end)
 
+  it("shows an error with too large radius", function()
+    piemenu.register("default", {
+      menus = {
+        {
+          text = "text A",
+          action = function()
+          end,
+        },
+      },
+    })
+
+    piemenu.start("default", {radius = 1000})
+
+    assert.exists_message([[could not open: radius=1000]])
+  end)
+
 end)
 
 describe("piemenu.highlight()", function()
