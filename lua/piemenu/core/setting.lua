@@ -31,7 +31,7 @@ function Setting.new(raw_setting)
 
   local base_err = validatelib.validate({
     radius = validatelib.greater_than(0, data.radius),
-    tile_width = validatelib.greater_than(1 + 2, data.tile_width), -- + 2 for border
+    tile_width = validatelib.equal_or_greater_than(1 + 2, data.tile_width), -- + 2 for border
     position = validatelib.positon_or_nil(data.position),
     start_angle = {data.start_angle, "number"},
     end_angle = {data.end_angle, "number"},
@@ -72,7 +72,7 @@ function Setting.for_view(self)
     start_angle = self._data.start_angle,
     end_angle = self._data.end_angle,
     radius = self._data.radius,
-    tile_width = self._data.tile_width,
+    tile_width = math.floor(self._data.tile_width),
     animation = self._data.animation,
     position = self._data.position or cursorlib.global_position(),
   }

@@ -11,6 +11,17 @@ function M.greater_than(n, value)
   }
 end
 
+function M.equal_or_greater_than(n, value)
+  vim.validate({n = {n, "number"}})
+  return {
+    value,
+    function(x)
+      return type(x) == "number" and x >= n
+    end,
+    "equal or greater than " .. n,
+  }
+end
+
 function M.not_negative(value)
   return {
     value,
