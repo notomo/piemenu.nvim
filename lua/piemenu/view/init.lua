@@ -1,6 +1,6 @@
 local Menus = require("piemenu.core.menu").Menus
 local Background = require("piemenu.view.background").Background
-local Tiles = require("piemenu.view.tile").Tiles
+local CircleTiles = require("piemenu.view.circle").CircleTiles
 local repository = require("piemenu.lib.repository").Repository.new("view")
 
 local M = {}
@@ -29,7 +29,7 @@ function View.open(name, raw_setting)
 
   local view_setting = setting:for_view()
   local background = Background.open(name, view_setting.position)
-  local tiles, open_err = Tiles.open(menus, view_setting)
+  local tiles, open_err = CircleTiles.open(menus, view_setting)
   if open_err then
     return open_err
   end
