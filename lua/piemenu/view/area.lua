@@ -9,7 +9,12 @@ TileArea.__index = TileArea
 M.TileArea = TileArea
 
 function TileArea.new()
-  local tbl = {_min_row = -1, _min_col = -1, _max_col = vim.o.columns, _max_row = vim.o.lines}
+  local tbl = {
+    _min_row = -1,
+    _min_col = -1,
+    _max_col = vim.o.columns,
+    _max_row = vim.o.lines - vim.o.cmdheight - 1,
+  }
   return setmetatable(tbl, TileArea)
 end
 
