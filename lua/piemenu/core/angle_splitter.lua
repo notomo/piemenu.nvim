@@ -45,7 +45,7 @@ end
 function AngleSplitter._split(_, start_angle, end_angle, count)
   local angle_distance = math.max(-360, math.min(end_angle - start_angle, 360))
   local increment_angle
-  if math.abs(angle_distance) ~= 360 then
+  if math.abs(angle_distance) ~= 360 and count > 1 then
     increment_angle = angle_distance / (count - 1)
   else
     increment_angle = angle_distance / count
