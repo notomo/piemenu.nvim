@@ -244,7 +244,7 @@ describe("piemenu.register()", function()
 
   it("shows validate error with position", function()
     piemenu.register("default", {position = {-1, -1}, menus = {}})
-    assert.exists_message([[position: expected greater than {1, 0}]])
+    assert.exists_message([[position: expected greater than {1, 1}]])
   end)
 
 end)

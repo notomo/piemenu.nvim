@@ -27,9 +27,9 @@ function M.positon_or_nil(value)
       if not p then
         return true
       end
-      return p[1] >= 1 and p[2] >= 0
+      return p[1] >= 1 and p[2] >= 1
     end,
-    "greater than {1, 0} or nil",
+    "greater than {1, 1} or nil",
   }
 end
 
