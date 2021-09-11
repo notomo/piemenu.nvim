@@ -27,4 +27,25 @@ function M.tri_circular(items)
   return list
 end
 
+function M.circular_shift(items, is_start)
+  vim.validate({items = {items, "table"}})
+  local start_index = 1
+  for i, item in ipairs(items) do
+    if is_start(item) then
+      start_index = i
+      break
+    end
+  end
+
+  local new_items = {}
+  for i = start_index, #items do
+    table.insert(new_items, items[i])
+  end
+  for i = 1, start_index - 1 do
+    table.insert(new_items, items[i])
+  end
+
+  return new_items
+end
+
 return M

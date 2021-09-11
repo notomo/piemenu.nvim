@@ -17,4 +17,18 @@ describe("piemenu.lib.list", function()
     end)
   end
 
+  for _, c in ipairs({
+    {items = {}, expected = {}},
+    {items = {4}, expected = {4}},
+    {items = {1, 2, 3, 4}, expected = {4, 1, 2, 3}},
+    {items = {1, 2, 3}, expected = {1, 2, 3}},
+  }) do
+    it(("circular_shift(%s, greater_than_3) == %s"):format(vim.inspect(c.items), vim.inspect(c.expected)), function()
+      local actual = require("piemenu.lib.list").circular_shift(c.items, function(item)
+        return item > 3
+      end)
+      assert.is_same(c.expected, actual)
+    end)
+  end
+
 end)
