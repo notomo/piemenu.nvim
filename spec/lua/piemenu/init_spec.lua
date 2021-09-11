@@ -110,6 +110,7 @@ describe("piemenu.start()", function()
     piemenu.start("default", {radius = 1000})
 
     assert.exists_message([[could not open: radius=1000]])
+    assert.window_count(1)
   end)
 
 end)

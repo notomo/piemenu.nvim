@@ -31,6 +31,7 @@ function View.open(name, raw_setting)
   local background = Background.open(name, view_setting.position)
   local tiles, open_err = CircleTiles.open(menus, view_setting)
   if open_err then
+    background:close()
     return open_err
   end
 
