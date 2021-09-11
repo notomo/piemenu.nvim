@@ -30,8 +30,8 @@ function Setting.new(raw_setting)
   local data = vim.tbl_deep_extend("force", default, raw_setting)
 
   local base_err = validatelib.validate({
-    radius = validatelib.greater_than_zero(data.radius),
-    tile_width = validatelib.greater_than_zero(data.tile_width),
+    radius = validatelib.greater_than(0, data.radius),
+    tile_width = validatelib.greater_than(1 + 2, data.tile_width), -- + 2 for border
     position = validatelib.positon_or_nil(data.position),
     start_angle = {data.start_angle, "number"},
     end_angle = {data.end_angle, "number"},

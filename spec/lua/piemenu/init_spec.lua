@@ -80,6 +80,22 @@ describe("piemenu.start()", function()
     assert.window_count(3)
   end)
 
+  it("shows validate error with position", function()
+    piemenu.register("default", {
+      menus = {
+        {
+          text = "text A",
+          action = function()
+          end,
+        },
+      },
+    })
+
+    piemenu.start("default", {position = {-1, -1}})
+
+    assert.exists_message([[position: expected greater than {1, 1}]])
+  end)
+
 end)
 
 describe("piemenu.highlight()", function()
@@ -234,7 +250,7 @@ describe("piemenu.register()", function()
 
   it("shows validate error with tile_width", function()
     piemenu.register("default", {tile_width = -1, menus = {}})
-    assert.exists_message([[tile_width: expected greater than 0, got %-1]])
+    assert.exists_message([[tile_width: expected greater than 3, got %-1]])
   end)
 
   it("shows validate error with radius", function()

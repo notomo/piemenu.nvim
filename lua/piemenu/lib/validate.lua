@@ -1,12 +1,13 @@
 local M = {}
 
-function M.greater_than_zero(value)
+function M.greater_than(n, value)
+  vim.validate({n = {n, "number"}})
   return {
     value,
     function(x)
-      return type(x) == "number" and x > 0
+      return type(x) == "number" and x > n
     end,
-    "greater than 0",
+    "greater than " .. n,
   }
 end
 
