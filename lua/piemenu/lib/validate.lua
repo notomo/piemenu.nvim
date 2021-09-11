@@ -33,15 +33,19 @@ function M.not_negative(value)
 end
 
 function M.positon_or_nil(value)
+  local min_row = 1
+  local min_col = 1
+  local max_row = vim.o.lines - vim.o.cmdheight - 1
+  local max_col = vim.o.columns
   return {
     value,
     function(p)
       if not p then
         return true
       end
-      return p[1] >= 1 and p[2] >= 1
+      return min_row <= p[1] and min_col <= p[2] and p[1] <= max_row and p[2] <= max_col
     end,
-    "greater than {1, 1} or nil",
+    ("between %s and %s or nil"):format(vim.inspect({min_row, 1}), vim.inspect({max_row, max_col})),
   }
 end
 

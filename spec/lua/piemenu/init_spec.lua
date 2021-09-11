@@ -93,7 +93,7 @@ describe("piemenu.start()", function()
 
     piemenu.start("default", {position = {-1, -1}})
 
-    assert.exists_message([[position: expected greater than {1, 1}]])
+    assert.exists_message([[position: expected between { 1, 1 } and { 22, 80 }]])
   end)
 
   it("shows an error with too large radius", function()
@@ -274,9 +274,14 @@ describe("piemenu.register()", function()
     assert.exists_message([[radius: expected greater than 0, got %-1]])
   end)
 
-  it("shows validate error with position", function()
+  it("shows validate error with small position", function()
     piemenu.register("default", {position = {-1, -1}, menus = {}})
-    assert.exists_message([[position: expected greater than {1, 1}]])
+    assert.exists_message([[position: expected between { 1, 1 } and { 22, 80 }]])
+  end)
+
+  it("shows validate error with large position", function()
+    piemenu.register("default", {position = {1000, 1000}, menus = {}})
+    assert.exists_message([[position: expected between { 1, 1 } and { 22, 80 }]])
   end)
 
 end)
