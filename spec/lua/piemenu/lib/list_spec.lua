@@ -1,6 +1,6 @@
 local helper = require("piemenu.lib.testlib.helper")
 
-describe("piemenu.view.circle_tri_list", function()
+describe("piemenu.lib.list", function()
 
   before_each(helper.before_each)
   after_each(helper.after_each)
@@ -11,8 +11,8 @@ describe("piemenu.view.circle_tri_list", function()
     {items = {1, 2}, expected = {{2, 1, 2}, {1, 2, 1}}},
     {items = {1, 2, 3}, expected = {{3, 1, 2}, {1, 2, 3}, {2, 3, 1}}},
   }) do
-    it(("CircleTriList.new(%s) == %s"):format(vim.inspect(c.items), vim.inspect(c.expected)), function()
-      local actual = require("piemenu.view.circle_tri_list").CircleTriList.new(c.items)
+    it(("tri_circular(%s) == %s"):format(vim.inspect(c.items), vim.inspect(c.expected)), function()
+      local actual = require("piemenu.lib.list").tri_circular(c.items)
       assert.is_same(c.expected, actual)
     end)
   end

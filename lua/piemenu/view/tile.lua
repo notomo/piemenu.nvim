@@ -5,7 +5,7 @@ local AngleDistance = require("piemenu.core.angle_distance").AngleDistance
 local Animation = require("piemenu.view.animation").Animation
 local Move = require("piemenu.view.animation").Move
 local TileArea = require("piemenu.view.area").TileArea
-local CircleTriList = require("piemenu.view.circle_tri_list").CircleTriList
+local listlib = require("piemenu.lib.list")
 local windowlib = require("piemenu.lib.window")
 local stringlib = require("piemenu.lib.string")
 local highlightlib = require("piemenu.lib.highlight")
@@ -48,7 +48,7 @@ function Tiles.open(defined_menus, view_setting)
     return nil, ("could not open: radius=%s"):format(radius)
   end
 
-  for i, e in ipairs(CircleTriList.new(angles)) do
+  for i, e in ipairs(listlib.tri_circular(angles)) do
     local prev_angle, current_angle, next_angle = unpack(e)
 
     prev_angle = AngleDistance.new(prev_angle, current_angle) / 2
