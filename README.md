@@ -2,6 +2,8 @@
 
 piemenu.nvim is a circular menu plugin for Neovim (nightly).
 
+<img src="https://github.com/notomo/piemenu.nvim/wiki/image/demo1.gif" width="1280">
+
 ## Example
 
 ```vim
