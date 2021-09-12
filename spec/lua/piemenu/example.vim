@@ -75,7 +75,24 @@ piemenu.register("gesture_example", {
         vim.cmd("tabedit")
       end,
     },
-    --TODO
+    {
+      text = "🏠 open vimrc",
+      action = function()
+        vim.cmd("edit " .. vim.env.MYVIMRC)
+      end,
+    },
+    {
+      text = "🔃 reload",
+      action = function()
+        vim.cmd("edit!")
+      end,
+    },
+    {
+      text = "😃 smile",
+      action = function()
+        vim.cmd("smile")
+      end,
+    },
   },
 })
 EOF
