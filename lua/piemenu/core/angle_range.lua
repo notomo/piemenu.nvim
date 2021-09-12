@@ -165,4 +165,9 @@ function AngleRange.distance(self)
   return AngleDistance.new(self._small, self._large)
 end
 
+function AngleRange.contain(self, angle)
+  angle = AngleWithOffset.new(self._small, angle)
+  return self._small <= angle and angle <= self._large
+end
+
 return M

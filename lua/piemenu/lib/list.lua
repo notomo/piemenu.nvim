@@ -28,7 +28,7 @@ function M.tri_circular(items)
 end
 
 function M.circular_shift(items, is_start)
-  vim.validate({items = {items, "table"}})
+  vim.validate({items = {items, "table"}, is_start = {is_start, "function"}})
   local start_index = 1
   for i, item in ipairs(items) do
     if is_start(item) then

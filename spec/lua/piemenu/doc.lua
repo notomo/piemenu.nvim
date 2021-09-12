@@ -82,7 +82,7 @@ require("genvdoc").generate("piemenu.nvim", {
 
 The following key's table or empty table are allowed.
 If it is empty table, the menu is not opened but used as spacer.
-If the circle is clipped, spacers are omitted.
+If the circle is clipped by editor area, spacers are omitted.
 
 - {text} (string): displayed text in menu tile
 - {action} (function): action triggered by |piemenu.nvim-piemenu.finish()|]]

@@ -38,6 +38,20 @@ describe("piemenu.core.angle_range", function()
   end
 
   for _, c in ipairs({
+    {start_angle = 0, end_angle = 0, angle = 0, expected = true},
+    {start_angle = 0, end_angle = 360, angle = 0, expected = true},
+    {start_angle = 0, end_angle = 360, angle = 360, expected = true},
+    {start_angle = 0, end_angle = 90, angle = 45, expected = true},
+    {start_angle = -30, end_angle = 30, angle = 0, expected = true},
+    {start_angle = 0, end_angle = 30, angle = 90, expected = false},
+  }) do
+    it(("AngleRange.new(%s, %s):contain() == %s"):format(c.start_angle, c.end_angle, c.angle), function()
+      local actual = require("piemenu.core.angle_range").AngleRange.new(c.start_angle, c.end_angle):contain(c.angle)
+      assert.is_same(c.expected, actual)
+    end)
+  end
+
+  for _, c in ipairs({
     {angle_ranges = {}, expected = {}},
     {angle_ranges = {{0, 360}}, expected = {{0, 360}}},
     {angle_ranges = {{0, 45}, {150, 360}}, expected = {{150, 405}}},
