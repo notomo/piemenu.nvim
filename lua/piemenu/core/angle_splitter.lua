@@ -58,6 +58,10 @@ function AngleSplitter._split(_, start_angle, end_angle, count)
   else
     increment_angle = angle_distance / count
   end
+  if increment_angle > 180 then
+    -- ex. if count == 2, distance == 330, space is insufficient between angle_a and angle_b.
+    increment_angle = angle_distance / count
+  end
   return vim.tbl_map(function(i)
     return start_angle + increment_angle * i
   end, vim.fn.range(count))
