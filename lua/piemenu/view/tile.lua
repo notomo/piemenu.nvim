@@ -83,7 +83,7 @@ M.hl_groups = {
     guifg = "Normal",
     ctermbg = "Normal",
     guibg = "Normal",
-    gui = "bold,undercurl",
+    gui = "bold,underline",
   }),
   highlightlib.link("PiemenuCurrentBorder", force, "NormalFloat"),
 }
