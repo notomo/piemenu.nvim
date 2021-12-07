@@ -1,10 +1,7 @@
 local example_path = "./spec/lua/piemenu/example.vim"
 local util = require("genvdoc.util")
 
-local ok, result = pcall(vim.cmd, "source" .. example_path)
-if not ok then
-  error(result)
-end
+vim.cmd("source" .. example_path)
 
 require("genvdoc").generate("piemenu.nvim", {
   chapters = {
@@ -22,94 +19,67 @@ require("genvdoc").generate("piemenu.nvim", {
     {
       name = "PARAMETERS",
       body = function(ctx)
-        local descriptions = {
-          start_angle = [[
-- {start_angle} (number | nil): angle to open first tile, default: %s]],
-          end_angle = [[
-- {end_angle} (number | nil): angle to limit open tile, default: %s]],
-          radius = [[
-- {radius} (number | nil): piemenu circle radius, default: %s]],
-          tile_width = [[
-- {tile_width} (number | nil): menu tile width, default: %s]],
-          animation = [[
-- {animation} (table | nil): |piemenu.nvim-animation|]],
-          menus = [[
-- {menus} (table | nil): |piemenu.nvim-menus|]],
-          position = [[
-- {position} (table | nil): {row, col}]],
-        }
-        local setting_lines = {}
+        local setting_text
         do
+          local descriptions = {
+            start_angle = [[(number | nil): angle to open first tile, default: %s]],
+            end_angle = [[(number | nil): angle to limit open tile, default: %s]],
+            radius = [[(number | nil): piemenu circle radius, default: %s]],
+            tile_width = [[(number | nil): menu tile width, default: %s]],
+            animation = [[(table | nil): |piemenu.nvim-animation|]],
+            menus = [[(table | nil): |piemenu.nvim-menus|]],
+            position = [[(table | nil): {row, col}]],
+          }
           local keys = vim.tbl_keys(require("piemenu.core.setting").Setting.default)
-          local values = require("piemenu.core.setting").Setting.default_values()
-          table.sort(keys, function(a, b)
-            return a < b
-          end)
-          for _, key in ipairs(keys) do
-            local desc = (descriptions[key] or "Todo\n"):format(vim.inspect(values[key]))
-            table.insert(setting_lines, desc)
-          end
+          local default_values = require("piemenu.core.setting").Setting.default_values()
+          local setting_lines = util.each_keys_description(keys, descriptions, default_values)
+          setting_text = table.concat(setting_lines, "\n")
         end
 
-        local animation_descriptions = {
-          duration = [[
-- {duration} (number | nil): open animation duration, default: %s]],
-        }
-        local animation_lines = {}
+        local animation_text
         do
+          local descriptions = {duration = [[(number | nil): open animation duration, default: %s]]}
           local keys = vim.tbl_keys(require("piemenu.core.setting").AnimationSetting.default)
-          local values = require("piemenu.core.setting").AnimationSetting.default
-          table.sort(keys, function(a, b)
-            return a < b
-          end)
-          for _, key in ipairs(keys) do
-            local desc = (animation_descriptions[key] or "Todo\n"):format(vim.inspect(values[key]))
-            table.insert(animation_lines, desc)
-          end
+          local default_values = require("piemenu.core.setting").AnimationSetting.default
+          local animation_lines = util.each_keys_description(keys, descriptions, default_values)
+          animation_text = table.concat(animation_lines, "\n")
         end
 
-        return util.help_tagged(ctx, "Setting", "piemenu.nvim-setting") .. [[
-
-]] .. vim.trim(table.concat(setting_lines, "\n")) .. [[
-
-
-]] .. util.help_tagged(ctx, "Animation", "piemenu.nvim-animation") .. [[
-
-]] .. vim.trim(table.concat(animation_lines, "\n")) .. [[
-
-
-]] .. util.help_tagged(ctx, "Menus", "piemenu.nvim-menus") .. [[
-
+        local menu_text
+        do
+          local descriptions = {
+            action = [[(function): action triggered by |piemenu.nvim-piemenu.finish()|]],
+            text = [[(string): displayed text in menu tile]],
+          }
+          local keys = vim.tbl_keys(descriptions)
+          local menu_lines = util.each_keys_description(keys, descriptions)
+          menu_text = [[
 The following key's table or empty table are allowed.
 If it is empty table, the menu is not opened but used as spacer.
 If the circle is clipped by editor area, spacers are omitted.
 
-- {text} (string): displayed text in menu tile
-- {action} (function): action triggered by |piemenu.nvim-piemenu.finish()|]]
+]] .. table.concat(menu_lines, "\n")
+        end
+
+        return util.sections(ctx, {
+          {name = "Setting", tag_name = "setting", text = setting_text},
+          {name = "Animation", tag_name = "animation", text = animation_text},
+          {name = "Menus", tag_name = "menus", text = menu_text},
+        })
       end,
     },
+
     {
       name = "HIGHLIGHT GROUPS",
       body = function(ctx)
         local descriptions = {
-          PiemenuCurrent = [[
-used for current selected menu content
-]],
-          PiemenuCurrentBorder = [[
-used for current selected menu border
-]],
-          PiemenuNonCurrent = [[
-used for non selected menu content
-]],
-          PiemenuNonCurrentBorder = [[
-used for non selected menu border
-]],
+          PiemenuCurrent = [[used for current selected menu content]],
+          PiemenuCurrentBorder = [[used for current selected menu border]],
+          PiemenuNonCurrent = [[used for non selected menu content]],
+          PiemenuNonCurrentBorder = [[used for non selected menu border]],
         }
-        local sections = {}
-        for _, hl_group in ipairs(require("piemenu.view").hl_groups) do
-          table.insert(sections, util.help_tagged(ctx, hl_group, "hl-" .. hl_group) .. util.indent(descriptions[hl_group] or "Todo\n", 2))
-        end
-        return vim.trim(table.concat(sections, "\n"))
+        local names = require("piemenu.view").hl_groups
+        return util.hl_group_sections(ctx, names, descriptions)
       end,
     },
     {
