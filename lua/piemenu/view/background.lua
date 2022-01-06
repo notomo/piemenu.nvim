@@ -15,7 +15,7 @@ function Background.open(name, position)
   local buffer_name = ("piemenu://%s"):format(name)
   bufferlib.delete_by_name(buffer_name)
   vim.api.nvim_buf_set_name(bufnr, buffer_name)
-  local lines = vim.fn["repeat"]({(" "):rep(width)}, height)
+  local lines = vim.fn["repeat"]({ (" "):rep(width) }, height)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
   vim.bo[bufnr].filetype = "piemenu"
   vim.bo[bufnr].bufhidden = "wipe"
@@ -34,12 +34,16 @@ function Background.open(name, position)
   vim.wo[window_id].winblend = 100
   vim.wo[window_id].scrolloff = 0
   vim.wo[window_id].sidescrolloff = 0
-  vim.api.nvim_win_set_cursor(window_id, {position[1] + 1, position[2] - 1})
+  vim.api.nvim_win_set_cursor(window_id, { position[1] + 1, position[2] - 1 })
 
   -- NOTE: show and move cursor to the window by <LeftDrag>
   vim.cmd("redraw")
 
-  vim.cmd(([[autocmd WinLeave,TabLeave,BufLeave <buffer=%s> ++once lua require('piemenu.command').Command.new("close", "%s")]]):format(bufnr, name))
+  vim.cmd(
+    (
+      [[autocmd WinLeave,TabLeave,BufLeave <buffer=%s> ++once lua require('piemenu.command').Command.new("close", "%s")]]
+    ):format(bufnr, name)
+  )
 
   local ns = vim.api.nvim_create_namespace("piemenu")
   vim.api.nvim_set_decoration_provider(ns, {
@@ -47,11 +51,11 @@ function Background.open(name, position)
       if topline == 0 or buf ~= bufnr or not vim.api.nvim_win_is_valid(window_id) then
         return false
       end
-      vim.fn.winrestview({topline = 0, leftcol = 0})
+      vim.fn.winrestview({ topline = 0, leftcol = 0 })
     end,
   })
 
-  local tbl = {window_id = window_id, _ns = ns}
+  local tbl = { window_id = window_id, _ns = ns }
   return setmetatable(tbl, Background)
 end
 
@@ -68,7 +72,7 @@ function Background.click(self)
   return vim.api.nvim_win_get_cursor(self.window_id)
 end
 
-local mouse = vim.api.nvim_eval("\"\\<LeftMouse>\"")
+local mouse = vim.api.nvim_eval('"\\<LeftMouse>"')
 -- replace on testing
 function Background._click()
   vim.cmd("normal! " .. mouse)

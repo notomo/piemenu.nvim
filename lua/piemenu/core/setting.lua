@@ -11,7 +11,7 @@ Setting.nil_value = {}
 
 local AnimationSetting = {}
 M.AnimationSetting = AnimationSetting
-AnimationSetting.default = {duration = 100}
+AnimationSetting.default = { duration = 100 }
 
 Setting.default = {
   start_angle = 0,
@@ -24,7 +24,7 @@ Setting.default = {
 }
 
 function Setting.new(raw_setting)
-  vim.validate({raw_setting = {raw_setting, "table"}})
+  vim.validate({ raw_setting = { raw_setting, "table" } })
 
   local default = Setting.default_values()
   local data = vim.tbl_deep_extend("force", default, raw_setting)
@@ -33,10 +33,10 @@ function Setting.new(raw_setting)
     radius = validatelib.greater_than(0, data.radius),
     tile_width = validatelib.equal_or_greater_than(1 + 2, data.tile_width), -- + 2 for border
     position = validatelib.positon_or_nil(data.position),
-    start_angle = {data.start_angle, "number"},
-    end_angle = {data.end_angle, "number"},
-    menus = {data.menus, "table", true},
-    animation = {data.animation, "table"},
+    start_angle = { data.start_angle, "number" },
+    end_angle = { data.end_angle, "number" },
+    menus = { data.menus, "table", true },
+    animation = { data.animation, "table" },
   })
   if base_err then
     return nil, base_err
@@ -49,7 +49,7 @@ function Setting.new(raw_setting)
     return nil, anim_err
   end
 
-  local tbl = {_data = data}
+  local tbl = { _data = data }
   return setmetatable(tbl, Setting), nil
 end
 

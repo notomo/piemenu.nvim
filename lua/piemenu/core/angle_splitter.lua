@@ -83,7 +83,7 @@ function AngleSplitter._counts(self, angles)
   end
 
   local remains = listlib.enumurate(count_rates, function(i, rate)
-    return {index = i, value = rate - math.floor(rate)}
+    return { index = i, value = rate - math.floor(rate) }
   end)
   table.sort(remains, function(a, b)
     return a.value > b.value

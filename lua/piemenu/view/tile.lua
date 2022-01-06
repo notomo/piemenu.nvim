@@ -20,7 +20,7 @@ function Tile.open(menu, angle, prev_angle, next_angle, radius, width, height, o
   local col = radius * math.cos(rad) * 2 + origin_col - half_width -- *2 for row height and col width ratio
 
   local bufnr = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, {stringlib.ellipsis(menu:to_string(), width - 2)})
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, true, { stringlib.ellipsis(menu:to_string(), width - 2) })
   vim.bo[bufnr].bufhidden = "wipe"
   vim.bo[bufnr].modifiable = false
 
@@ -37,7 +37,7 @@ function Tile.open(menu, angle, prev_angle, next_angle, radius, width, height, o
     focusable = false,
     style = "minimal",
     zindex = 51,
-    border = {{" ", "PimenuNonCurrent"}},
+    border = { { " ", "PimenuNonCurrent" } },
   })
   vim.wo[window_id].winblend = 0
 
@@ -49,7 +49,7 @@ function Tile.open(menu, angle, prev_angle, next_angle, radius, width, height, o
   }
   local tile = setmetatable(tbl, Tile)
   tile:deactivate()
-  return tile, Move.new(window_id, {y, x}, {row + 1, col})
+  return tile, Move.new(window_id, { y, x }, { row + 1, col })
 end
 
 function Tile.include(self, position)
@@ -62,12 +62,12 @@ end
 
 function Tile.activate(self)
   vim.wo[self._window_id].winhighlight = "Normal:PiemenuCurrent"
-  vim.api.nvim_win_set_config(self._window_id, {border = {{" ", "PiemenuCurrentBorder"}}})
+  vim.api.nvim_win_set_config(self._window_id, { border = { { " ", "PiemenuCurrentBorder" } } })
 end
 
 function Tile.deactivate(self)
   vim.wo[self._window_id].winhighlight = "Normal:PiemenuNonCurrent"
-  vim.api.nvim_win_set_config(self._window_id, {border = {{" ", "PiemenuNonCurrentBorder"}}})
+  vim.api.nvim_win_set_config(self._window_id, { border = { { " ", "PiemenuNonCurrentBorder" } } })
 end
 
 function Tile.execute_action(self)

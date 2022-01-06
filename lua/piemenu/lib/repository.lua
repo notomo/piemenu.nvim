@@ -10,7 +10,7 @@ function Repository.new(name)
   if persist[name] ~= nil then
     return persist[name]
   end
-  local tbl = {_data = {}}
+  local tbl = { _data = {} }
   local self = setmetatable(tbl, Repository)
   persist[name] = self
   return self

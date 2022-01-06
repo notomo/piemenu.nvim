@@ -38,7 +38,7 @@ require("genvdoc").generate("piemenu.nvim", {
 
         local animation_text
         do
-          local descriptions = {duration = [[(number | nil): open animation duration, default: %s]]}
+          local descriptions = { duration = [[(number | nil): open animation duration, default: %s]] }
           local keys = vim.tbl_keys(require("piemenu.core.setting").AnimationSetting.default)
           local default_values = require("piemenu.core.setting").AnimationSetting.default
           local animation_lines = util.each_keys_description(keys, descriptions, default_values)
@@ -62,9 +62,9 @@ If the circle is clipped by editor area, spacers are omitted.
         end
 
         return util.sections(ctx, {
-          {name = "Setting", tag_name = "setting", text = setting_text},
-          {name = "Animation", tag_name = "animation", text = animation_text},
-          {name = "Menus", tag_name = "menus", text = menu_text},
+          { name = "Setting", tag_name = "setting", text = setting_text },
+          { name = "Animation", tag_name = "animation", text = animation_text },
+          { name = "Menus", tag_name = "menus", text = menu_text },
         })
       end,
     },

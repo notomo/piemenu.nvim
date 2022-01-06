@@ -6,8 +6,7 @@ M.root = M.find_plugin_root(plugin_name)
 function M.before_each()
   vim.cmd("filetype on")
   vim.cmd("syntax enable")
-  require("piemenu.view.background").Background._click = function()
-  end
+  require("piemenu.view.background").Background._click = function() end
 end
 
 function M.after_each()

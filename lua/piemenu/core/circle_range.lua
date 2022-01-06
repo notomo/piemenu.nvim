@@ -8,7 +8,7 @@ CircleRange.__index = CircleRange
 M.CircleRange = CircleRange
 
 function CircleRange.new(start_angle, end_angle)
-  local tbl = {_s = Angle0To360.new(start_angle), _e = Angle0To360.new(end_angle)}
+  local tbl = { _s = Angle0To360.new(start_angle), _e = Angle0To360.new(end_angle) }
   return setmetatable(tbl, CircleRange)
 end
 

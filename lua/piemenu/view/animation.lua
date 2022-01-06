@@ -8,7 +8,7 @@ Animation.__index = Animation
 M.Animation = Animation
 
 function Animation.new(items, duration)
-  vim.validate({items = {items, "table"}, duration = {duration, "number"}})
+  vim.validate({ items = { items, "table" }, duration = { duration, "number" } })
 
   local on_tick = function()
     local ok = true
@@ -42,17 +42,21 @@ end
 function Animation.start(self)
   local start_time = hrtime()
   local end_time = start_time + self._duration * 1E6
-  self._timer:start(0, 1, vim.schedule_wrap(function()
-    local current = hrtime()
-    if current > end_time then
-      self._timer:stop()
-      return self._on_finish()
-    end
-    local ok = self._on_tick()
-    if not ok then
-      self._timer:stop()
-    end
-  end))
+  self._timer:start(
+    0,
+    1,
+    vim.schedule_wrap(function()
+      local current = hrtime()
+      if current > end_time then
+        self._timer:stop()
+        return self._on_finish()
+      end
+      local ok = self._on_tick()
+      if not ok then
+        self._timer:stop()
+      end
+    end)
+  )
 end
 
 local Move = {}
@@ -93,7 +97,7 @@ function Move._move(self, x, y)
   end
   self._x = x
   self._y = y
-  vim.api.nvim_win_set_config(self._window_id, {row = self._y, col = self._x, relative = "editor"})
+  vim.api.nvim_win_set_config(self._window_id, { row = self._y, col = self._x, relative = "editor" })
   return true
 end
 

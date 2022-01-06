@@ -8,7 +8,7 @@ Command.__index = Command
 M.Command = Command
 
 function Command.new(name, ...)
-  local args = {...}
+  local args = { ... }
   local f = function()
     return Command[name](unpack(args))
   end
@@ -23,7 +23,7 @@ function Command.new(name, ...)
 end
 
 function Command.start(name, raw_setting)
-  vim.validate({name = {name, "string"}, setting = {raw_setting, "table", true}})
+  vim.validate({ name = { name, "string" }, setting = { raw_setting, "table", true } })
   raw_setting = raw_setting or {}
 
   local already = View.find(name)

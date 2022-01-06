@@ -12,10 +12,10 @@ function M.link(name, force, to)
 end
 
 local ATTRIBUTES = {
-  ctermfg = {"fg", "cterm"},
-  guifg = {"fg", "gui"},
-  ctermbg = {"bg", "cterm"},
-  guibg = {"bg", "gui"},
+  ctermfg = { "fg", "cterm" },
+  guifg = { "fg", "gui" },
+  ctermbg = { "bg", "cterm" },
+  guibg = { "bg", "gui" },
 }
 function M.define(name, force, attributes)
   local parts = {}

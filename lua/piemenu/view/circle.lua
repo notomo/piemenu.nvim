@@ -13,7 +13,7 @@ CircleTiles.__index = CircleTiles
 M.CircleTiles = CircleTiles
 
 function CircleTiles.open(defined_menus, view_setting)
-  vim.validate({defined_menus = {defined_menus, "table"}, view_setting = {view_setting, "table"}})
+  vim.validate({ defined_menus = { defined_menus, "table" }, view_setting = { view_setting, "table" } })
 
   local start_angle = view_setting.start_angle
   local end_angle = view_setting.end_angle
@@ -22,7 +22,12 @@ function CircleTiles.open(defined_menus, view_setting)
   local tile_height = 3
   local tile_width = view_setting.tile_width
   local origin_pos = view_setting.position
-  local overflow_angle_ranges = TileArea.new(start_angle, end_angle):calculate_overflow(radius, origin_pos, tile_width, tile_height)
+  local overflow_angle_ranges = TileArea.new(start_angle, end_angle):calculate_overflow(
+    radius,
+    origin_pos,
+    tile_width,
+    tile_height
+  )
 
   local menus
   if #overflow_angle_ranges:list() > 0 then
@@ -50,7 +55,16 @@ function CircleTiles.open(defined_menus, view_setting)
 
     local menu = menus[i]
     if not menu:is_empty() then
-      local tile, move = Tile.open(menu, current_angle, prev_angle, next_angle, radius, tile_width, tile_height, origin_pos)
+      local tile, move = Tile.open(
+        menu,
+        current_angle,
+        prev_angle,
+        next_angle,
+        radius,
+        tile_width,
+        tile_height,
+        origin_pos
+      )
       table.insert(tiles, tile)
       table.insert(moves, move)
     end
@@ -58,7 +72,7 @@ function CircleTiles.open(defined_menus, view_setting)
 
   Animation.new(moves, view_setting.animation.duration):start()
 
-  local tbl = {_tiles = tiles}
+  local tbl = { _tiles = tiles }
   return setmetatable(tbl, CircleTiles), nil
 end
 

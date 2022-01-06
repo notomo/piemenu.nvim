@@ -1,7 +1,7 @@
 local M = {}
 
 function M.greater_than(n, value)
-  vim.validate({n = {n, "number"}})
+  vim.validate({ n = { n, "number" } })
   return {
     value,
     function(x)
@@ -12,7 +12,7 @@ function M.greater_than(n, value)
 end
 
 function M.equal_or_greater_than(n, value)
-  vim.validate({n = {n, "number"}})
+  vim.validate({ n = { n, "number" } })
   return {
     value,
     function(x)
@@ -45,14 +45,14 @@ function M.positon_or_nil(value)
       end
       return min_row <= p[1] and min_col <= p[2] and p[1] <= max_row and p[2] <= max_col
     end,
-    ("between %s and %s or nil"):format(vim.inspect({min_row, 1}), vim.inspect({max_row, max_col})),
+    ("between %s and %s or nil"):format(vim.inspect({ min_row, 1 }), vim.inspect({ max_row, max_col })),
   }
 end
 
 function M.validate(tbl)
   local errs = {}
   for key, value in pairs(tbl) do
-    local ok, result = pcall(vim.validate, {[key] = value})
+    local ok, result = pcall(vim.validate, { [key] = value })
     if not ok then
       local msg = vim.split(result, "\n")[1]
       if type(value[1]) == "table" then

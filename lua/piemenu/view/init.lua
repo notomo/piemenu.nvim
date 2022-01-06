@@ -10,7 +10,7 @@ View.__index = View
 M.View = View
 
 function View.open(name, raw_setting)
-  vim.validate({name = {name, "string"}, raw_setting = {raw_setting, "table"}})
+  vim.validate({ name = { name, "string" }, raw_setting = { raw_setting, "table" } })
 
   local menus, err
   if not raw_setting.menus then
@@ -35,7 +35,7 @@ function View.open(name, raw_setting)
     return open_err
   end
 
-  local tbl = {name = name, _background = background, _tiles = tiles}
+  local tbl = { name = name, _background = background, _tiles = tiles }
   local self = setmetatable(tbl, View)
 
   repository:set(background.window_id, self)
@@ -70,7 +70,7 @@ function View.close(self)
 end
 
 function View.get(window_id)
-  vim.validate({window_id = {window_id, "number"}})
+  vim.validate({ window_id = { window_id, "number" } })
   return repository:get(window_id)
 end
 
@@ -84,7 +84,7 @@ function View.current()
 end
 
 function View.find(name)
-  vim.validate({name = {name, "string"}})
+  vim.validate({ name = { name, "string" } })
   for _, view in repository:all() do
     if view.name == name then
       return view

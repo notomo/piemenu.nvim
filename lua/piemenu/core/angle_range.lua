@@ -13,12 +13,12 @@ AngleRange.__index = AngleRange
 M.AngleRange = AngleRange
 
 function AngleRanges.new(raw_angle_ranges)
-  local tbl = {_angle_ranges = raw_angle_ranges}
+  local tbl = { _angle_ranges = raw_angle_ranges }
   return setmetatable(tbl, AngleRanges)
 end
 
 function AngleRanges.new_one(s, e)
-  return AngleRanges.new({AngleRange.new(s, e)})
+  return AngleRanges.new({ AngleRange.new(s, e) })
 end
 
 function AngleRanges.from_raw(raw)
@@ -36,7 +36,7 @@ end
 
 function AngleRanges.raw(self)
   return vim.tbl_map(function(angle_range)
-    return {angle_range:raw()}
+    return { angle_range:raw() }
   end, self._angle_ranges)
 end
 
@@ -100,7 +100,7 @@ function AngleRange.new(s, e)
   else
     small, large = e, s
   end
-  local tbl = {_s = s, _e = e, _small = small, _large = large, _is_ascending = is_ascending}
+  local tbl = { _s = s, _e = e, _small = small, _large = large, _is_ascending = is_ascending }
   return setmetatable(tbl, AngleRange)
 end
 
@@ -135,17 +135,17 @@ function AngleRange.exclude(self, s, e)
 
   -- outside
   if self._large < s or e < self._small then
-    return AngleRanges.new({self})
+    return AngleRanges.new({ self })
   end
 
   -- include right edge
   if self._small < s and self._large <= e then
-    return AngleRanges.new({AngleRange.new(self._small, s - 1):sorted(self._is_ascending)})
+    return AngleRanges.new({ AngleRange.new(self._small, s - 1):sorted(self._is_ascending) })
   end
 
   -- include left edge
   if s <= self._small and e < self._large then
-    return AngleRanges.new({AngleRange.new(e + 1, self._large):sorted(self._is_ascending)})
+    return AngleRanges.new({ AngleRange.new(e + 1, self._large):sorted(self._is_ascending) })
   end
 
   -- contained
@@ -153,9 +153,9 @@ function AngleRange.exclude(self, s, e)
     local a = AngleRange.new(self._small, s - 1)
     local b = AngleRange.new(e + 1, self._large)
     if self._is_ascending then
-      return AngleRanges.new({a, b})
+      return AngleRanges.new({ a, b })
     end
-    return AngleRanges.new({b:sorted(false), a:sorted(false)})
+    return AngleRanges.new({ b:sorted(false), a:sorted(false) })
   end
 
   return AngleRanges.new({})

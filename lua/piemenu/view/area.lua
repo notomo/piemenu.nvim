@@ -22,10 +22,10 @@ end
 function TileArea.calculate_overflow(self, radius, origin_pos, width, height)
   local raw_angle_ranges = {}
   local directions = {
-    {0, self._max_col - origin_pos[2], radius * 2 + width / 2, 15}, -- radius * 2 for row height and col width ratio
-    {90, self._max_row - origin_pos[1], radius + height / 2, 0},
-    {180, self._min_col - origin_pos[2], radius * 2 + width / 2, 15},
-    {270, self._min_row - origin_pos[1], radius + height / 2, 5}, -- HACK: 5?
+    { 0, self._max_col - origin_pos[2], radius * 2 + width / 2, 15 }, -- radius * 2 for row height and col width ratio
+    { 90, self._max_row - origin_pos[1], radius + height / 2, 0 },
+    { 180, self._min_col - origin_pos[2], radius * 2 + width / 2, 15 },
+    { 270, self._min_row - origin_pos[1], radius + height / 2, 5 }, -- HACK: 5?
   }
   for _, e in ipairs(directions) do
     local base_angle, distance, r, ext_angle = unpack(e)
