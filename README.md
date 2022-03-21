@@ -6,21 +6,21 @@ piemenu.nvim is a circular menu plugin for Neovim (nightly).
 
 ## Example
 
-```vim
-set mouse=a
+```lua
+vim.opt.mouse = "a"
 
-augroup piemenu_setting
-  autocmd!
-  autocmd FileType piemenu call s:setting()
-augroup END
-function! s:setting() abort
-  nnoremap <buffer> <LeftDrag> <Cmd>lua require("piemenu").highlight()<CR>
-  nnoremap <buffer> <LeftRelease> <Cmd>lua require("piemenu").finish()<CR>
-  nnoremap <buffer> <RightMouse> <Cmd>lua require("piemenu").cancel()<CR>
-endfunction
+local group = vim.api.nvim_create_augroup("piemenu_setting", {})
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  group = group,
+  pattern = { "piemenu" },
+  callback = function()
+    vim.keymap.set("n", "<LeftDrag>", [[<Cmd>lua require("piemenu").highlight()<CR>]], { buffer = true })
+    vim.keymap.set("n", "<LeftRelease>", [[<Cmd>lua require("piemenu").finish()<CR>]], { buffer = true })
+    vim.keymap.set("n", "<RightMouse>", [[<Cmd>lua require("piemenu").cancel()<CR>]], { buffer = true })
+  end,
+})
 
-nnoremap <RightMouse> <LeftMouse><Cmd>lua require("piemenu").start("example")<CR>
-lua << EOF
+vim.keymap.set("n", "<RightMouse>", [[<LeftMouse><Cmd>lua require("piemenu").start("example")<CR>]])
 require("piemenu").register("example", {
   menus = {
     {
@@ -61,17 +61,15 @@ require("piemenu").register("example", {
     },
   },
 })
-EOF
 
-" start by gesture.nvim (optional)
-lua << EOF
+-- start by gesture.nvim (optional)
 local piemenu = require("piemenu")
 local gesture = require("gesture")
 gesture.register({
   name = "open pie menu",
-  inputs = {gesture.up()},
+  inputs = { gesture.up() },
   action = function(ctx)
-    piemenu.start("gesture_example", {position = ctx.last_position})
+    piemenu.start("gesture_example", { position = ctx.last_position })
   end,
   nowait = true,
 })
@@ -104,5 +102,4 @@ piemenu.register("gesture_example", {
     },
   },
 })
-EOF
 ```

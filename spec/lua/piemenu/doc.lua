@@ -2,8 +2,8 @@ local util = require("genvdoc.util")
 local plugin_name = vim.env.PLUGIN_NAME
 local full_plugin_name = plugin_name .. ".nvim"
 
-local example_path = "./spec/lua/piemenu/example.vim"
-vim.cmd("source" .. example_path)
+local example_path = ("./spec/lua/%s/example.lua"):format(plugin_name)
+dofile(example_path)
 
 require("genvdoc").generate(full_plugin_name, {
   chapters = {
@@ -107,7 +107,7 @@ piemenu.nvim is a circular menu plugin for Neovim (nightly).
 
 ## Example
 
-```vim
+```lua
 %s```]]):format(exmaple)
 
   local readme = io.open("README.md", "w")
