@@ -40,9 +40,10 @@ function Background.open(name, position)
   vim.cmd("redraw")
 
   vim.cmd(
-    (
-      [[autocmd WinLeave,TabLeave,BufLeave <buffer=%s> ++once lua require('piemenu.command').Command.new("close", "%s")]]
-    ):format(bufnr, name)
+    ([[autocmd WinLeave,TabLeave,BufLeave <buffer=%s> ++once lua require('piemenu.command').close("%s")]]):format(
+      bufnr,
+      name
+    )
   )
 
   local ns = vim.api.nvim_create_namespace("piemenu")

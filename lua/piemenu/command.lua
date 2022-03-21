@@ -1,28 +1,7 @@
 local View = require("piemenu.view").View
-local messagelib = require("piemenu.lib.message")
+local ShowError = require("piemenu.vendor.error_handler").for_show_error()
 
-local M = {}
-
-local Command = {}
-Command.__index = Command
-M.Command = Command
-
-function Command.new(name, ...)
-  local args = { ... }
-  local f = function()
-    return Command[name](unpack(args))
-  end
-
-  local ok, msg = xpcall(f, debug.traceback)
-  if not ok then
-    return messagelib.error(msg)
-  elseif msg then
-    return messagelib.warn(msg)
-  end
-  return nil
-end
-
-function Command.start(name, raw_setting)
+function ShowError.start(name, raw_setting)
   vim.validate({ name = { name, "string" }, setting = { raw_setting, "table", true } })
   raw_setting = raw_setting or {}
 
@@ -34,7 +13,7 @@ function Command.start(name, raw_setting)
   return View.open(name, raw_setting)
 end
 
-function Command.highlight()
+function ShowError.highlight()
   local view, err = View.current()
   if err then
     return err
@@ -42,7 +21,7 @@ function Command.highlight()
   view:highlight()
 end
 
-function Command.finish()
+function ShowError.finish()
   local view, err = View.current()
   if err then
     return err
@@ -50,7 +29,7 @@ function Command.finish()
   return view:finish()
 end
 
-function Command.cancel()
+function ShowError.cancel()
   local view, err = View.current()
   if err then
     return err
@@ -58,7 +37,7 @@ function Command.cancel()
   view:close()
 end
 
-function Command.close(name)
+function ShowError.close(name)
   local view = View.find(name)
   if not view then
     return
@@ -66,16 +45,16 @@ function Command.close(name)
   view:close()
 end
 
-function Command.register(name, setting)
+function ShowError.register(name, setting)
   return require("piemenu.core.menu").Menus.register(name, setting)
 end
 
-function Command.clear(name)
+function ShowError.clear(name)
   require("piemenu.core.menu").Menus.clear(name)
 end
 
-function Command.clear_all()
+function ShowError.clear_all()
   require("piemenu.core.menu").Menus.clear_all()
 end
 
-return M
+return ShowError:methods()

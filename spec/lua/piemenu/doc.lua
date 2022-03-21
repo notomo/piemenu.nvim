@@ -1,9 +1,11 @@
-local example_path = "./spec/lua/piemenu/example.vim"
 local util = require("genvdoc.util")
+local plugin_name = vim.env.PLUGIN_NAME
+local full_plugin_name = plugin_name .. ".nvim"
 
+local example_path = "./spec/lua/piemenu/example.vim"
 vim.cmd("source" .. example_path)
 
-require("genvdoc").generate("piemenu.nvim", {
+require("genvdoc").generate(full_plugin_name, {
   chapters = {
     {
       name = function(group)
@@ -85,7 +87,7 @@ If the circle is clipped by editor area, spacers are omitted.
     {
       name = "EXAMPLES",
       body = function()
-        return require("genvdoc.util").help_code_block_from_file(example_path)
+        return util.help_code_block_from_file(example_path)
       end,
     },
   },
