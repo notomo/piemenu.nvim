@@ -1,5 +1,5 @@
 local View = require("piemenu.view").View
-local ShowError = require("piemenu.vendor.error_handler").for_show_error()
+local ShowError = require("piemenu.vendor.misclib.error_handler").for_show_error()
 
 function ShowError.start(name, raw_setting)
   vim.validate({ name = { name, "string" }, setting = { raw_setting, "table", true } })
