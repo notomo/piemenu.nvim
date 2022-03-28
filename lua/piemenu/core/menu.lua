@@ -1,5 +1,4 @@
 local Setting = require("piemenu.core.setting").Setting
-local repository = require("piemenu.lib.repository").Repository.new("menu")
 
 local M = {}
 
@@ -95,9 +94,11 @@ function Menus.exclude_empty(self)
   return Menus.new(self.name, raw_menus, self.setting)
 end
 
+local _menus = {}
+
 function Menus.find(name)
   vim.validate({ name = { name, "string" } })
-  local menus = repository:get(name)
+  local menus = _menus[name]
   if not menus or menus:is_empty() then
     return nil, ("no menus for `%s`"):format(name)
   end
@@ -109,16 +110,18 @@ function Menus.register(name, setting)
   if err then
     return err
   end
-  repository:set(name, menus)
+  _menus[name] = menus
 end
 
 function Menus.clear(name)
   vim.validate({ name = { name, "string" } })
-  repository:delete(name)
+  _menus[name] = nil
 end
 
 function Menus.clear_all()
-  repository:delete_all()
+  for name in pairs(_menus) do
+    _menus[name] = nil
+  end
 end
 
 function Menus.__index(self, k)

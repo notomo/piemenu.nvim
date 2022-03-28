@@ -1,7 +1,8 @@
 local Menus = require("piemenu.core.menu").Menus
 local Background = require("piemenu.view.background").Background
 local CircleTiles = require("piemenu.view.circle").CircleTiles
-local repository = require("piemenu.lib.repository").Repository.new("view")
+
+local views = {}
 
 local M = {}
 
@@ -38,7 +39,7 @@ function View.open(name, raw_setting)
   local tbl = { name = name, _background = background, _tiles = tiles }
   local self = setmetatable(tbl, View)
 
-  repository:set(background.window_id, self)
+  views[background.window_id] = self
 end
 
 function View.highlight(self)
@@ -66,12 +67,12 @@ end
 function View.close(self)
   self._background:close()
   self._tiles:close()
-  repository:delete(self._background.window_id)
+  views[self._background.window_id] = nil
 end
 
 function View.get(window_id)
   vim.validate({ window_id = { window_id, "number" } })
-  return repository:get(window_id)
+  return views[window_id]
 end
 
 function View.current()
@@ -85,7 +86,7 @@ end
 
 function View.find(name)
   vim.validate({ name = { name, "string" } })
-  for _, view in repository:all() do
+  for _, view in pairs(views) do
     if view.name == name then
       return view
     end
