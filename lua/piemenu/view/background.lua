@@ -1,4 +1,4 @@
-local windowlib = require("piemenu.lib.window")
+local windowlib = require("piemenu.vendor.misclib.window")
 local bufferlib = require("piemenu.lib.buffer")
 
 local M = {}
@@ -61,7 +61,7 @@ function Background.open(name, position)
 end
 
 function Background.close(self)
-  windowlib.close(self.window_id)
+  windowlib.safe_close(self.window_id)
   vim.api.nvim_set_decoration_provider(self._ns, {})
 end
 

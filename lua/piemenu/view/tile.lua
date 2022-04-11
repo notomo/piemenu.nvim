@@ -1,6 +1,6 @@
 local CircleRange = require("piemenu.core.circle_range").CircleRange
 local Move = require("piemenu.view.animation").Move
-local windowlib = require("piemenu.lib.window")
+local windowlib = require("piemenu.vendor.misclib.window")
 local stringlib = require("piemenu.lib.string")
 local highlightlib = require("piemenu.lib.highlight")
 local vim = vim
@@ -57,7 +57,7 @@ function Tile.include(self, position)
 end
 
 function Tile.close(self)
-  windowlib.close(self._window_id)
+  windowlib.safe_close(self._window_id)
 end
 
 function Tile.activate(self)
