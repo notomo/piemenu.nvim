@@ -39,12 +39,13 @@ function Background.open(name, position)
   -- NOTE: show and move cursor to the window by <LeftDrag>
   vim.cmd("redraw")
 
-  vim.cmd(
-    ([[autocmd WinLeave,TabLeave,BufLeave <buffer=%s> ++once lua require('piemenu.command').close("%s")]]):format(
-      bufnr,
-      name
-    )
-  )
+  vim.api.nvim_create_autocmd({ "WinLeave", "TabLeave", "BufLeave" }, {
+    buffer = bufnr,
+    once = true,
+    callback = function()
+      require("piemenu.command").close(name)
+    end,
+  })
 
   local ns = vim.api.nvim_create_namespace("piemenu")
   vim.api.nvim_set_decoration_provider(ns, {
