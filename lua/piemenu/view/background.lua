@@ -1,5 +1,5 @@
 local windowlib = require("piemenu.vendor.misclib.window")
-local bufferlib = require("piemenu.lib.buffer")
+local bufferlib = require("piemenu.vendor.misclib.buffer")
 
 local M = {}
 
