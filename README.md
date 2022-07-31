@@ -26,37 +26,37 @@ require("piemenu").register("example", {
     {
       text = "📋 copy",
       action = function()
-        vim.cmd("normal! yy")
+        vim.cmd.normal({ args = { "yy" }, bang = true })
       end,
     },
     {
       text = "📝 paste",
       action = function()
-        vim.cmd("normal! p")
+        vim.cmd.normal({ args = { "p" }, bang = true })
       end,
     },
     {
       text = "✅ save",
       action = function()
-        vim.cmd("write")
+        vim.cmd.write()
       end,
     },
     {
       text = "👉 goto file",
       action = function()
-        vim.cmd("normal! gF")
+        vim.cmd.normal({ args = { "gF" }, bang = true })
       end,
     },
     {
       text = "📚 help",
       action = function()
-        vim.cmd("help " .. vim.fn.expand("<cword>"))
+        vim.cmd.help(vim.fn.expand("<cword>"))
       end,
     },
     {
       text = "❌ close",
       action = function()
-        vim.cmd("quit")
+        vim.cmd.quit()
       end,
     },
   },
@@ -79,25 +79,25 @@ piemenu.register("gesture_example", {
     {
       text = "🆕 new tab",
       action = function()
-        vim.cmd("tabedit")
+        vim.cmd.tabedit()
       end,
     },
     {
       text = "🏠 open vimrc",
       action = function()
-        vim.cmd("edit " .. vim.env.MYVIMRC)
+        vim.cmd.edit(vim.env.MYVIMRC)
       end,
     },
     {
       text = "🔃 reload",
       action = function()
-        vim.cmd("edit!")
+        vim.cmd.edit({ bang = true })
       end,
     },
     {
       text = "😃 smile",
       action = function()
-        vim.cmd("smile")
+        vim.cmd.smile()
       end,
     },
   },
