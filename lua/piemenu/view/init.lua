@@ -42,7 +42,26 @@ function View.open(name, raw_setting)
   views[background.window_id] = self
 end
 
+local mouse_is_on_tabline = function()
+  local showtabline = vim.o.showtabline
+  if showtabline == 0 then
+    return false
+  end
+  local tab_count = vim.fn.tabpagenr("$")
+  if tab_count == 1 and showtabline == 1 then
+    return false
+  end
+  local screen_row = vim.fn.getmousepos().screenrow
+  if screen_row > 1 then
+    return false
+  end
+  return true
+end
+
 function View.highlight(self)
+  if mouse_is_on_tabline() then
+    return
+  end
   local position = self._background:click()
   if not position then
     return
