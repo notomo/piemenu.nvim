@@ -74,18 +74,29 @@ function Tile.execute_action(self)
   return self._menu:execute_action()
 end
 
-local force = false
-M.hl_groups = {
-  highlightlib.link("PiemenuNonCurrent", force, "NormalFloat"),
-  highlightlib.link("PiemenuNonCurrentBorder", force, "NormalFloat"),
-  highlightlib.define("PiemenuCurrent", force, {
-    ctermfg = "Normal",
-    guifg = "Normal",
-    ctermbg = "Normal",
-    guibg = "Normal",
-    gui = "bold,underline",
-  }),
-  highlightlib.link("PiemenuCurrentBorder", force, "NormalFloat"),
-}
+local setup_highlight_groups = function()
+  local force = false
+  return {
+    highlightlib.link("PiemenuNonCurrent", force, "NormalFloat"),
+    highlightlib.link("PiemenuNonCurrentBorder", force, "NormalFloat"),
+    highlightlib.define("PiemenuCurrent", force, {
+      ctermfg = "Normal",
+      guifg = "Normal",
+      ctermbg = "Normal",
+      guibg = "Normal",
+      gui = "bold,underline",
+    }),
+    highlightlib.link("PiemenuCurrentBorder", force, "NormalFloat"),
+  }
+end
+
+local group = vim.api.nvim_create_augroup("piemenu", {})
+vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+  group = group,
+  pattern = { "*" },
+  callback = setup_highlight_groups,
+})
+
+M.hl_groups = setup_highlight_groups()
 
 return M
