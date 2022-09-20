@@ -2,7 +2,6 @@ local CircleRange = require("piemenu.core.circle_range").CircleRange
 local Move = require("piemenu.view.animation").Move
 local windowlib = require("piemenu.vendor.misclib.window")
 local stringlib = require("piemenu.lib.string")
-local highlightlib = require("piemenu.lib.highlight")
 local vim = vim
 
 local M = {}
@@ -74,19 +73,18 @@ function Tile.execute_action(self)
   return self._menu:execute_action()
 end
 
+local highlightlib = require("piemenu.vendor.misclib.highlight")
 local setup_highlight_groups = function()
-  local force = false
   return {
-    highlightlib.link("PiemenuNonCurrent", force, "NormalFloat"),
-    highlightlib.link("PiemenuNonCurrentBorder", force, "NormalFloat"),
-    highlightlib.define("PiemenuCurrent", force, {
-      ctermfg = "Normal",
-      guifg = "Normal",
-      ctermbg = "Normal",
-      guibg = "Normal",
-      gui = "bold,underline",
+    highlightlib.link("PiemenuNonCurrent", "NormalFloat"),
+    highlightlib.link("PiemenuNonCurrentBorder", "NormalFloat"),
+    highlightlib.define("PiemenuCurrent", {
+      fg = vim.api.nvim_get_hl_by_name("Normal", true).foreground,
+      bg = vim.api.nvim_get_hl_by_name("Normal", true).background,
+      bold = true,
+      underline = true,
     }),
-    highlightlib.link("PiemenuCurrentBorder", force, "NormalFloat"),
+    highlightlib.link("PiemenuCurrentBorder", "NormalFloat"),
   }
 end
 
