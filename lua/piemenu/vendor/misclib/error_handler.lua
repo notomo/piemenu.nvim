@@ -12,11 +12,8 @@ end
 
 function M.for_return_value()
   return M.new(function(f)
-    local ok, result, err = xpcall(f, debug.traceback)
-    if not ok then
-      messagelib.error(result)
-      return nil
-    elseif err then
+    local result, err = f()
+    if err then
       messagelib.warn(err)
       return nil
     end
@@ -24,13 +21,20 @@ function M.for_return_value()
   end)
 end
 
+function M.for_return_value_and_error()
+  return M.new(function(f)
+    local result, err = f()
+    if err then
+      return nil, messagelib.wrap(err)
+    end
+    return result, nil
+  end)
+end
+
 function M.for_return_packed_value()
   return M.new(function(f)
-    local ok, result, err = xpcall(f, debug.traceback)
-    if not ok then
-      messagelib.error(result)
-      return nil
-    elseif err then
+    local result, err = f()
+    if err then
       messagelib.warn(err)
       return nil, err
     end
@@ -40,11 +44,8 @@ end
 
 function M.for_show_error()
   return M.new(function(f)
-    local ok, err = xpcall(f, debug.traceback)
-    if not ok then
-      messagelib.error(err)
-      return nil
-    elseif err then
+    local err = f()
+    if err then
       messagelib.warn(err)
       return nil
     end
@@ -54,11 +55,8 @@ end
 
 function M.for_show_as_user_error()
   return M.new(function(f)
-    local ok, err = xpcall(f, debug.traceback)
-    if not ok then
-      messagelib.error(err)
-      return nil
-    elseif err then
+    local err = f()
+    if err then
       messagelib.user_error(err)
       return nil
     end

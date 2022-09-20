@@ -20,7 +20,7 @@ function M.jump(window_id, row, column)
   if not M.safe_enter(window_id) then
     return false
   end
-  vim.cmd("normal! m'")
+  vim.cmd.normal({ args = { "m'" }, bang = true })
   vim.api.nvim_win_set_cursor(window_id, { row, column })
   return true
 end
