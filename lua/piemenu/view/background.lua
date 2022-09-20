@@ -37,7 +37,7 @@ function Background.open(name, position)
   vim.api.nvim_win_set_cursor(window_id, { position[1] + 1, position[2] - 1 })
 
   -- NOTE: show and move cursor to the window by <LeftDrag>
-  vim.cmd("redraw")
+  vim.cmd.redraw()
 
   vim.api.nvim_create_autocmd({ "WinLeave", "TabLeave", "BufLeave" }, {
     buffer = bufnr,
@@ -77,7 +77,7 @@ end
 local mouse = vim.api.nvim_eval('"\\<LeftMouse>"')
 -- replace on testing
 function Background._click()
-  vim.cmd("normal! " .. mouse)
+  vim.cmd.normal({ args = { mouse }, bang = true })
 end
 
 return M
