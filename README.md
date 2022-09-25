@@ -73,7 +73,6 @@ gesture.register({
   action = function(ctx)
     piemenu.start("gesture_example", { position = ctx.last_position })
   end,
-  nowait = true,
 })
 
 piemenu.register("gesture_example", {
