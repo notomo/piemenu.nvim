@@ -37,10 +37,9 @@ describe("piemenu.core.angle_range", function()
         vim.inspect(c.expected)
       ),
       function()
-        local angle_ranges = require("piemenu.core.angle_range").AngleRange.new(c.start_angle, c.end_angle):exclude(
-          c.exclude_s,
-          c.exclude_e
-        )
+        local angle_ranges = require("piemenu.core.angle_range").AngleRange
+          .new(c.start_angle, c.end_angle)
+          :exclude(c.exclude_s, c.exclude_e)
         local actual = angle_ranges:raw()
 
         assert.is_same(c.expected, actual)
