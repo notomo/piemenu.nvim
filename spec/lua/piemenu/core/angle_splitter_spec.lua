@@ -1,4 +1,4 @@
-local helper = require("piemenu.lib.testlib.helper")
+local helper = require("piemenu.test.helper")
 
 describe("piemenu.core.angle_splitter", function()
   before_each(helper.before_each)

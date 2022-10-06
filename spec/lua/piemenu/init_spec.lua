@@ -1,4 +1,4 @@
-local helper = require("piemenu.lib.testlib.helper")
+local helper = require("piemenu.test.helper")
 local piemenu = helper.require("piemenu")
 
 describe("piemenu.start()", function()
