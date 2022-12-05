@@ -79,7 +79,7 @@ PiemenuCurrentBorder                                 *hl-PiemenuCurrentBorder*
 ==============================================================================
 EXAMPLES                                               *piemenu.nvim-EXAMPLES*
 
->
+>lua
   vim.opt.mouse = "a"
 
   local group = vim.api.nvim_create_augroup("piemenu_setting", {})

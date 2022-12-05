@@ -87,7 +87,7 @@ If the circle is clipped by editor area, spacers are omitted.
     {
       name = "EXAMPLES",
       body = function()
-        return util.help_code_block_from_file(example_path)
+        return util.help_code_block_from_file(example_path, { language = "lua" })
       end,
     },
   },
