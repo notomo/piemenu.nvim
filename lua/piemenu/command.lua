@@ -1,7 +1,8 @@
 local View = require("piemenu.view").View
-local ShowError = require("piemenu.vendor.misclib.error_handler").for_show_error()
 
-function ShowError.start(name, raw_setting)
+local M = {}
+
+function M.start(name, raw_setting)
   vim.validate({ name = { name, "string" }, setting = { raw_setting, "table", true } })
   raw_setting = raw_setting or {}
 
@@ -10,34 +11,40 @@ function ShowError.start(name, raw_setting)
     return nil
   end
 
-  return View.open(name, raw_setting)
+  local err = View.open(name, raw_setting)
+  if err then
+    require("piemenu.vendor.misclib.message").error(err)
+  end
 end
 
-function ShowError.highlight()
+function M.highlight()
   local view, err = View.current()
   if err then
-    return err
+    require("piemenu.vendor.misclib.message").error(err)
   end
   view:highlight()
 end
 
-function ShowError.finish()
+function M.finish()
   local view, err = View.current()
   if err then
-    return err
+    require("piemenu.vendor.misclib.message").error(err)
   end
-  return view:finish()
+  local finish_err = view:finish()
+  if finish_err then
+    require("piemenu.vendor.misclib.message").error(finish_err)
+  end
 end
 
-function ShowError.cancel()
+function M.cancel()
   local view, err = View.current()
   if err then
-    return err
+    require("piemenu.vendor.misclib.message").error(err)
   end
   view:close()
 end
 
-function ShowError.close(name)
+function M.close(name)
   local view = View.find(name)
   if not view then
     return
@@ -45,16 +52,19 @@ function ShowError.close(name)
   view:close()
 end
 
-function ShowError.register(name, setting)
-  return require("piemenu.core.menu").Menus.register(name, setting)
+function M.register(name, setting)
+  local err = require("piemenu.core.menu").Menus.register(name, setting)
+  if err then
+    require("piemenu.vendor.misclib.message").error(err)
+  end
 end
 
-function ShowError.clear(name)
+function M.clear(name)
   require("piemenu.core.menu").Menus.clear(name)
 end
 
-function ShowError.clear_all()
+function M.clear_all()
   require("piemenu.core.menu").Menus.clear_all()
 end
 
-return ShowError:methods()
+return M

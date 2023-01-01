@@ -9,7 +9,6 @@ return {
   "notomo/assertlib.nvim/lua/assertlib/function/window.lua",
   "notomo/assertlib.nvim/lua/assertlib/init.lua",
   "notomo/misclib.nvim/lua/misclib/buffer.lua",
-  "notomo/misclib.nvim/lua/misclib/error_handler.lua",
   "notomo/misclib.nvim/lua/misclib/highlight.lua",
   "notomo/misclib.nvim/lua/misclib/message.lua",
   "notomo/misclib.nvim/lua/misclib/test/assert.lua",

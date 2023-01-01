@@ -28,9 +28,11 @@ describe("piemenu.start()", function()
   it("raises error if menus is empty", function()
     piemenu.register("default", { menus = { {}, {} } })
 
-    piemenu.start("default")
-
-    assert.exists_message("no menus for `default`")
+    local ok, err = pcall(function()
+      piemenu.start("default")
+    end)
+    assert.is_false(ok)
+    assert.match("no menus for `default`", err)
   end)
 
   it("can show space if menu is empty dict", function()
@@ -86,9 +88,11 @@ describe("piemenu.start()", function()
       },
     })
 
-    piemenu.start("default", { position = { -1, -1 } })
-
-    assert.exists_message([[position: expected between { 1, 1 } and { 22, 80 }]])
+    local ok, err = pcall(function()
+      piemenu.start("default", { position = { -1, -1 } })
+    end)
+    assert.is_false(ok)
+    assert.match([[position: expected between { 1, 1 } and { 22, 80 }]], err)
   end)
 
   it("shows an error with too large radius", function()
@@ -101,9 +105,11 @@ describe("piemenu.start()", function()
       },
     })
 
-    piemenu.start("default", { radius = 1000 })
-
-    assert.exists_message([[could not open: radius=1000]])
+    local ok, err = pcall(function()
+      piemenu.start("default", { radius = 1000 })
+    end)
+    assert.is_false(ok)
+    assert.match([[could not open: radius=1000]], err)
     assert.window_count(1)
   end)
 end)
@@ -158,6 +164,30 @@ describe("piemenu.finish()", function()
     piemenu.finish()
 
     assert.is_true(called)
+  end)
+
+  it("raises error if action raises error", function()
+    piemenu.register("default", {
+      animation = { duration = 0 },
+      radius = 5.0,
+      menus = {
+        {
+          text = "text A",
+          action = function()
+            error("test", 0)
+          end,
+        },
+      },
+    })
+
+    piemenu.start("default", { position = { vim.o.lines / 2, vim.o.columns / 2 } })
+
+    vim.api.nvim_win_set_cursor(0, { math.floor(vim.o.lines / 2), vim.o.columns })
+    local ok, err = pcall(function()
+      piemenu.finish()
+    end)
+    assert.is_false(ok)
+    assert.equal([=[[piemenu] test]=], err)
   end)
 end)
 
@@ -246,23 +276,35 @@ describe("piemenu.register()", function()
   end)
 
   it("shows validate error with tile_width", function()
-    piemenu.register("default", { tile_width = 2.9, menus = {} })
-    assert.exists_message([[tile_width: expected equal or greater than 3, got 2.9]])
+    local ok, err = pcall(function()
+      piemenu.register("default", { tile_width = 2.9, menus = {} })
+    end)
+    assert.is_false(ok)
+    assert.match([[tile_width: expected equal or greater than 3, got 2.9]], err)
   end)
 
   it("shows validate error with radius", function()
-    piemenu.register("default", { radius = -1, menus = {} })
-    assert.exists_message([[radius: expected greater than 0, got %-1]])
+    local ok, err = pcall(function()
+      piemenu.register("default", { radius = -1, menus = {} })
+    end)
+    assert.is_false(ok)
+    assert.match([[radius: expected greater than 0, got %-1]], err)
   end)
 
   it("shows validate error with small position", function()
-    piemenu.register("default", { position = { -1, -1 }, menus = {} })
-    assert.exists_message([[position: expected between { 1, 1 } and { 22, 80 }]])
+    local ok, err = pcall(function()
+      piemenu.register("default", { position = { -1, -1 }, menus = {} })
+    end)
+    assert.is_false(ok)
+    assert.match([[position: expected between { 1, 1 } and { 22, 80 }]], err)
   end)
 
   it("shows validate error with large position", function()
-    piemenu.register("default", { position = { 1000, 1000 }, menus = {} })
-    assert.exists_message([[position: expected between { 1, 1 } and { 22, 80 }]])
+    local ok, err = pcall(function()
+      piemenu.register("default", { position = { 1000, 1000 }, menus = {} })
+    end)
+    assert.is_false(ok)
+    assert.match([[position: expected between { 1, 1 } and { 22, 80 }]], err)
   end)
 end)
 
@@ -282,8 +324,11 @@ describe("piemenu.clear()", function()
 
     piemenu.clear("default")
 
-    piemenu.start("default")
-    assert.exists_message("no menus for `default`")
+    local ok, err = pcall(function()
+      piemenu.start("default")
+    end)
+    assert.is_false(ok)
+    assert.match("no menus for `default`", err)
   end)
 end)
 
@@ -311,10 +356,16 @@ describe("piemenu.clear_all()", function()
 
     piemenu.clear_all()
 
-    piemenu.start("default1")
-    assert.exists_message("no menus for `default1`")
+    local ok1, err1 = pcall(function()
+      piemenu.start("default1")
+    end)
+    assert.is_false(ok1)
+    assert.match("no menus for `default1`", err1)
 
-    piemenu.start("default2")
-    assert.exists_message("no menus for `default2`")
+    local ok2, err2 = pcall(function()
+      piemenu.start("default2")
+    end)
+    assert.is_false(ok2)
+    assert.match("no menus for `default2`", err2)
   end)
 end)
