@@ -29,9 +29,9 @@ asserts.create("exists_highlighted_window"):register(function(self)
     for _, window_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
       local hls = vim.tbl_filter(function(hl)
         return vim.startswith(hl, "Normal:")
-      end, vim.split(vim.wo[window_id].winhighlight, ",", true))
+      end, vim.split(vim.wo[window_id].winhighlight, ",", { plain = true }))
       for _, hl in ipairs(hls) do
-        local _, v = unpack(vim.split(hl, ":", true))
+        local _, v = unpack(vim.split(hl, ":", { plain = true }))
         if v == expected then
           return true
         end

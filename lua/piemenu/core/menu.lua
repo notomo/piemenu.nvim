@@ -8,7 +8,7 @@ M.Menu = Menu
 
 function Menu.new(action, text)
   vim.validate({ action = { action, "function" }, text = { text, "string" } })
-  local tbl = { _action = action, _text = vim.split(text, "\n", true)[1] }
+  local tbl = { _action = action, _text = vim.split(text, "\n", { plain = true })[1] }
   return setmetatable(tbl, Menu)
 end
 
