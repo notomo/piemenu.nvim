@@ -12,65 +12,21 @@ require("genvdoc").generate(full_plugin_name, {
         return "Lua module: " .. group
       end,
       group = function(node)
-        if not node.declaration then
+        if node.declaration == nil or node.declaration.type ~= "function" then
           return nil
         end
         return node.declaration.module
       end,
     },
     {
-      name = "PARAMETERS",
-      body = function(ctx)
-        local setting_text
-        do
-          local descriptions = {
-            start_angle = [[(number | nil): angle to open first tile, default: %s]],
-            end_angle = [[(number | nil): angle to limit open tile, default: %s]],
-            radius = [[(number | nil): piemenu circle radius, default: %s]],
-            tile_width = [[(number | nil): menu tile width, default: %s]],
-            animation = [[(table | nil): |piemenu.nvim-animation|]],
-            menus = [[(table | nil): |piemenu.nvim-menus|]],
-            position = [[(table | nil): {row, col}]],
-          }
-          local keys = vim.tbl_keys(require("piemenu.core.setting").Setting.default)
-          local default_values = require("piemenu.core.setting").Setting.default_values()
-          local setting_lines = util.each_keys_description(keys, descriptions, default_values)
-          setting_text = table.concat(setting_lines, "\n")
+      name = "STRUCTURE",
+      group = function(node)
+        if node.declaration == nil or node.declaration.type ~= "class" then
+          return nil
         end
-
-        local animation_text
-        do
-          local descriptions = { duration = [[(number | nil): open animation duration, default: %s]] }
-          local keys = vim.tbl_keys(require("piemenu.core.setting").AnimationSetting.default)
-          local default_values = require("piemenu.core.setting").AnimationSetting.default
-          local animation_lines = util.each_keys_description(keys, descriptions, default_values)
-          animation_text = table.concat(animation_lines, "\n")
-        end
-
-        local menu_text
-        do
-          local descriptions = {
-            action = [[(function): action triggered by |piemenu.nvim-piemenu.finish()|]],
-            text = [[(string): displayed text in menu tile]],
-          }
-          local keys = vim.tbl_keys(descriptions)
-          local menu_lines = util.each_keys_description(keys, descriptions)
-          menu_text = [[
-The following key's table or empty table are allowed.
-If it is empty table, the menu is not opened but used as spacer.
-If the circle is clipped by editor area, spacers are omitted.
-
-]] .. table.concat(menu_lines, "\n")
-        end
-
-        return util.sections(ctx, {
-          { name = "Setting", tag_name = "setting", text = setting_text },
-          { name = "Animation", tag_name = "animation", text = animation_text },
-          { name = "Menus", tag_name = "menus", text = menu_text },
-        })
+        return "STRUCTURE"
       end,
     },
-
     {
       name = "HIGHLIGHT GROUPS",
       body = function(ctx)

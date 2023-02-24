@@ -1,8 +1,24 @@
 local M = {}
 
+--- @class PiemenuSetting
+--- @field animation PiemenuAnimation? |PiemenuAnimation|
+--- @field menus (PiemenuMenu|{})[] If the element is empty table, the menu is not opened but used as spacer. If the circle is clipped by editor area, spacers are omitted. |PiemenuMenu|
+--- @field position integer[]? {row, col}
+--- @field radius integer? piemenu circle radius, default: 12
+--- @field start_angle integer? angle to open first tile, default: 0
+--- @field end_angle integer? angle to limit open tile, default: 360
+--- @field tile_width integer? menu tile width, default: 15
+
+--- @class PiemenuAnimation
+--- @field duration integer? open animation duration milliseconds. default: 100
+
+--- @class PiemenuMenu
+--- @field action fun() action triggered by |piemenu.nvim-piemenu.finish()|
+--- @field text string displayed text in menu tile
+
 --- Start a piemenu.
 --- @param name string: registered name by |piemenu.register()|
---- @param setting table|nil: |piemenu.nvim-setting|
+--- @param setting PiemenuSetting: |PiemenuSetting|
 function M.start(name, setting)
   require("piemenu.command").start(name, setting)
 end
@@ -24,7 +40,7 @@ end
 
 --- Register a piemenu setting.
 --- @param name string: key to lookup pimenu setting
---- @param setting table: |piemenu.nvim-setting|
+--- @param setting PiemenuSetting: |PiemenuSetting|
 function M.register(name, setting)
   require("piemenu.command").register(name, setting)
 end
