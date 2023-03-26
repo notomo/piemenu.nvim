@@ -79,8 +79,8 @@ local setup_highlight_groups = function()
     highlightlib.link("PiemenuNonCurrent", "NormalFloat"),
     highlightlib.link("PiemenuNonCurrentBorder", "NormalFloat"),
     highlightlib.define("PiemenuCurrent", {
-      fg = vim.api.nvim_get_hl_by_name("Normal", true).foreground,
-      bg = vim.api.nvim_get_hl_by_name("Normal", true).background,
+      fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg,
+      bg = vim.api.nvim_get_hl(0, { name = "Normal" }).bg,
       bold = true,
       underline = true,
     }),
