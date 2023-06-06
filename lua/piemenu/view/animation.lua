@@ -1,5 +1,6 @@
 local vim = vim
-local hrtime = vim.loop.hrtime
+local uv = vim.loop or vim.uv
+local hrtime = uv.hrtime
 
 local M = {}
 
@@ -31,7 +32,7 @@ function Animation.new(items, duration)
   end
 
   local tbl = {
-    _timer = vim.loop.new_timer(),
+    _timer = uv.new_timer(),
     _on_tick = on_tick,
     _on_finish = on_finish,
     _duration = duration,
