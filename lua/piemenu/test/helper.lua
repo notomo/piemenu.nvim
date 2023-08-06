@@ -4,7 +4,6 @@ local plugin_name = helper.get_module_root(...)
 helper.root = helper.find_plugin_root(plugin_name)
 
 function helper.before_each()
-  require("piemenu.view.background").Background._click = function() end
 end
 
 function helper.after_each()

@@ -11,7 +11,10 @@ View.__index = View
 M.View = View
 
 function View.open(name, raw_setting)
-  vim.validate({ name = { name, "string" }, raw_setting = { raw_setting, "table" } })
+  vim.validate({
+    name = { name, "string" },
+    raw_setting = { raw_setting, "table" },
+  })
 
   local menus, err
   if not raw_setting.menus then

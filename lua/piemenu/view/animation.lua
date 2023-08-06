@@ -9,7 +9,10 @@ Animation.__index = Animation
 M.Animation = Animation
 
 function Animation.new(items, duration)
-  vim.validate({ items = { items, "table" }, duration = { duration, "number" } })
+  vim.validate({
+    items = { items, "table" },
+    duration = { duration, "number" },
+  })
 
   local on_tick = function()
     local ok = true
