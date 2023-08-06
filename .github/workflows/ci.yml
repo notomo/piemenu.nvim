@@ -1,0 +1,6 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  ci:
+    uses: notomo/workflow/.github/workflows/neovim-plugin-ci.yml@main
