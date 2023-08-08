@@ -26,7 +26,7 @@ describe("piemenu.core.circle_range", function()
         c.expected
       ),
       function()
-        local actual = require("piemenu.core.circle_range").CircleRange.new(c.s, c.e):include(c.origin, c.position)
+        local actual = require("piemenu.core.circle_range").new(c.s, c.e):include(c.origin, c.position)
         assert.equals(c.expected, actual)
       end
     )

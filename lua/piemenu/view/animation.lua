@@ -2,11 +2,8 @@ local vim = vim
 local uv = vim.loop or vim.uv
 local hrtime = uv.hrtime
 
-local M = {}
-
 local Animation = {}
 Animation.__index = Animation
-M.Animation = Animation
 
 function Animation.new(items, duration)
   vim.validate({ items = { items, "table" }, duration = { duration, "number" } })
@@ -62,9 +59,8 @@ end
 
 local Move = {}
 Move.__index = Move
-M.Move = Move
 
-function Move.new(window_id, from, to)
+function Animation.new_move(window_id, from, to)
   local tbl = {
     _window_id = window_id,
     _dx = 0,
@@ -102,4 +98,4 @@ function Move._move(self, x, y)
   return true
 end
 
-return M
+return Animation

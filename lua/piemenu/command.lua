@@ -1,4 +1,4 @@
-local View = require("piemenu.view").View
+local View = require("piemenu.view")
 
 local M = {}
 
@@ -53,18 +53,18 @@ function M.close(name)
 end
 
 function M.register(name, setting)
-  local err = require("piemenu.core.menu").Menus.register(name, setting)
+  local err = require("piemenu.core.menu").register(name, setting)
   if err then
     require("piemenu.vendor.misclib.message").error(err)
   end
 end
 
 function M.clear(name)
-  require("piemenu.core.menu").Menus.clear(name)
+  require("piemenu.core.menu").clear(name)
 end
 
 function M.clear_all()
-  require("piemenu.core.menu").Menus.clear_all()
+  require("piemenu.core.menu").clear_all()
 end
 
 return M

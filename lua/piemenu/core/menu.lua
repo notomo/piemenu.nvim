@@ -1,10 +1,7 @@
-local Setting = require("piemenu.core.setting").Setting
-
-local M = {}
+local Setting = require("piemenu.core.setting")
 
 local Menu = {}
 Menu.__index = Menu
-M.Menu = Menu
 
 function Menu.new(action, text)
   vim.validate({ action = { action, "function" }, text = { text, "string" } })
@@ -30,7 +27,6 @@ end
 
 local EmptyMenu = {}
 EmptyMenu.__index = EmptyMenu
-M.EmptyMenu = EmptyMenu
 
 function EmptyMenu.new()
   local tbl = {}
@@ -42,7 +38,6 @@ function EmptyMenu.is_empty(_)
 end
 
 local Menus = {}
-M.Menus = Menus
 
 function Menus.new(name, raw_menus, setting)
   vim.validate({
@@ -131,4 +126,4 @@ function Menus.__index(self, k)
   return Menus[k]
 end
 
-return M
+return Menus

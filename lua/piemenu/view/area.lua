@@ -1,12 +1,9 @@
-local Angle = require("piemenu.core.angle").Angle
+local Angle = require("piemenu.core.angle")
 local AngleRange = require("piemenu.core.angle_range").AngleRange
 local AngleRanges = require("piemenu.core.angle_range").AngleRanges
 
-local M = {}
-
 local TileArea = {}
 TileArea.__index = TileArea
-M.TileArea = TileArea
 
 function TileArea.new(start_angle, end_angle)
   local tbl = {
@@ -43,4 +40,4 @@ function TileArea.calculate_overflow(self, radius, origin_pos, width, height)
   return AngleRanges.new(raw_angle_ranges)
 end
 
-return M
+return TileArea

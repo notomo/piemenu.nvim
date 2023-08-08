@@ -1,14 +1,11 @@
-local Menus = require("piemenu.core.menu").Menus
-local Background = require("piemenu.view.background").Background
-local CircleTiles = require("piemenu.view.circle").CircleTiles
+local Menus = require("piemenu.core.menu")
+local Background = require("piemenu.view.background")
+local CircleTiles = require("piemenu.view.circle")
 
 local views = {}
 
-local M = {}
-
 local View = {}
 View.__index = View
-M.View = View
 
 function View.open(name, raw_setting)
   vim.validate({ name = { name, "string" }, raw_setting = { raw_setting, "table" } })
@@ -113,6 +110,4 @@ function View.find(name)
   return nil
 end
 
-M.hl_groups = require("piemenu.view.tile").hl_groups
-
-return M
+return View

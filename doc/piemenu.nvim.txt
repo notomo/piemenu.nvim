@@ -60,17 +60,17 @@ PiemenuMenu                                                      *PiemenuMenu*
 ==============================================================================
 HIGHLIGHT GROUPS                               *piemenu.nvim-HIGHLIGHT-GROUPS*
 
-PiemenuNonCurrent                                       *hl-PiemenuNonCurrent*
-  used for non selected menu content
-
-PiemenuNonCurrentBorder                           *hl-PiemenuNonCurrentBorder*
-  used for non selected menu border
-
 PiemenuCurrent                                             *hl-PiemenuCurrent*
   used for current selected menu content
 
 PiemenuCurrentBorder                                 *hl-PiemenuCurrentBorder*
   used for current selected menu border
+
+PiemenuNonCurrent                                       *hl-PiemenuNonCurrent*
+  used for non selected menu content
+
+PiemenuNonCurrentBorder                           *hl-PiemenuNonCurrentBorder*
+  used for non selected menu border
 
 ==============================================================================
 EXAMPLES                                               *piemenu.nvim-EXAMPLES*

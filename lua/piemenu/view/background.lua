@@ -1,11 +1,8 @@
 local windowlib = require("piemenu.vendor.misclib.window")
 local bufferlib = require("piemenu.vendor.misclib.buffer")
 
-local M = {}
-
 local Background = {}
 Background.__index = Background
-M.Background = Background
 
 function Background.open(name, position)
   local width = vim.o.columns
@@ -80,4 +77,4 @@ function Background._click()
   vim.cmd.normal({ args = { mouse }, bang = true })
 end
 
-return M
+return Background

@@ -1,14 +1,12 @@
-local CircleRange = require("piemenu.core.circle_range").CircleRange
-local Move = require("piemenu.view.animation").Move
+local CircleRange = require("piemenu.core.circle_range")
+local Animation = require("piemenu.view.animation")
 local windowlib = require("piemenu.vendor.misclib.window")
 local stringlib = require("piemenu.lib.string")
+local hl_groups = require("piemenu.view.highlight_group")
 local vim = vim
-
-local M = {}
 
 local Tile = {}
 Tile.__index = Tile
-M.Tile = Tile
 
 function Tile.open(menu, angle, prev_angle, next_angle, radius, width, height, origin_pos)
   local half_width = width / 2
@@ -36,7 +34,7 @@ function Tile.open(menu, angle, prev_angle, next_angle, radius, width, height, o
     focusable = false,
     style = "minimal",
     zindex = 51,
-    border = { { " ", "PimenuNonCurrent" } },
+    border = { { " ", hl_groups.PiemenuNonCurrent } },
   })
   vim.wo[window_id].winblend = 0
 
@@ -48,7 +46,7 @@ function Tile.open(menu, angle, prev_angle, next_angle, radius, width, height, o
   }
   local tile = setmetatable(tbl, Tile)
   tile:deactivate()
-  return tile, Move.new(window_id, { y, x }, { row + 1, col })
+  return tile, Animation.new_move(window_id, { y, x }, { row + 1, col })
 end
 
 function Tile.include(self, position)
@@ -60,41 +58,17 @@ function Tile.close(self)
 end
 
 function Tile.activate(self)
-  vim.wo[self._window_id].winhighlight = "Normal:PiemenuCurrent"
-  vim.api.nvim_win_set_config(self._window_id, { border = { { " ", "PiemenuCurrentBorder" } } })
+  vim.wo[self._window_id].winhighlight = "Normal:" .. hl_groups.PiemenuCurrent
+  vim.api.nvim_win_set_config(self._window_id, { border = { { " ", hl_groups.PiemenuCurrentBorder } } })
 end
 
 function Tile.deactivate(self)
-  vim.wo[self._window_id].winhighlight = "Normal:PiemenuNonCurrent"
-  vim.api.nvim_win_set_config(self._window_id, { border = { { " ", "PiemenuNonCurrentBorder" } } })
+  vim.wo[self._window_id].winhighlight = "Normal:" .. hl_groups.PiemenuNonCurrent
+  vim.api.nvim_win_set_config(self._window_id, { border = { { " ", hl_groups.PiemenuNonCurrentBorder } } })
 end
 
 function Tile.execute_action(self)
   return self._menu:execute_action()
 end
 
-local highlightlib = require("piemenu.vendor.misclib.highlight")
-local setup_highlight_groups = function()
-  return {
-    highlightlib.link("PiemenuNonCurrent", "NormalFloat"),
-    highlightlib.link("PiemenuNonCurrentBorder", "NormalFloat"),
-    highlightlib.define("PiemenuCurrent", {
-      fg = vim.api.nvim_get_hl(0, { name = "Normal" }).fg,
-      bg = vim.api.nvim_get_hl(0, { name = "Normal" }).bg,
-      bold = true,
-      underline = true,
-    }),
-    highlightlib.link("PiemenuCurrentBorder", "NormalFloat"),
-  }
-end
-
-local group = vim.api.nvim_create_augroup("piemenu", {})
-vim.api.nvim_create_autocmd({ "ColorScheme" }, {
-  group = group,
-  pattern = { "*" },
-  callback = setup_highlight_groups,
-})
-
-M.hl_groups = setup_highlight_groups()
-
-return M
+return Tile

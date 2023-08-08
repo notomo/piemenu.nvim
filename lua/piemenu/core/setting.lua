@@ -1,16 +1,12 @@
 local cursorlib = require("piemenu.lib.cursor")
 local validatelib = require("piemenu.lib.validate")
 
-local M = {}
-
 local Setting = {}
 Setting.__index = Setting
-M.Setting = Setting
 
 Setting.nil_value = {}
 
 local AnimationSetting = {}
-M.AnimationSetting = AnimationSetting
 AnimationSetting.default = { duration = 100 }
 
 Setting.default = {
@@ -78,4 +74,4 @@ function Setting.for_view(self)
   }
 end
 
-return M
+return Setting

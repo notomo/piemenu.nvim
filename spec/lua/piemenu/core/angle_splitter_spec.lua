@@ -54,9 +54,8 @@ describe("piemenu.core.angle_splitter", function()
       ),
       function()
         local angle_ranges = require("piemenu.core.angle_range").AngleRanges.from_raw(c.angle_ranges)
-        local actual = require("piemenu.core.angle_splitter").AngleSplitter
-          .new(c.start_angle, c.end_angle, angle_ranges, c.all_count)
-          :split()
+        local actual =
+          require("piemenu.core.angle_splitter").new(c.start_angle, c.end_angle, angle_ranges, c.all_count):split()
 
         assert.is_same(c.expected, actual)
       end

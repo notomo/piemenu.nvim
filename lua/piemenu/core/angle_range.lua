@@ -1,7 +1,7 @@
 local AngleWithOffset = require("piemenu.core.angle_with_offset").AngleWithOffset
 local Angle0To360 = require("piemenu.core.angle_with_offset").Angle0To360
 local Angle0To359 = require("piemenu.core.angle_with_offset").Angle0To359
-local AngleDistance = require("piemenu.core.angle_distance").AngleDistance
+local AngleDistance = require("piemenu.core.angle_distance")
 
 local M = {}
 

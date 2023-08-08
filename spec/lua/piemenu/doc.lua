@@ -36,7 +36,10 @@ require("genvdoc").generate(full_plugin_name, {
           PiemenuNonCurrent = [[used for non selected menu content]],
           PiemenuNonCurrentBorder = [[used for non selected menu border]],
         }
-        local names = require("piemenu.view").hl_groups
+        local names = vim.tbl_keys(require("piemenu.view.highlight_group"))
+        table.sort(names, function(a, b)
+          return a < b
+        end)
         return util.hl_group_sections(ctx, names, descriptions)
       end,
     },

@@ -1,11 +1,8 @@
 local listlib = require("piemenu.lib.list")
 local Angle0To359 = require("piemenu.core.angle_with_offset").Angle0To359
 
-local M = {}
-
 local AngleSplitter = {}
 AngleSplitter.__index = AngleSplitter
-M.AngleSplitter = AngleSplitter
 
 function AngleSplitter.new(start_angle, end_angle, angle_ranges, all_count)
   local tbl = {
@@ -99,4 +96,4 @@ function AngleSplitter._counts(self, angles)
   return counts
 end
 
-return M
+return AngleSplitter

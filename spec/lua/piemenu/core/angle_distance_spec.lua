@@ -11,7 +11,7 @@ describe("piemenu.core.angle_distance", function()
     { angle = 90, next_angle = -90, expected = 180 },
   }) do
     it(("AngleDistance.new(%s, %s) == %s"):format(c.angle, c.next_angle, c.expected), function()
-      local actual = require("piemenu.core.angle_distance").AngleDistance.new(c.angle, c.next_angle)
+      local actual = require("piemenu.core.angle_distance").new(c.angle, c.next_angle)
       assert.equals(c.expected, actual)
     end)
   end

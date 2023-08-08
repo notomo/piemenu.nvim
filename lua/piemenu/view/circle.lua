@@ -1,16 +1,13 @@
 local AngleRanges = require("piemenu.core.angle_range").AngleRanges
-local AngleSplitter = require("piemenu.core.angle_splitter").AngleSplitter
-local AngleDistance = require("piemenu.core.angle_distance").AngleDistance
-local Animation = require("piemenu.view.animation").Animation
-local TileArea = require("piemenu.view.area").TileArea
-local Tile = require("piemenu.view.tile").Tile
+local AngleSplitter = require("piemenu.core.angle_splitter")
+local AngleDistance = require("piemenu.core.angle_distance")
+local Animation = require("piemenu.view.animation")
+local TileArea = require("piemenu.view.area")
+local Tile = require("piemenu.view.tile")
 local listlib = require("piemenu.lib.list")
-
-local M = {}
 
 local CircleTiles = {}
 CircleTiles.__index = CircleTiles
-M.CircleTiles = CircleTiles
 
 function CircleTiles.open(defined_menus, view_setting)
   vim.validate({ defined_menus = { defined_menus, "table" }, view_setting = { view_setting, "table" } })
@@ -89,4 +86,4 @@ function CircleTiles.close(self)
   end
 end
 
-return M
+return CircleTiles
