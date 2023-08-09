@@ -1,8 +1,8 @@
 local AngleRanges = require("piemenu.core.angle_range").AngleRanges
 local AngleSplitter = require("piemenu.core.angle_splitter")
-local AngleDistance = require("piemenu.core.angle_distance")
+local Angle = require("piemenu.core.angle")
 local Animation = require("piemenu.view.animation")
-local TileArea = require("piemenu.view.area")
+local TileArea = require("piemenu.view.tile_area")
 local Tile = require("piemenu.view.tile")
 local listlib = require("piemenu.lib.list")
 
@@ -39,8 +39,8 @@ function CircleTiles.open(defined_menus, view_setting)
   for i, e in ipairs(listlib.tri_circular(angles)) do
     local prev_angle, current_angle, next_angle = unpack(e)
 
-    prev_angle = AngleDistance.new(prev_angle, current_angle) / 2
-    next_angle = AngleDistance.new(current_angle, next_angle) / 2
+    prev_angle = Angle.distance(prev_angle, current_angle) / 2
+    next_angle = Angle.distance(current_angle, next_angle) / 2
     if prev_angle + next_angle > 180 then
       prev_angle = math.min(90, prev_angle)
       next_angle = math.min(90, next_angle)

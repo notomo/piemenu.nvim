@@ -1,5 +1,5 @@
 local listlib = require("piemenu.lib.list")
-local Angle0To359 = require("piemenu.core.angle_with_offset").Angle0To359
+local Angle = require("piemenu.core.angle")
 
 local AngleSplitter = {}
 AngleSplitter.__index = AngleSplitter
@@ -23,11 +23,11 @@ function AngleSplitter.split(self)
   end
 
   angles = vim.tbl_map(function(angle)
-    return Angle0To359.new(angle)
+    return Angle.new_0_to_359(angle)
   end, angles)
 
   local is_start
-  local start_angle = Angle0To359.new(self._start_angle)
+  local start_angle = Angle.new_0_to_359(self._start_angle)
   if self._start_angle < self._end_angle then
     table.sort(angles, function(a, b)
       return a < b

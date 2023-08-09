@@ -1,7 +1,4 @@
-local AngleWithOffset = require("piemenu.core.angle_with_offset").AngleWithOffset
-local Angle0To360 = require("piemenu.core.angle_with_offset").Angle0To360
-local Angle0To359 = require("piemenu.core.angle_with_offset").Angle0To359
-local AngleDistance = require("piemenu.core.angle_distance")
+local Angle = require("piemenu.core.angle")
 
 local M = {}
 
@@ -54,15 +51,15 @@ function AngleRanges.join(self)
   local new_angle_ranges = {}
   local first_start_angle = self._angle_ranges[1]:raw()
   local last_start_angle, last_end_angle = self._angle_ranges[#self._angle_ranges]:raw()
-  if Angle0To359.new(first_start_angle) ~= Angle0To359.new(last_end_angle) then
+  if Angle.new_0_to_359(first_start_angle) ~= Angle.new_0_to_359(last_end_angle) then
     return self
   end
 
   for _, angle_range in ipairs(self._angle_ranges) do
     local s, e = angle_range:raw()
     table.insert(new_angle_ranges, {
-      AngleWithOffset.shift(last_start_angle - s, s),
-      AngleWithOffset.shift(last_start_angle - e, e),
+      Angle.shift_with_offset(last_start_angle - s, s),
+      Angle.shift_with_offset(last_start_angle - e, e),
     })
   end
   table.remove(new_angle_ranges, #new_angle_ranges)
@@ -105,7 +102,7 @@ function AngleRange.new(s, e)
 end
 
 function AngleRange.new_0_to_360(s, e)
-  local new_s = Angle0To360.new(s)
+  local new_s = Angle.new_0_to_360(s)
   return AngleRange.new(new_s, new_s + e - s)
 end
 
@@ -125,7 +122,7 @@ function AngleRange.raw(self)
 end
 
 function AngleRange.exclude(self, s, e)
-  s, e = AngleWithOffset.new(self._small, s), AngleWithOffset.new(self._small, e)
+  s, e = Angle.new_with_offset(self._small, s), Angle.new_with_offset(self._small, e)
   s, e = AngleRange.new(s, e):sorted_ascending():raw()
 
   -- contain
@@ -162,11 +159,11 @@ function AngleRange.exclude(self, s, e)
 end
 
 function AngleRange.distance(self)
-  return AngleDistance.new(self._small, self._large)
+  return Angle.distance(self._small, self._large)
 end
 
 function AngleRange.contain(self, angle)
-  angle = AngleWithOffset.new(self._small, angle)
+  angle = Angle.new_with_offset(self._small, angle)
   return self._small <= angle and angle <= self._large
 end
 

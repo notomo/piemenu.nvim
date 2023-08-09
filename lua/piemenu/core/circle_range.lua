@@ -1,11 +1,13 @@
 local Angle = require("piemenu.core.angle")
-local Angle0To360 = require("piemenu.core.angle_with_offset").Angle0To360
 
 local CircleRange = {}
 CircleRange.__index = CircleRange
 
 function CircleRange.new(start_angle, end_angle)
-  local tbl = { _s = Angle0To360.new(start_angle), _e = Angle0To360.new(end_angle) }
+  local tbl = {
+    _s = Angle.new_0_to_360(start_angle),
+    _e = Angle.new_0_to_360(end_angle),
+  }
   return setmetatable(tbl, CircleRange)
 end
 
@@ -18,7 +20,7 @@ function CircleRange.include(self, p1, p2)
     raw_angle = raw_angle + 180
   end
 
-  local angle = Angle0To360.new(raw_angle)
+  local angle = Angle.new_0_to_360(raw_angle)
   if self._s <= self._e then
     return self._s <= angle and angle <= self._e
   end
