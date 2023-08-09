@@ -8,14 +8,6 @@ function M.sum(items)
   return all
 end
 
-function M.enumurate(items, f)
-  local new_items = {}
-  for i, item in ipairs(items) do
-    table.insert(new_items, f(i, item))
-  end
-  return new_items
-end
-
 function M.tri_circular(items)
   vim.validate({ items = { items, "table" } })
   local list = {}

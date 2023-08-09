@@ -79,9 +79,16 @@ function AngleSplitter._counts(self, angles)
     return counts
   end
 
-  local remains = listlib.enumurate(count_rates, function(i, rate)
-    return { index = i, value = rate - math.floor(rate) }
-  end)
+  local remains = vim
+    .iter(count_rates)
+    :enumerate()
+    :map(function(i, rate)
+      return {
+        index = i,
+        value = rate - math.floor(rate),
+      }
+    end)
+    :totable()
   table.sort(remains, function(a, b)
     return a.value > b.value
   end)
