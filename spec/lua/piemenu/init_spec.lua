@@ -137,6 +137,28 @@ describe("piemenu.highlight()", function()
 
     assert.exists_highlighted_window("PiemenuCurrent")
   end)
+
+  it("highlights a menu if mouse cursor is in area with mousemoveevent", function()
+    vim.o.mousemoveevent = true
+
+    piemenu.register("default", {
+      animation = { duration = 0 },
+      radius = 5.0,
+      menus = {
+        {
+          text = "text A",
+          action = function() end,
+        },
+      },
+    })
+
+    piemenu.start("default", { position = { vim.o.lines / 2, vim.o.columns / 2 } })
+
+    vim.api.nvim_input_mouse("left", "press", "", 0, math.floor(vim.o.lines / 2), vim.o.columns)
+    piemenu.highlight()
+
+    assert.exists_highlighted_window("PiemenuCurrent")
+  end)
 end)
 
 describe("piemenu.finish()", function()

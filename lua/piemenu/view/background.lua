@@ -31,10 +31,28 @@ function Background.open(name, position)
   vim.wo[window_id].winblend = 100
   vim.wo[window_id].scrolloff = 0
   vim.wo[window_id].sidescrolloff = 0
-  vim.api.nvim_win_set_cursor(window_id, { position[1] + 1, position[2] - 1 })
 
-  -- NOTE: show and move cursor to the window by <LeftDrag>
-  vim.cmd.redraw()
+  local get_position
+  if vim.o.mousemoveevent then
+    get_position = function()
+      local mouse_pos = vim.fn.getmousepos()
+      return {
+        mouse_pos.screenrow,
+        mouse_pos.screencol - 1,
+      }
+    end
+  else
+    vim.api.nvim_win_set_cursor(window_id, { position[1] + 1, position[2] - 1 })
+    -- NOTE: show and move cursor to the window by <LeftDrag>
+    vim.cmd.redraw()
+    get_position = function()
+      Background._click()
+      if not vim.api.nvim_win_is_valid(window_id) then
+        return nil
+      end
+      return vim.api.nvim_win_get_cursor(window_id)
+    end
+  end
 
   vim.api.nvim_create_autocmd({ "WinLeave", "TabLeave", "BufLeave" }, {
     buffer = bufnr,
@@ -54,21 +72,17 @@ function Background.open(name, position)
     end,
   })
 
-  local tbl = { window_id = window_id, _ns = ns }
+  local tbl = {
+    window_id = window_id,
+    get_position = get_position,
+    _ns = ns,
+  }
   return setmetatable(tbl, Background)
 end
 
 function Background.close(self)
   windowlib.safe_close(self.window_id)
   vim.api.nvim_set_decoration_provider(self._ns, {})
-end
-
-function Background.click(self)
-  self:_click()
-  if not vim.api.nvim_win_is_valid(self.window_id) then
-    return nil
-  end
-  return vim.api.nvim_win_get_cursor(self.window_id)
 end
 
 local mouse = vim.api.nvim_eval('"\\<LeftMouse>"')

@@ -59,7 +59,7 @@ function View.highlight(self)
   if mouse_is_on_tabline() then
     return
   end
-  local position = self._background:click()
+  local position = self._background:get_position()
   if not position then
     return
   end
@@ -67,7 +67,7 @@ function View.highlight(self)
 end
 
 function View.finish(self)
-  local position = self._background:click()
+  local position = self._background:get_position()
   if not position then
     return
   end
