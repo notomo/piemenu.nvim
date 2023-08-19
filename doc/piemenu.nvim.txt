@@ -41,7 +41,7 @@ STRUCTURE                                             *piemenu.nvim-STRUCTURE*
 PiemenuSetting                                                *PiemenuSetting*
 
 - {animation} (PiemenuAnimation?) |PiemenuAnimation|
-- {menus} ((PiemenuMenu|{})[]) If the element is empty table, the menu is not opened but used as spacer. If the circle is clipped by editor area, spacers are omitted. |PiemenuMenu|
+- {menus} ((PiemenuMenu|{})[]?) If the element is empty table, the menu is not opened but used as spacer. If the circle is clipped by editor area, spacers are omitted. |PiemenuMenu|
 - {position} (integer[]?) {row, col}
 - {radius} (integer?) piemenu circle radius, default: 12
 - {start_angle} (integer?) angle to open first tile, default: 0

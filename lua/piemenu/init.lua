@@ -2,7 +2,7 @@ local M = {}
 
 --- @class PiemenuSetting
 --- @field animation PiemenuAnimation? |PiemenuAnimation|
---- @field menus (PiemenuMenu|{})[] If the element is empty table, the menu is not opened but used as spacer. If the circle is clipped by editor area, spacers are omitted. |PiemenuMenu|
+--- @field menus (PiemenuMenu|{})[]? If the element is empty table, the menu is not opened but used as spacer. If the circle is clipped by editor area, spacers are omitted. |PiemenuMenu|
 --- @field position integer[]? {row, col}
 --- @field radius integer? piemenu circle radius, default: 12
 --- @field start_angle integer? angle to open first tile, default: 0
