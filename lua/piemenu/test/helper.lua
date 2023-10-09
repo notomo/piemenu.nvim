@@ -2,6 +2,8 @@ local helper = require("vusted.helper")
 local plugin_name = helper.get_module_root(...)
 
 helper.root = helper.find_plugin_root(plugin_name)
+vim.opt.packpath:prepend(vim.fs.joinpath(helper.root, "spec/.shared/packages"))
+require("assertlib").register(require("vusted.assert").register)
 
 function helper.before_each()
   require("piemenu.view.background")._click = function() end
@@ -17,8 +19,6 @@ function helper.set_lines(lines)
 end
 
 local asserts = require("vusted.assert").asserts
-local asserters = require(plugin_name .. ".vendor.assertlib").list()
-require(plugin_name .. ".vendor.misclib.test.assert").register(asserts.create, asserters)
 
 asserts.create("exists_highlighted_window"):register(function(self)
   return function(_, args)
