@@ -26,9 +26,12 @@ asserts.create("exists_highlighted_window"):register(function(self)
     self:set_positive(("window highlighted `%s` is not found"):format(expected))
     self:set_negative(("window highlighted `%s` is found"):format(expected))
     for _, window_id in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-      local hls = vim.tbl_filter(function(hl)
-        return vim.startswith(hl, "Normal:")
-      end, vim.split(vim.wo[window_id].winhighlight, ",", { plain = true }))
+      local hls = vim
+        .iter(vim.split(vim.wo[window_id].winhighlight, ",", { plain = true }))
+        :filter(function(hl)
+          return vim.startswith(hl, "Normal:")
+        end)
+        :totable()
       for _, hl in ipairs(hls) do
         local _, v = unpack(vim.split(hl, ":", { plain = true }))
         if v == expected then

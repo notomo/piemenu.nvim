@@ -83,9 +83,12 @@ function Menus.count(self)
 end
 
 function Menus.exclude_empty(self)
-  local raw_menus = vim.tbl_filter(function(menu)
-    return not menu:is_empty()
-  end, self._menus)
+  local raw_menus = vim
+    .iter(self._menus)
+    :filter(function(menu)
+      return not menu:is_empty()
+    end)
+    :totable()
   return Menus.new(self.name, raw_menus, self.setting)
 end
 
