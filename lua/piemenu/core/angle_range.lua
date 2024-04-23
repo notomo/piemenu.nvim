@@ -19,9 +19,12 @@ function AngleRanges.new_one(s, e)
 end
 
 function AngleRanges.from_raw(raw)
-  return AngleRanges.new(vim.tbl_map(function(r)
-    return AngleRange.new(unpack(r))
-  end, raw))
+  return AngleRanges.new(vim
+    .iter(raw)
+    :map(function(r)
+      return AngleRange.new(unpack(r))
+    end)
+    :totable())
 end
 
 function AngleRanges.__index(self, k)
@@ -32,15 +35,21 @@ function AngleRanges.__index(self, k)
 end
 
 function AngleRanges.raw(self)
-  return vim.tbl_map(function(angle_range)
-    return { angle_range:raw() }
-  end, self._angle_ranges)
+  return vim
+    .iter(self._angle_ranges)
+    :map(function(angle_range)
+      return { angle_range:raw() }
+    end)
+    :totable()
 end
 
 function AngleRanges.list(self)
-  return vim.tbl_map(function(angle_range)
-    return angle_range
-  end, self._angle_ranges)
+  return vim
+    .iter(self._angle_ranges)
+    :map(function(angle_range)
+      return angle_range
+    end)
+    :totable()
 end
 
 function AngleRanges.join(self)
@@ -65,15 +74,21 @@ function AngleRanges.join(self)
   table.remove(new_angle_ranges, #new_angle_ranges)
   new_angle_ranges[1][1] = last_start_angle
 
-  return AngleRanges.new(vim.tbl_map(function(angles)
-    return AngleRange.new(unpack(angles))
-  end, new_angle_ranges))
+  return AngleRanges.new(vim
+    .iter(new_angle_ranges)
+    :map(function(angles)
+      return AngleRange.new(unpack(angles))
+    end)
+    :totable())
 end
 
 function AngleRanges.distances(self)
-  return vim.tbl_map(function(angle_range)
-    return angle_range:distance()
-  end, self._angle_ranges)
+  return vim
+    .iter(self._angle_ranges)
+    :map(function(angle_range)
+      return angle_range:distance()
+    end)
+    :totable()
 end
 
 function AngleRanges.exclude(self, angle_ranges)

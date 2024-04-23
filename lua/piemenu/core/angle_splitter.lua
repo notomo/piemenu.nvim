@@ -22,9 +22,12 @@ function AngleSplitter.split(self)
     vim.list_extend(angles, self:_split(start_angle, end_angle, count))
   end
 
-  angles = vim.tbl_map(function(angle)
-    return Angle.new_0_to_359(angle)
-  end, angles)
+  angles = vim
+    .iter(angles)
+    :map(function(angle)
+      return Angle.new_0_to_359(angle)
+    end)
+    :totable()
 
   local is_start
   local start_angle = Angle.new_0_to_359(self._start_angle)
@@ -59,20 +62,29 @@ function AngleSplitter._split(_, start_angle, end_angle, count)
     -- ex. if count == 2, distance == 330, space is insufficient between angle_a and angle_b.
     increment_angle = angle_distance / count
   end
-  return vim.tbl_map(function(i)
-    return start_angle + increment_angle * i
-  end, vim.fn.range(count))
+  return vim
+    .iter(vim.fn.range(count))
+    :map(function(i)
+      return start_angle + increment_angle * i
+    end)
+    :totable()
 end
 
 function AngleSplitter._counts(self, angles)
   local angle_sum = listlib.sum(angles)
-  local count_rates = vim.tbl_map(function(angle)
-    return self._all_count * angle / angle_sum
-  end, angles)
+  local count_rates = vim
+    .iter(angles)
+    :map(function(angle)
+      return self._all_count * angle / angle_sum
+    end)
+    :totable()
 
-  local counts = vim.tbl_map(function(rate)
-    return math.floor(rate)
-  end, count_rates)
+  local counts = vim
+    .iter(count_rates)
+    :map(function(rate)
+      return math.floor(rate)
+    end)
+    :totable()
 
   local remain_count = self._all_count - listlib.sum(counts)
   if remain_count == 0 then
