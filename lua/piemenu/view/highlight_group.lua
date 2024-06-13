@@ -17,7 +17,9 @@ local group = vim.api.nvim_create_augroup("piemenu", {})
 vim.api.nvim_create_autocmd({ "ColorScheme" }, {
   group = group,
   pattern = { "*" },
-  callback = setup_highlight_groups,
+  callback = function()
+    setup_highlight_groups()
+  end,
 })
 
 return setup_highlight_groups()
