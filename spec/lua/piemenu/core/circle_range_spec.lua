@@ -1,4 +1,5 @@
 local helper = require("piemenu.test.helper")
+local assert = helper.typed_assert(assert)
 
 describe("piemenu.core.circle_range", function()
   before_each(helper.before_each)
@@ -27,7 +28,7 @@ describe("piemenu.core.circle_range", function()
       ),
       function()
         local actual = require("piemenu.core.circle_range").new(c.s, c.e):include(c.origin, c.position)
-        assert.equals(c.expected, actual)
+        assert.equal(c.expected, actual)
       end
     )
   end

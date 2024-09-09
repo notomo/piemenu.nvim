@@ -1,5 +1,6 @@
 local helper = require("piemenu.test.helper")
 local piemenu = helper.require("piemenu")
+local assert = helper.typed_assert(assert)
 
 describe("piemenu.start()", function()
   before_each(helper.before_each)

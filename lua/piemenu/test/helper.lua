@@ -6,6 +6,7 @@ vim.opt.packpath:prepend(vim.fs.joinpath(helper.root, "spec/.shared/packages"))
 require("assertlib").register(require("vusted.assert").register)
 
 function helper.before_each()
+  ---@diagnostic disable-next-line: duplicate-set-field
   require("piemenu.view.background")._click = function() end
 end
 
@@ -42,5 +43,11 @@ asserts.create("exists_highlighted_window"):register(function(self)
     return false
   end
 end)
+
+function helper.typed_assert(assert)
+  local x = require("assertlib").typed(assert)
+  ---@cast x +{exists_highlighted_window:fun(want)}
+  return x
+end
 
 return helper

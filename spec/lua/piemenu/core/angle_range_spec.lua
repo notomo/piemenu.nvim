@@ -1,4 +1,5 @@
 local helper = require("piemenu.test.helper")
+local assert = helper.typed_assert(assert)
 
 describe("piemenu.core.angle_range", function()
   before_each(helper.before_each)
@@ -42,7 +43,7 @@ describe("piemenu.core.angle_range", function()
           :exclude(c.exclude_s, c.exclude_e)
         local actual = angle_ranges:raw()
 
-        assert.is_same(c.expected, actual)
+        assert.same(c.expected, actual)
       end
     )
   end
@@ -57,7 +58,7 @@ describe("piemenu.core.angle_range", function()
   }) do
     it(("AngleRange.new(%s, %s):contain() == %s"):format(c.start_angle, c.end_angle, c.angle), function()
       local actual = require("piemenu.core.angle_range").AngleRange.new(c.start_angle, c.end_angle):contain(c.angle)
-      assert.is_same(c.expected, actual)
+      assert.same(c.expected, actual)
     end)
   end
 
@@ -72,7 +73,7 @@ describe("piemenu.core.angle_range", function()
       local angle_ranges = require("piemenu.core.angle_range").AngleRanges.from_raw(c.angle_ranges):join()
       local actual = angle_ranges:raw()
 
-      assert.is_same(c.expected, actual)
+      assert.same(c.expected, actual)
     end)
   end
 
@@ -94,7 +95,7 @@ describe("piemenu.core.angle_range", function()
         local angle_ranges = require("piemenu.core.angle_range").AngleRanges.from_raw(c.angle_ranges):exclude(exclude)
         local actual = angle_ranges:raw()
 
-        assert.is_same(c.expected, actual)
+        assert.same(c.expected, actual)
       end
     )
   end

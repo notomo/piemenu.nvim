@@ -1,4 +1,5 @@
 local helper = require("piemenu.test.helper")
+local assert = helper.typed_assert(assert)
 
 describe("piemenu.core.angle_splitter", function()
   before_each(helper.before_each)
@@ -57,7 +58,7 @@ describe("piemenu.core.angle_splitter", function()
         local actual =
           require("piemenu.core.angle_splitter").new(c.start_angle, c.end_angle, angle_ranges, c.all_count):split()
 
-        assert.is_same(c.expected, actual)
+        assert.same(c.expected, actual)
       end
     )
   end

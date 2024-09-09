@@ -1,4 +1,5 @@
 local helper = require("piemenu.test.helper")
+local assert = helper.typed_assert(assert)
 
 describe("piemenu.core.angle", function()
   before_each(helper.before_each)
@@ -14,7 +15,7 @@ describe("piemenu.core.angle", function()
   }) do
     it(("Angle.new_with_offset(%s, %s) == %s"):format(c.base_angle, c.angle, c.expected), function()
       local actual = require("piemenu.core.angle").new_with_offset(c.base_angle, c.angle)
-      assert.equals(c.expected, actual)
+      assert.equal(c.expected, actual)
     end)
   end
 
@@ -26,7 +27,7 @@ describe("piemenu.core.angle", function()
   }) do
     it(("Angle.distance(%s, %s) == %s"):format(c.angle, c.next_angle, c.expected), function()
       local actual = require("piemenu.core.angle").distance(c.angle, c.next_angle)
-      assert.equals(c.expected, actual)
+      assert.equal(c.expected, actual)
     end)
   end
 end)

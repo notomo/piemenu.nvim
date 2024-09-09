@@ -1,4 +1,5 @@
 local helper = require("piemenu.test.helper")
+local assert = helper.typed_assert(assert)
 
 describe("piemenu.lib.list", function()
   before_each(helper.before_each)
@@ -12,7 +13,7 @@ describe("piemenu.lib.list", function()
   }) do
     it(("tri_circular(%s) == %s"):format(vim.inspect(c.items), vim.inspect(c.expected)), function()
       local actual = require("piemenu.lib.list").tri_circular(c.items)
-      assert.is_same(c.expected, actual)
+      assert.same(c.expected, actual)
     end)
   end
 
@@ -26,7 +27,7 @@ describe("piemenu.lib.list", function()
       local actual = require("piemenu.lib.list").circular_shift(c.items, function(item)
         return item > 3
       end)
-      assert.is_same(c.expected, actual)
+      assert.same(c.expected, actual)
     end)
   end
 end)
