@@ -54,7 +54,7 @@ function M.validate(tbl)
   for key, value in pairs(tbl) do
     local ok, result = pcall(vim.validate, { [key] = value })
     if not ok then
-      local msg = vim.split(result, "\n")[1]
+      local msg = vim.split(tostring(result), "\n")[1]
       if type(value[1]) == "table" then
         msg = ("%s: %s"):format(msg, vim.inspect(value[1]))
       end

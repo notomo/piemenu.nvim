@@ -18,16 +18,18 @@ function M.start(name, raw_setting)
 end
 
 function M.highlight()
-  local view, err = View.current()
-  if err then
+  local view = View.current()
+  if type(view) == "string" then
+    local err = view
     require("piemenu.vendor.misclib.message").error(err)
   end
   view:highlight()
 end
 
 function M.finish()
-  local view, err = View.current()
-  if err then
+  local view = View.current()
+  if type(view) == "string" then
+    local err = view
     require("piemenu.vendor.misclib.message").error(err)
   end
   local finish_err = view:finish()
@@ -37,8 +39,9 @@ function M.finish()
 end
 
 function M.cancel()
-  local view, err = View.current()
-  if err then
+  local view = View.current()
+  if type(view) == "string" then
+    local err = view
     require("piemenu.vendor.misclib.message").error(err)
   end
   view:close()

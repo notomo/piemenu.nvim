@@ -63,10 +63,10 @@ function Menus.parse(name, raw_setting)
 
   local setting, err = Setting.new(raw_setting)
   if err then
-    return nil, err
+    return err
   end
 
-  return Menus.new(name, raw_menus, setting), nil
+  return Menus.new(name, raw_menus, setting)
 end
 
 function Menus.is_empty(self)
@@ -98,14 +98,15 @@ function Menus.find(name)
   vim.validate({ name = { name, "string" } })
   local menus = _menus[name]
   if not menus or menus:is_empty() then
-    return nil, ("no menus for `%s`"):format(name)
+    return ("no menus for `%s`"):format(name)
   end
-  return menus, nil
+  return menus
 end
 
 function Menus.register(name, setting)
-  local menus, err = Menus.parse(name, setting)
-  if err then
+  local menus = Menus.parse(name, setting)
+  if type(menus) == "string" then
+    local err = menus
     return err
   end
   _menus[name] = menus

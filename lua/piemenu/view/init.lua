@@ -10,13 +10,14 @@ View.__index = View
 function View.open(name, raw_setting)
   vim.validate({ name = { name, "string" }, raw_setting = { raw_setting, "table" } })
 
-  local menus, err
+  local menus
   if not raw_setting.menus then
-    menus, err = Menus.find(name)
+    menus = Menus.find(name)
   else
-    menus, err = Menus.parse(name, raw_setting)
+    menus = Menus.parse(name, raw_setting)
   end
-  if err then
+  if type(menus) == "string" then
+    local err = menus
     return err
   end
 
@@ -95,9 +96,9 @@ function View.current()
   local window_id = vim.api.nvim_get_current_win()
   local view = View.get(window_id)
   if not view then
-    return nil, "not found view"
+    return "not found view"
   end
-  return view, nil
+  return view
 end
 
 function View.find(name)
