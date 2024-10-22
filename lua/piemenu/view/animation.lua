@@ -5,9 +5,9 @@ local hrtime = uv.hrtime
 local Animation = {}
 Animation.__index = Animation
 
+--- @param items table[]
+--- @param duration number
 function Animation.new(items, duration)
-  vim.validate({ items = { items, "table" }, duration = { duration, "number" } })
-
   local on_tick = function()
     local ok = true
     for _, item in ipairs(items) do

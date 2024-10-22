@@ -19,9 +19,8 @@ Setting.default = {
   position = Setting.nil_value,
 }
 
+--- @param raw_setting PiemenuSetting
 function Setting.new(raw_setting)
-  vim.validate({ raw_setting = { raw_setting, "table" } })
-
   local default = Setting.default_values()
   local data = vim.tbl_deep_extend("force", default, raw_setting)
 

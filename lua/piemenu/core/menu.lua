@@ -3,8 +3,9 @@ local Setting = require("piemenu.core.setting")
 local Menu = {}
 Menu.__index = Menu
 
+--- @param action fun()
+--- @param text string
 function Menu.new(action, text)
-  vim.validate({ action = { action, "function" }, text = { text, "string" } })
   local tbl = { _action = action, _text = vim.split(text, "\n", { plain = true })[1] }
   return setmetatable(tbl, Menu)
 end
@@ -39,19 +40,17 @@ end
 
 local Menus = {}
 
+--- @param name string
+--- @param raw_menus table
+--- @param setting table
 function Menus.new(name, raw_menus, setting)
-  vim.validate({
-    name = { name, "string" },
-    raw_menus = { raw_menus, "table" },
-    setting = { setting, "table" },
-  })
   local tbl = { name = name, setting = setting, _menus = raw_menus }
   return setmetatable(tbl, Menus)
 end
 
+--- @param name string
+--- @param raw_setting table
 function Menus.parse(name, raw_setting)
-  vim.validate({ name = { name, "string" }, setting = { raw_setting, "table" } })
-
   local raw_menus = {}
   for _, menu in ipairs(raw_setting.menus or {}) do
     if vim.tbl_isempty(menu) then
@@ -94,8 +93,8 @@ end
 
 local _menus = {}
 
+--- @param name string
 function Menus.find(name)
-  vim.validate({ name = { name, "string" } })
   local menus = _menus[name]
   if not menus or menus:is_empty() then
     return ("no menus for `%s`"):format(name)
@@ -112,8 +111,8 @@ function Menus.register(name, setting)
   _menus[name] = menus
 end
 
+--- @param name string
 function Menus.clear(name)
-  vim.validate({ name = { name, "string" } })
   _menus[name] = nil
 end
 

@@ -9,9 +9,9 @@ local listlib = require("piemenu.lib.list")
 local CircleTiles = {}
 CircleTiles.__index = CircleTiles
 
+--- @param defined_menus table
+--- @param view_setting table
 function CircleTiles.open(defined_menus, view_setting)
-  vim.validate({ defined_menus = { defined_menus, "table" }, view_setting = { view_setting, "table" } })
-
   local start_angle = view_setting.start_angle
   local end_angle = view_setting.end_angle
 

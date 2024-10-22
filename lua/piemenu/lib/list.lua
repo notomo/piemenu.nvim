@@ -8,8 +8,8 @@ function M.sum(items)
   return all
 end
 
+--- @param items any[]
 function M.tri_circular(items)
-  vim.validate({ items = { items, "table" } })
   local list = {}
   for i, item in ipairs(items) do
     local prev_item = items[i - 1] or items[#items]
@@ -18,9 +18,9 @@ function M.tri_circular(items)
   end
   return list
 end
-
+--- @param items any[]
+--- @param is_start fun(any):boolean
 function M.circular_shift(items, is_start)
-  vim.validate({ items = { items, "table" }, is_start = { is_start, "function" } })
   local start_index = 1
   for i, item in ipairs(items) do
     if is_start(item) then

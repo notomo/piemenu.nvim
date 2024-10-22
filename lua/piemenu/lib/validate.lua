@@ -1,7 +1,6 @@
 local M = {}
 
 function M.greater_than(n, value)
-  vim.validate({ n = { n, "number" } })
   return {
     value,
     function(x)
@@ -12,7 +11,6 @@ function M.greater_than(n, value)
 end
 
 function M.equal_or_greater_than(n, value)
-  vim.validate({ n = { n, "number" } })
   return {
     value,
     function(x)
@@ -52,7 +50,7 @@ end
 function M.validate(tbl)
   local errs = {}
   for key, value in pairs(tbl) do
-    local ok, result = pcall(vim.validate, { [key] = value })
+    local ok, result = pcall(vim.validate, key, unpack(value))
     if not ok then
       local msg = vim.split(tostring(result), "\n")[1]
       if type(value[1]) == "table" then

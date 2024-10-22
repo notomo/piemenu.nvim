@@ -7,9 +7,9 @@ local views = {}
 local View = {}
 View.__index = View
 
+--- @param name string
+--- @param raw_setting PiemenuSetting
 function View.open(name, raw_setting)
-  vim.validate({ name = { name, "string" }, raw_setting = { raw_setting, "table" } })
-
   local menus
   if not raw_setting.menus then
     menus = Menus.find(name)
@@ -87,8 +87,8 @@ function View.close(self)
   views[self._background.window_id] = nil
 end
 
+--- @param window_id integer
 function View.get(window_id)
-  vim.validate({ window_id = { window_id, "number" } })
   return views[window_id]
 end
 
@@ -101,8 +101,8 @@ function View.current()
   return view
 end
 
+--- @param name string
 function View.find(name)
-  vim.validate({ name = { name, "string" } })
   for _, view in pairs(views) do
     if view.name == name then
       return view

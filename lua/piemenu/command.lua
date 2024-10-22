@@ -2,8 +2,9 @@ local View = require("piemenu.view")
 
 local M = {}
 
+--- @param name string
+--- @param raw_setting PiemenuSetting?
 function M.start(name, raw_setting)
-  vim.validate({ name = { name, "string" }, setting = { raw_setting, "table", true } })
   raw_setting = raw_setting or {}
 
   local already = View.find(name)
