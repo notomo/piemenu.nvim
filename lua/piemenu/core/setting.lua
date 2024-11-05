@@ -34,18 +34,18 @@ function Setting.new(raw_setting)
     animation = { data.animation, "table" },
   })
   if base_err then
-    return nil, base_err
+    return base_err
   end
 
   local anim_err = validatelib.validate({
     ["animation.duration"] = validatelib.not_negative(data.animation.duration),
   })
   if anim_err then
-    return nil, anim_err
+    return anim_err
   end
 
   local tbl = { _data = data }
-  return setmetatable(tbl, Setting), nil
+  return setmetatable(tbl, Setting)
 end
 
 function Setting.default_values()

@@ -21,9 +21,10 @@ function View.open(name, raw_setting)
     return err
   end
 
-  local setting, merge_err = menus.setting:merge(raw_setting)
-  if merge_err then
-    return merge_err
+  local setting = menus.setting:merge(raw_setting)
+  if type(setting) == "string" then
+    local err = setting
+    return err
   end
 
   local view_setting = setting:for_view()

@@ -60,8 +60,9 @@ function Menus.parse(name, raw_setting)
     end
   end
 
-  local setting, err = Setting.new(raw_setting)
-  if err then
+  local setting = Setting.new(raw_setting)
+  if type(setting) == "string" then
+    local err = setting
     return err
   end
 
