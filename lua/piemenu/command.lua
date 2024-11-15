@@ -14,7 +14,7 @@ function M.start(name, raw_setting)
 
   local err = View.open(name, raw_setting)
   if err then
-    require("piemenu.vendor.misclib.message").error(err)
+    error("[piemenu] " .. err, 0)
   end
 end
 
@@ -22,7 +22,7 @@ function M.highlight()
   local view = View.current()
   if type(view) == "string" then
     local err = view
-    require("piemenu.vendor.misclib.message").error(err)
+    error("[piemenu] " .. err, 0)
   end
   view:highlight()
 end
@@ -31,11 +31,11 @@ function M.finish()
   local view = View.current()
   if type(view) == "string" then
     local err = view
-    require("piemenu.vendor.misclib.message").error(err)
+    error("[piemenu] " .. err, 0)
   end
   local finish_err = view:finish()
   if finish_err then
-    require("piemenu.vendor.misclib.message").error(finish_err)
+    error("[piemenu] " .. finish_err, 0)
   end
 end
 
@@ -43,7 +43,7 @@ function M.cancel()
   local view = View.current()
   if type(view) == "string" then
     local err = view
-    require("piemenu.vendor.misclib.message").error(err)
+    error("[piemenu] " .. err, 0)
   end
   view:close()
 end
@@ -59,7 +59,7 @@ end
 function M.register(name, setting)
   local err = require("piemenu.core.menu").register(name, setting)
   if err then
-    require("piemenu.vendor.misclib.message").error(err)
+    error("[piemenu] " .. err, 0)
   end
 end
 
