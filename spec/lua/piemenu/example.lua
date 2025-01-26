@@ -1,6 +1,6 @@
 vim.opt.mouse = "a"
 
-local group = vim.api.nvim_create_augroup("piemenu_setting", {})
+local group = vim.api.nvim_create_augroup("config.piemenu", {})
 vim.api.nvim_create_autocmd({ "FileType" }, {
   group = group,
   pattern = { "piemenu" },
