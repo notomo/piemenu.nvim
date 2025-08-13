@@ -36,7 +36,7 @@ function Tile.open(menu, angle, prev_angle, next_angle, radius, width, height, o
     zindex = 51,
     border = { { " ", hl_groups.PiemenuNonCurrent } },
   })
-  vim.wo[window_id].winblend = 0
+  vim.wo[window_id][0].winblend = 0
 
   local tbl = {
     _window_id = window_id,
@@ -58,12 +58,12 @@ function Tile.close(self)
 end
 
 function Tile.activate(self)
-  vim.wo[self._window_id].winhighlight = "Normal:" .. hl_groups.PiemenuCurrent
+  vim.wo[self._window_id][0].winhighlight = "Normal:" .. hl_groups.PiemenuCurrent
   vim.api.nvim_win_set_config(self._window_id, { border = { { " ", hl_groups.PiemenuCurrentBorder } } })
 end
 
 function Tile.deactivate(self)
-  vim.wo[self._window_id].winhighlight = "Normal:" .. hl_groups.PiemenuNonCurrent
+  vim.wo[self._window_id][0].winhighlight = "Normal:" .. hl_groups.PiemenuNonCurrent
   vim.api.nvim_win_set_config(self._window_id, { border = { { " ", hl_groups.PiemenuNonCurrentBorder } } })
 end
 

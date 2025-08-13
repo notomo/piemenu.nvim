@@ -28,9 +28,9 @@ function Background.open(name, position)
     focusable = true,
     style = "minimal",
   })
-  vim.wo[window_id].winblend = 100
-  vim.wo[window_id].scrolloff = 0
-  vim.wo[window_id].sidescrolloff = 0
+  vim.wo[window_id][0].winblend = 100
+  vim.wo[window_id][0].scrolloff = 0
+  vim.wo[window_id][0].sidescrolloff = 0
 
   local get_position
   if vim.o.mousemoveevent then
