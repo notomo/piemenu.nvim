@@ -9,7 +9,7 @@ function M.delete_by_name(path)
 end
 
 function M.find(path)
-  local pattern = "^" .. vim.fn.escape(path, "[]{}") .. "$"
+  local pattern = "^" .. vim.fn.escape(path, "[]{}\\") .. "$"
   local bufnr = vim.fn.bufnr(pattern)
   if bufnr == -1 then
     return nil
