@@ -55,7 +55,7 @@ function Background.open(name, position)
   end
 
   vim.api.nvim_create_autocmd({ "WinLeave", "TabLeave", "BufLeave" }, {
-    buffer = bufnr,
+    buf = bufnr,
     once = true,
     callback = function()
       require("piemenu.command").close(name)
