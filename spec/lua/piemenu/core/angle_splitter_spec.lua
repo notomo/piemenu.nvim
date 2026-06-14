@@ -1,5 +1,7 @@
+local ntf = require("ntf")
+local describe, it, before_each, after_each = ntf.describe, ntf.it, ntf.before_each, ntf.after_each
 local helper = require("piemenu.test.helper")
-local assert = helper.typed_assert(assert)
+local assert = helper.typed_assert(ntf.assert)
 
 describe("piemenu.core.angle_splitter", function()
   before_each(helper.before_each)
