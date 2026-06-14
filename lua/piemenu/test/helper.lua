@@ -41,8 +41,8 @@ assert.register("exists_highlighted_window", function(self)
   end
 end)
 
-function helper.typed_assert(assert)
-  local x = require("assertlib").typed(assert)
+function helper.typed_assert(raw_assert)
+  local x = require("assertlib").typed(raw_assert)
   ---@cast x +{exists_highlighted_window:fun(want)}
   return x
 end
