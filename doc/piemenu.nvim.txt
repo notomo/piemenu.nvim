@@ -54,7 +54,7 @@ PiemenuAnimation                                            *PiemenuAnimation*
 
 PiemenuMenu                                                      *PiemenuMenu*
 
-- {action} (fun()) action triggered by |piemenu.nvim-piemenu.finish()|
+- {action} (fun()) action triggered by |piemenu.finish()|
 - {text} (string) displayed text in menu tile
 
 ==============================================================================

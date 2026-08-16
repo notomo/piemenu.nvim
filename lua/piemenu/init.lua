@@ -13,7 +13,7 @@ local M = {}
 --- @field duration integer? open animation duration milliseconds. default: 100
 
 --- @class PiemenuMenu
---- @field action fun() action triggered by |piemenu.nvim-piemenu.finish()|
+--- @field action fun() action triggered by |piemenu.finish()|
 --- @field text string displayed text in menu tile
 
 --- Start a piemenu.
