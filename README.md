@@ -63,44 +63,4 @@ require("piemenu").register("example", {
     },
   },
 })
-
--- start by gesture.nvim (optional)
-local piemenu = require("piemenu")
-local gesture = require("gesture")
-gesture.register({
-  name = "open pie menu",
-  inputs = { gesture.up() },
-  action = function(ctx)
-    piemenu.start("gesture_example", { position = ctx.last_position })
-  end,
-})
-
-piemenu.register("gesture_example", {
-  menus = {
-    {
-      text = "🆕 new tab",
-      action = function()
-        vim.cmd.tabedit()
-      end,
-    },
-    {
-      text = "🏠 open vimrc",
-      action = function()
-        vim.cmd.edit(vim.env.MYVIMRC)
-      end,
-    },
-    {
-      text = "🔃 reload",
-      action = function()
-        vim.cmd.edit({ bang = true })
-      end,
-    },
-    {
-      text = "😃 smile",
-      action = function()
-        vim.cmd.smile()
-      end,
-    },
-  },
-})
 ```
